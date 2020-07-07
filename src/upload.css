@@ -1,0 +1,6 @@
+#upload_button[data-drag='true'] {
+  border: dashed 2px black;
+}
+#upload_button > span {
+  pointer-events: none;
+}

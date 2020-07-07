@@ -1,0 +1,46 @@
+.cell {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  max-width: 100%;
+  margin: 10px;
+  text-align: center;
+}
+.header {
+  margin-bottom: 8px;
+  font-weight: 600;
+  height: 20px;
+}
+.control {
+  min-height: 30px;
+}
+.header,
+.control {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.tiny_control {
+  width: 20px;
+  height: 20px;
+}
+.small_control {
+  width: 100px;
+  height: 30px;
+}
+.square_control {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+}
+.big_control {
+  width: 200px;
+  height: 60px;
+}
+
+@media screen and (max-width: 700px) {
+  .header {
+    height: unset;
+  }
+}
