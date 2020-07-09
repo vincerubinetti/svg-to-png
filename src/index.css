@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;600');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400&');
+@import url('https://use.fontawesome.com/releases/v5.13.1/css/all.css');
+
+* {
+  --black: #000000;
+  --light-gray: #e8e8e8;
+  --gray: #808080;
+  --white: #ffffff;
+  --red: #e91e63;
+  --serif: 'Lora', serif;
+  --sans: 'Lato', sans-serif;
+  --width: 900px;
+
+  font-family: var(--serif), serif;
+}
+body {
+  margin: 0;
+}
+#root {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+}
+
+a {
+  color: var(--red);
+}
+a:hover,
+a:focus {
+  color: var(--black);
+}
+button,
+input[type='checkbox']:not([disabled]),
+input[type='color']:not([disabled]) {
+  cursor: pointer;
+  background: var(--light-gray);
+}
+button,
+input,
+textarea,
+select,
+option {
+  margin: 0;
+  font-size: 1em;
+  border: solid 1px var(--gray);
+  outline: none;
+}
+button {
+  padding: 0 10px;
+}
+input,
+textarea {
+  padding: 0 5px;
+}
+button:focus,
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--red);
+  box-shadow: 0 0 2px 0 var(--red);
+}
+
+svg:not(:first-child),
+i:not(:first-child) {
+  margin-left: 8px;
+}
+svg:not(:last-child),
+i:not(:last-child) {
+  margin-right: 8px;
+}

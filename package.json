@@ -1,0 +1,23 @@
+{
+  "name": "svg-to-png",
+  "version": "1.0.0",
+  "homepage": "https://vincerubinetti.github.io/svg-to-png/",
+  "dependencies": {
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-scripts": "3.4.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test"
+  },
+  "browserslist": [
+    ">0.1%",
+    "not dead"
+  ],
+  "devDependencies": {
+    "eslint-config-rubinetti": "git+https://git@github.com/vincerubinetti/eslint-config-rubinetti.git",
+    "prettier-config-rubinetti": "git+https://git@github.com/vincerubinetti/prettier-config-rubinetti.git"
+  }
+}
