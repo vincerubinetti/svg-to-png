@@ -1,0 +1,34 @@
+header {
+  background: var(--red);
+  color: var(--white);
+}
+header > section > * {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+header a {
+  color: var(--white);
+  text-decoration: none;
+}
+header a * {
+  font-family: var(--sans), sans-serif;
+}
+#icons {
+  font-size: 2em;
+}
+#icons > svg {
+  height: 1em;
+}
+#title {
+  font-size: 1.5em;
+}
+#view_on_github {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  font-size: 0.8em;
+}
+#view_on_github i {
+  margin-right: 5px;
+}
