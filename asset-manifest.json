@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/svg-to-png/static/css/main.1f0818f0.chunk.css",
+    "main.js": "/svg-to-png/static/js/main.53909e1f.chunk.js",
+    "main.js.map": "/svg-to-png/static/js/main.53909e1f.chunk.js.map",
+    "runtime-main.js": "/svg-to-png/static/js/runtime-main.dc546e44.js",
+    "runtime-main.js.map": "/svg-to-png/static/js/runtime-main.dc546e44.js.map",
+    "static/js/2.2d8e8d7a.chunk.js": "/svg-to-png/static/js/2.2d8e8d7a.chunk.js",
+    "static/js/2.2d8e8d7a.chunk.js.map": "/svg-to-png/static/js/2.2d8e8d7a.chunk.js.map",
+    "index.html": "/svg-to-png/index.html",
+    "precache-manifest.02be07d7302207ae7e4fa76859ac221c.js": "/svg-to-png/precache-manifest.02be07d7302207ae7e4fa76859ac221c.js",
+    "service-worker.js": "/svg-to-png/service-worker.js",
+    "static/css/main.1f0818f0.chunk.css.map": "/svg-to-png/static/css/main.1f0818f0.chunk.css.map",
+    "static/js/2.2d8e8d7a.chunk.js.LICENSE.txt": "/svg-to-png/static/js/2.2d8e8d7a.chunk.js.LICENSE.txt",
+    "static/media/canvas.css": "/svg-to-png/static/media/checkers.b107f568.svg",
+    "static/media/svg.f04f4098.svg": "/svg-to-png/static/media/svg.f04f4098.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.dc546e44.js",
+    "static/js/2.2d8e8d7a.chunk.js",
+    "static/css/main.1f0818f0.chunk.css",
+    "static/js/main.53909e1f.chunk.js"
+  ]
+}
