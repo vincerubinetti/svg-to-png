@@ -1,0 +1,14 @@
+.canvas {
+  max-width: 100%;
+  max-height: 90vh;
+  overflow-x: auto;
+  overflow-y: auto;
+  background-image: url("checkers-light.svg");
+  background-size: 2vmin;
+  background-attachment: fixed;
+  outline: solid 1px var(--black);
+}
+
+.canvas[data-dark="true"] {
+  background-image: url("checkers-dark.svg");
+}

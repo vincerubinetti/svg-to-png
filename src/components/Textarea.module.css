@@ -1,0 +1,15 @@
+.textarea {
+  height: 200px;
+  padding: 10px;
+  border: solid 1px var(--light-gray);
+  border-radius: var(--rounded);
+  color: var(--dark-gray);
+  font-family: "IBM Plex Mono", monospace;
+  cursor: unset;
+  transition: box-shadow var(--fast);
+  white-space: nowrap;
+}
+
+.textarea:hover {
+  box-shadow: var(--shadow);
+}

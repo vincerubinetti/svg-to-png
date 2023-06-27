@@ -1,0 +1,13 @@
+.textbox {
+  max-width: 100%;
+  padding: 10px;
+  border: solid 1px var(--light-gray);
+  border-radius: var(--rounded);
+  color: var(--dark-gray);
+  cursor: unset;
+  transition: box-shadow var(--fast);
+}
+
+.textbox:hover {
+  box-shadow: var(--shadow);
+}

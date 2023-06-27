@@ -1,0 +1,56 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--white);
+  background: #000c;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 99;
+  font-size: 1.2rem;
+  transition: opacity var(--fast);
+}
+
+.overlay[data-dragging="true"] {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 100%;
+}
+
+.buttons > button {
+  flex-grow: 1;
+}
+
+.files {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: 40px;
+}
+
+.file {
+  display: flex;
+  justify-content: center;
+  align-content: flex-start;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.file > input {
+  flex-grow: 1;
+}
+
+.file > textarea {
+  width: 100%;
+}
+
+.error {
+  color: var(--primary);
+}
