@@ -1,19 +1,25 @@
 import { DragEventHandler, useEffect, useRef, useState } from "react";
 import { useAtom } from "jotai";
-import { cloneDeep } from "lodash";
 import { faTimes, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "@/components/Button";
 import Textarea from "@/components/Textarea";
 import Textbox from "@/components/Textbox";
-import { addFiles, clearFiles, computed, files, removeFile } from "@/state";
+import {
+  addFiles,
+  clearFiles,
+  computed,
+  files,
+  removeFile,
+  setFile,
+} from "@/state";
 import classes from "./Input.module.css";
 
 const Input = () => {
   const [dragging, setDragging] = useState(false);
   const input = useRef<HTMLInputElement>(null);
 
-  const [getFiles, setFiles] = useAtom(files);
+  const [getFiles] = useAtom(files);
   const [getComputed] = useAtom(computed);
 
   /** click actual file input on button click */
@@ -108,11 +114,7 @@ const Input = () => {
             <div className={classes.top}>
               <Textbox
                 value={file.name}
-                onChange={(value) => {
-                  const newFiles = cloneDeep(getFiles);
-                  newFiles[index].name = value;
-                  setFiles(newFiles);
-                }}
+                onChange={(value) => setFile(index, "name", value)}
                 data-tooltip="Filename"
               />
               <Button
@@ -124,11 +126,7 @@ const Input = () => {
             </div>
             <Textarea
               value={file.source}
-              onChange={(value) => {
-                const newFiles = cloneDeep(getFiles);
-                newFiles[index].source = value;
-                setFiles(newFiles);
-              }}
+              onChange={(value) => setFile(index, "source", value)}
               data-tooltip="SVG source code"
             />
             {getComputed?.[index]?.errorMessage && (

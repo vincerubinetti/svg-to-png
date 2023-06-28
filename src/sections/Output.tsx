@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "@/components/Button";
 import Checkbox from "@/components/Checkbox";
 import { Canvas } from "@/sections/Canvas";
-import { computed, files } from "@/state";
+import { computed, files, options } from "@/state";
 import { downloadCanvas } from "@/util/download";
 import classes from "./Output.module.css";
 
@@ -13,6 +13,7 @@ const Output = () => {
   const [dark, setDark] = useState(false);
   const [getFiles] = useAtom(files);
   const [getComputed] = useAtom(computed);
+  const [getOptions] = useAtom(options);
 
   if (!getFiles.length) return <></>;
 
@@ -27,12 +28,12 @@ const Output = () => {
             <span>{getComputed?.[index]?.name}.png</span>
             <Canvas
               image={getComputed?.[index]?.image || null}
-              width={getComputed?.[index]?.dimensions.width || 0}
-              height={getComputed?.[index]?.dimensions.height || 0}
+              width={getOptions?.[index]?.width || 0}
+              height={getOptions?.[index]?.height || 0}
               originalWidth={getComputed?.[index]?.dimensions.width || 0}
               originalHeight={getComputed?.[index]?.dimensions.height || 0}
               fit={"contain"}
-              margin={0}
+              margin={getOptions?.[index]?.margin || 0}
               transparent={true}
               background="#000000"
               data-dark={dark}

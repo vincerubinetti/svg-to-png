@@ -1,0 +1,20 @@
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.option {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px;
+}
+
+.option > :first-child {
+  flex-basis: 0;
+  flex-grow: 1;
+  font-weight: bold;
+  overflow-wrap: break-word;
+}

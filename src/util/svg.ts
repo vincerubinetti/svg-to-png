@@ -29,7 +29,9 @@ const urlToImage = (url: string): Promise<HTMLImageElement> =>
   new Promise((resolve, reject) => {
     const image = new Image();
     image.addEventListener("load", () => resolve(image));
-    image.addEventListener("error", () => reject("Couldn't convert SVG to image"));
+    image.addEventListener("error", () =>
+      reject("Couldn't convert SVG to image")
+    );
     image.src = url;
   });
 

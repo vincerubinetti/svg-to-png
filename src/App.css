@@ -84,11 +84,16 @@ section {
 }
 
 button,
-input,
 select,
+input,
 textarea {
   font: inherit;
   color: inherit;
+}
+
+button,
+select,
+input[type="checkbox"] {
   cursor: pointer;
 }
 
@@ -124,6 +129,7 @@ td:not(:first-child) {
 }
 
 .control-label {
+  cursor: pointer;
 }
 
 .tippy-box {

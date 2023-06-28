@@ -1,4 +1,4 @@
-.textbox {
+.input {
   min-width: 0;
   padding: 5px 10px;
   border: solid 1px var(--gray);
@@ -6,6 +6,6 @@
   transition: box-shadow var(--fast);
 }
 
-.textbox:hover {
+.input:hover {
   box-shadow: var(--shadow);
 }

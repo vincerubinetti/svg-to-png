@@ -1,24 +1,34 @@
 import { atom, getDefaultStore } from "jotai";
+import { atomWithImmer } from "jotai-immer";
 import { unstable_unwrap } from "jotai/utils";
-import { cloneDeep, isEqual } from "lodash";
+import { isEqual, range } from "lodash";
 import { sourceToImage, sourceToSvg, unitsToPixels } from "@/util/svg";
 
-type Input = { name: string; source: string };
+type File = {
+  name: string;
+  source: string;
+};
 
-/** sample file */
-const sampleFile: Input = {
+type Option = {
+  width: number;
+  height: number;
+  aspect: number;
+  margin: number;
+};
+
+const sampleFile: File = {
   name: "sample.svg",
-  source: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-100 -100 200 200">\n  <circle fill="#e91e63" cx="0" cy="0" r="50" />\n</svg>`,
+  source: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-100 -100 200 200">\n  <circle fill="#e91e63" cx="0" cy="0" r="100" />\n</svg>`,
 };
 
 /** list of inputted svg files */
-export const files = atom([sampleFile]);
+export const files = atomWithImmer([sampleFile]);
 
 /** default dimensions */
 export const defaultWidth = 512;
 export const defaultHeight = 512;
 
-/** list of computed props from files */
+/** props computed/derived from input files */
 export const computed = unstable_unwrap(
   atom(
     async (get) =>
@@ -88,28 +98,86 @@ export const computed = unstable_unwrap(
             dimensions,
           };
         })
-      )
-  ),
-  (prev) => prev ?? null
+      ),
+    (prev) => prev ?? null
+  )
 );
+
+/** list of options for rendering */
+export const options = atomWithImmer<Option[]>([]);
 
 /** singleton store instance to access state outside of react */
 const store = getDefaultStore();
 
+/** set options from files */
+store.sub(computed, () =>
+  store.set(
+    options,
+    store.get(computed)?.map((computed) => ({
+      width: computed.dimensions.width,
+      height: computed.dimensions.height,
+      aspect: computed.dimensions.width / computed.dimensions.height,
+      margin: 0,
+    })) || []
+  )
+);
+
+/** set arbitrary file field */
+export const setFile = <Key extends keyof File>(
+  /** which options set in list to set */
+  index: number,
+  /** which field to set */
+  key: Key,
+  /** value to set field to */
+  value: File[Key]
+) =>
+  store.set(files, (newFiles) => {
+    newFiles[index][key] = value;
+  });
+
+/** set arbitrary option field */
+export const setOption = <Key extends keyof Option>(
+  /** which options set in list to set. -1 to set all. */
+  index: number,
+  /** which field to set */
+  key: Key,
+  /** value to set field to */
+  value: Option[Key]
+) =>
+  store.set(options, (newOptions) => {
+    /** list of list items to set */
+    const indices = index === -1 ? range(store.get(options).length) : [index];
+
+    for (const index of indices) {
+      /** update value */
+      newOptions[index][key] = value;
+
+      /** lock aspect ratio */
+      if (key === "aspect" && value === Infinity)
+        newOptions[index].aspect =
+          newOptions[index].width / newOptions[index].height;
+
+      /** preserve aspect ratio */
+      if (key === "width" && newOptions[index].aspect)
+        newOptions[index].height =
+          newOptions[index].width / newOptions[index].aspect;
+      if (key === "height" && newOptions[index].aspect)
+        newOptions[index].width =
+          newOptions[index].height * newOptions[index].aspect;
+    }
+  });
+
 /** add files to file list */
-export const addFiles = (toAdd: Input[]) => {
-  let newFiles = cloneDeep(store.get(files));
-  if (isEqual(newFiles, [sampleFile])) newFiles = [];
-  newFiles = newFiles.concat(toAdd);
-  store.set(files, newFiles);
-};
+export const addFiles = (toAdd: File[]) =>
+  store.set(files, (newFiles) =>
+    isEqual(newFiles, [sampleFile]) ? toAdd : newFiles.concat(toAdd)
+  );
 
 /** remove file from file list */
-export const removeFile = (index: number) => {
-  const newFiles = cloneDeep(store.get(files));
-  newFiles.splice(index, 1);
-  store.set(files, newFiles);
-};
+export const removeFile = (index: number) =>
+  store.set(files, (newFiles) => {
+    newFiles.splice(index, 1);
+  });
 
 /** reset file list to just sample file */
 export const clearFiles = () => store.set(files, []);
