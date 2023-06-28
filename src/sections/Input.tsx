@@ -1,15 +1,15 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { DragEventHandler, useEffect, useRef, useState } from "react";
 import { useAtom } from "jotai";
 import { cloneDeep } from "lodash";
 import { faTimes, faUpload } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "@/components/Button";
 import Textarea from "@/components/Textarea";
 import Textbox from "@/components/Textbox";
 import { addFiles, clearFiles, computed, files, removeFile } from "@/state";
-import classes from "./File.module.css";
+import classes from "./Input.module.css";
 
-const File = () => {
+const Input = () => {
   const [dragging, setDragging] = useState(false);
   const input = useRef<HTMLInputElement>(null);
 
@@ -63,7 +63,8 @@ const File = () => {
   };
 
   return (
-    <>
+    <section>
+      <h2>Input SVGs</h2>
       {/* buttons */}
       <div className={classes.buttons}>
         <input
@@ -76,7 +77,7 @@ const File = () => {
         />
         <Button
           onClick={onClick}
-          data-tooltip="Load SVG files. Or drag and drop file onto window."
+          data-tooltip="Load SVG files. Or drag and drop files onto window."
         >
           Load
           <FontAwesomeIcon icon={faUpload} />
@@ -104,87 +105,42 @@ const File = () => {
       <div className={classes.files}>
         {getFiles.map((file, index) => (
           <div className={classes.file} key={index}>
-            <Textbox
-              value={file.name}
-              onChange={(event) => {
-                const newFiles = cloneDeep(getFiles);
-                newFiles[index].name = event.target.value;
-                setFiles(newFiles);
-              }}
-              aria-label="filename"
-            />
-            <Button
-              onClick={() => removeFile(index)}
-              data-tooltip="Remove file"
-            >
-              <FontAwesomeIcon icon={faTimes} />
-            </Button>
+            <div className={classes.top}>
+              <Textbox
+                value={file.name}
+                onChange={(value) => {
+                  const newFiles = cloneDeep(getFiles);
+                  newFiles[index].name = value;
+                  setFiles(newFiles);
+                }}
+                data-tooltip="Filename"
+              />
+              <Button
+                onClick={() => removeFile(index)}
+                data-tooltip="Remove file"
+              >
+                <FontAwesomeIcon icon={faTimes} />
+              </Button>
+            </div>
             <Textarea
               value={file.source}
-              onChange={(event) => {
+              onChange={(value) => {
                 const newFiles = cloneDeep(getFiles);
-                newFiles[index].source = event.target.value;
+                newFiles[index].source = value;
                 setFiles(newFiles);
               }}
-              aria-label="file source code contents"
-              data-tooltip={`
-                <table>
-                  <tr>
-                    <td>
-                      Specified size:
-                    </td>
-                    <td>
-                      ${getComputed.data?.[index]?.specified.width || "-"}
-                    </td>
-                    <td>
-                      &times;
-                    </td>
-                    <td>
-                      ${getComputed.data?.[index]?.specified.height || "-"}
-                    </td>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      Absolute size:
-                    </td>
-                    <td>
-                      ${getComputed.data?.[index]?.absolute.width || "-"}
-                    </td>
-                    <td>
-                      &times;
-                    </td>
-                    <td>
-                      ${getComputed.data?.[index]?.absolute.height || "-"}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      View Box:
-                    </td>
-                    <td>
-                      ${getComputed.data?.[index]?.viewBox.width || "-"}
-                    </td>
-                    <td>
-                      &times;
-                    </td>
-                    <td>
-                      ${getComputed.data?.[index]?.viewBox.height || "-"}
-                    </td>
-                  </tr>
-                </table>
-              `}
+              data-tooltip="SVG source code"
             />
-            {getComputed.data?.[index]?.errorMessage && (
+            {getComputed?.[index]?.errorMessage && (
               <div className={classes.error}>
-                {getComputed.data?.[index]?.errorMessage}
+                {getComputed?.[index]?.errorMessage}
               </div>
             )}
           </div>
         ))}
       </div>
-    </>
+    </section>
   );
 };
 
-export default File;
+export default Input;

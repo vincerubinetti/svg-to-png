@@ -6,7 +6,7 @@
   background-image: url("checkers-light.svg");
   background-size: 2vmin;
   background-attachment: fixed;
-  outline: solid 1px var(--black);
+  /* outline: solid 1px var(--black); */
 }
 
 .canvas[data-dark="true"] {

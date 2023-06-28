@@ -1,5 +1,5 @@
 import { atom, getDefaultStore } from "jotai";
-import { loadable } from "jotai/utils";
+import { unstable_unwrap } from "jotai/utils";
 import { cloneDeep, isEqual } from "lodash";
 import { sourceToImage, sourceToSvg, unitsToPixels } from "@/util/svg";
 
@@ -8,18 +8,18 @@ type Input = { name: string; source: string };
 /** sample file */
 const sampleFile: Input = {
   name: "sample.svg",
-  source: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-50 -50 100 100">\n  <circle fill="#e91e63" cx="0" cy="0" r="35" />\n</svg>\n`,
+  source: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-100 -100 200 200">\n  <circle fill="#e91e63" cx="0" cy="0" r="50" />\n</svg>`,
 };
 
 /** list of inputted svg files */
 export const files = atom([sampleFile]);
 
 /** default dimensions */
-export const defaultWidth = 200;
-export const defaultHeight = 200;
+export const defaultWidth = 512;
+export const defaultHeight = 512;
 
 /** list of computed props from files */
-export const computed = loadable(
+export const computed = unstable_unwrap(
   atom(
     async (get) =>
       await Promise.all(
@@ -38,6 +38,9 @@ export const computed = loadable(
             if (typeof error === "string") errorMessage = error;
             if (error instanceof Error) errorMessage = error.message;
           }
+
+          /** filename, without extension */
+          const name = file.name.replace(/\.svg$/, "");
 
           /** dimensions, exactly as specified in svg source */
           const specified = {
@@ -78,6 +81,7 @@ export const computed = loadable(
             errorMessage,
             svg,
             image,
+            name,
             specified,
             absolute,
             viewBox,
@@ -85,7 +89,8 @@ export const computed = loadable(
           };
         })
       )
-  )
+  ),
+  (prev) => prev ?? null
 );
 
 /** singleton store instance to access state outside of react */

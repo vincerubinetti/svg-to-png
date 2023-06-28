@@ -6,8 +6,7 @@
   padding: 10px 20px;
   border: none;
   border-radius: var(--rounded);
-  background: var(--off-white);
-  color: var(--dark-gray);
+  background: var(--light-gray);
   transition: background var(--fast), color var(--fast);
 }
 

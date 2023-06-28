@@ -1,7 +1,7 @@
-import File from "@/sections/File";
 import Footer from "@/sections/Footer";
 import Header from "@/sections/Header";
-import Results from "@/sections/Results";
+import Input from "@/sections/Input";
+import Output from "@/sections/Output";
 import "@/components/tooltip";
 import "./App.css";
 
@@ -9,12 +9,8 @@ const App = () => (
   <>
     <Header />
     <main>
-      <section>
-        <File />
-      </section>
-      <section>
-        <Results />
-      </section>
+      <Input />
+      <Output />
     </main>
     <Footer />
   </>

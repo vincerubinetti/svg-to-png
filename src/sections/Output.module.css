@@ -1,0 +1,18 @@
+.results {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+
+.result {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

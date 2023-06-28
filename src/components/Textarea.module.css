@@ -1,13 +1,13 @@
 .textarea {
-  height: 200px;
+  flex-grow: 1;
   padding: 10px;
   border: solid 1px var(--light-gray);
   border-radius: var(--rounded);
-  color: var(--dark-gray);
   font-family: "IBM Plex Mono", monospace;
   cursor: unset;
   transition: box-shadow var(--fast);
   white-space: nowrap;
+  resize: none;
 }
 
 .textarea:hover {

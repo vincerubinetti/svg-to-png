@@ -1,10 +1,10 @@
-import { defaultHeight, defaultWidth } from "@/state";
+import { CanvasHTMLAttributes } from "react";
 import classes from "./Canvas.module.css";
 
 const densityScale = window.devicePixelRatio;
 
 type Props = {
-  image: HTMLImageElement;
+  image: HTMLImageElement | null;
   width: number;
   height: number;
   originalWidth: number;
@@ -13,7 +13,7 @@ type Props = {
   margin: number;
   transparent: boolean;
   background: string;
-};
+} & CanvasHTMLAttributes<HTMLCanvasElement>;
 
 /** canvas component */
 export const Canvas = ({
@@ -26,10 +26,11 @@ export const Canvas = ({
   margin,
   transparent,
   background,
+  ...props
 }: Props) => {
   /** size to draw svg image onto canvas */
-  let drawWidth = (Math.abs(width) || defaultWidth) - margin * 2;
-  let drawHeight = (Math.abs(height) || defaultHeight) - margin * 2;
+  let drawWidth = Math.abs(width) - margin * 2;
+  let drawHeight = Math.abs(height) - margin * 2;
 
   /** scale down draw size to contain full svg within bounds of canvas */
   const contain = () => {
@@ -79,18 +80,16 @@ export const Canvas = ({
 
   /** render component */
   return (
-    <div className={classes.result}>
-      <canvas
-        ref={drawCanvas}
-        className={classes.canvas}
-        width={width}
-        height={height}
-        style={{
-          width: width / densityScale + "px",
-          height: height / densityScale + "px",
-        }}
-        data-tooltip="PNG image"
-      />
-    </div>
+    <canvas
+      ref={drawCanvas}
+      {...props}
+      className={classes.canvas}
+      width={width}
+      height={height}
+      style={{
+        width: width / densityScale + "px",
+        height: height / densityScale + "px",
+      }}
+    />
   );
 };

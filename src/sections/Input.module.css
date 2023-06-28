@@ -20,35 +20,42 @@
 
 .buttons {
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
-  gap: 10px;
-  width: 100%;
-}
-
-.buttons > button {
-  flex-grow: 1;
+  gap: 20px;
 }
 
 .files {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 40px;
+  width: 100%;
 }
 
 .file {
   display: flex;
-  justify-content: center;
-  align-content: flex-start;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 10px;
+  width: calc(100% / 2 - 40px / 2);
+  height: 200px;
+  max-width: 100%;
+  min-width: 200px;
+  min-height: 100px;
+  resize: both;
+  overflow: hidden;
+}
+
+.file:only-child {
+  width: 100%;
+}
+
+.top {
+  display: flex;
   gap: 10px;
 }
 
-.file > input {
+.top > input {
   flex-grow: 1;
-}
-
-.file > textarea {
-  width: 100%;
 }
 
 .error {

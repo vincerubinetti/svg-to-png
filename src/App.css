@@ -3,16 +3,16 @@
   --secondary: #f06292;
 
   --white: white;
-  --off-white: #eceff1;
-  --light-gray: #cfd8dc;
+  --light-gray: #eceff1;
   --gray: #90a4ae;
-  --mid-gray: #607d8b;
   --dark-gray: #263238;
   --black: #000000;
 
   --shadow: 0 0 10px #0002;
   --rounded: 5px;
   --fast: 0.15s ease;
+
+  font-size: 14pt;
 }
 
 * {
@@ -23,8 +23,8 @@
 body {
   min-height: 100vh;
   margin: 0;
-  font-size: 14pt;
   background: var(--white);
+  color: var(--dark-gray);
 }
 
 #root {
@@ -64,12 +64,20 @@ h1 {
   gap: 20px;
   margin: 0;
   font: inherit;
-  font-size: 2rem;
+  font-size: 1.5rem;
+}
+
+h2 {
+  margin: 0;
+  text-align: center;
+  font: inherit;
+  font-size: 1.2rem;
 }
 
 section {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 40px;
   width: 100%;
   padding: 40px max(40px, (100% - 1200px) / 2);
@@ -80,6 +88,7 @@ input,
 select,
 textarea {
   font: inherit;
+  color: inherit;
   cursor: pointer;
 }
 
@@ -89,7 +98,7 @@ a {
 }
 
 a:hover {
-  color: var(--dark-gray);
+  color: var(--primary);
 }
 
 table {
@@ -108,12 +117,21 @@ td:not(:first-child) {
   text-align: center;
 }
 
+.control {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.control-label {
+}
+
 .tippy-box {
   padding: 10px 15px;
   border-radius: var(--rounded);
   background: var(--dark-gray);
   font-size: 1rem;
-  box-shadow: 0 0 10px var(--off-black);
+  box-shadow: var(--shadow);
 }
 
 .tippy-content {

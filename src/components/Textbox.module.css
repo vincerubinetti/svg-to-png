@@ -1,9 +1,8 @@
 .textbox {
-  max-width: 100%;
+  min-width: 0;
   padding: 10px;
   border: solid 1px var(--light-gray);
   border-radius: var(--rounded);
-  color: var(--dark-gray);
   cursor: unset;
   transition: box-shadow var(--fast);
 }

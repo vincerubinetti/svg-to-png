@@ -1,8 +1,19 @@
 import { TextareaHTMLAttributes } from "react";
 import classes from "./Textarea.module.css";
 
-const Textarea = (props: TextareaHTMLAttributes<HTMLTextAreaElement>) => (
-  <textarea {...props} className={classes.textarea} spellCheck={false} />
+type Props = {
+  value: string;
+  onChange: (value: string) => void;
+} & Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "value" | "onChange">;
+
+const Textarea = ({ value, onChange, ...props }: Props) => (
+  <textarea
+    {...props}
+    value={value}
+    onChange={(event) => onChange(event.target.value)}
+    className={classes.textarea}
+    spellCheck={false}
+  />
 );
 
 export default Textarea;
