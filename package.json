@@ -13,6 +13,7 @@
     "@fortawesome/free-brands-svg-icons": "^6.4.0",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@zip.js/zip.js": "^2.7.17",
     "immer": "^10.0.2",
     "jotai": "^2.2.1",
     "jotai-immer": "^0.2.0",

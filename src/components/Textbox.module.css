@@ -1,11 +1,25 @@
 .textbox {
   min-width: 0;
+}
+
+.textbox[data-resizable="true"] {
+  resize: horizontal;
+  overflow: hidden;
+  width: 150px;
+  min-width: 100px;
+  max-width: 300px;
+}
+
+.input {
+  flex-grow: 1;
+  min-width: 0;
+  min-height: 40px;
   padding: 5px 10px;
   border: solid 1px var(--gray);
   border-radius: var(--rounded);
   transition: box-shadow var(--fast);
 }
 
-.textbox:hover {
+.input:hover {
   box-shadow: var(--shadow);
 }

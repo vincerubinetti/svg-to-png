@@ -1,13 +1,14 @@
-.textarea {
-  flex-grow: 1;
-  padding: 10px;
+.select {
+  min-width: 0;
+  min-height: 40px;
+  padding: 5px 10px;
+  border: none;
   border: solid 1px var(--gray);
   border-radius: var(--rounded);
+  background: var(--off-white);
   transition: box-shadow var(--fast);
-  white-space: nowrap;
-  resize: none;
 }
 
-.textarea:hover {
+.select:hover {
   box-shadow: var(--shadow);
 }

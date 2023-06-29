@@ -1,20 +1,27 @@
 .options {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr auto auto auto auto;
+  align-items: center;
   gap: 20px;
   width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 .option {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 20px;
+  display: contents;
 }
 
-.option > :first-child {
-  flex-basis: 0;
-  flex-grow: 1;
-  font-weight: bold;
-  overflow-wrap: break-word;
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: max-content;
+}
+
+.title {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

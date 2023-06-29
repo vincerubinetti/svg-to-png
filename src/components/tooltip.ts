@@ -6,7 +6,7 @@ const options: Partial<Props> = {
   delay: [50, 0],
   duration: [100, 100],
   allowHTML: true,
-  // interactive: true,
+  interactive: true,
   appendTo: document.body,
   aria: { content: "auto" },
   onCreate: (instance: Instance) => {

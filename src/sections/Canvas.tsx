@@ -11,7 +11,6 @@ type Props = {
   originalHeight: number;
   fit: string;
   margin: number;
-  transparent: boolean;
   background: string;
 } & CanvasHTMLAttributes<HTMLCanvasElement>;
 
@@ -24,7 +23,6 @@ export const Canvas = ({
   originalHeight,
   fit,
   margin,
-  transparent,
   background,
   ...props
 }: Props) => {
@@ -59,10 +57,8 @@ export const Canvas = ({
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     /** fill background */
-    if (!transparent) {
-      ctx.fillStyle = background;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-    }
+    ctx.fillStyle = background.trim() || "transparent";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     if (!image) return;
 

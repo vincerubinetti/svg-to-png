@@ -655,6 +655,11 @@
     "@babel/plugin-transform-react-jsx-source" "^7.19.6"
     react-refresh "^0.14.0"
 
+"@zip.js/zip.js@^2.7.17":
+  version "2.7.17"
+  resolved "https://registry.yarnpkg.com/@zip.js/zip.js/-/zip.js-2.7.17.tgz#b72444181493a9a480720b5832f760ead0ba423f"
+  integrity sha512-Y7GSkZTHaol4AC4pSsnxuw2LnYrI+j2VZsPwnARocLYzmRW7qnUAZ20rWeNeJNH6yfag56UdbxztYyxpuazUCQ==
+
 acorn-jsx@^5.3.2:
   version "5.3.2"
   resolved "https://registry.yarnpkg.com/acorn-jsx/-/acorn-jsx-5.3.2.tgz#7ed5bb55908b3b2f1bc55c6af1653bada7f07937"

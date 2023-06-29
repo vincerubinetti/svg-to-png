@@ -1,12 +1,12 @@
 :root {
   --primary: #e91e63;
-  --secondary: #f06292;
 
   --white: white;
   --light-gray: #eceff1;
+  --mid-gray: #cfd8dc;
   --gray: #90a4ae;
   --dark-gray: #263238;
-  --black: #000000;
+  --black: black;
 
   --shadow: 0 0 10px #0002;
   --rounded: 5px;
@@ -57,6 +57,11 @@ footer a {
   color: var(--white);
 }
 
+header a:hover,
+footer a:hover {
+  color: var(--black);
+}
+
 h1 {
   display: inline-flex;
   justify-content: center;
@@ -68,10 +73,23 @@ h1 {
 }
 
 h2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
   margin: 0;
   text-align: center;
   font: inherit;
   font-size: 1.2rem;
+}
+
+h2:before,
+h2:after {
+  content: "";
+  flex-grow: 1;
+  height: 1px;
+  background: var(--mid-gray);
 }
 
 section {
@@ -91,10 +109,33 @@ textarea {
   color: inherit;
 }
 
+textarea,
+code {
+  font-family: "IBM Plex Mono", monospace;
+}
+
+code {
+  padding: 2px 5px;
+  border-radius: var(--rounded);
+  background: #eceff120;
+  color: var(--light-gray);
+}
+
 button,
 select,
-input[type="checkbox"] {
+input[type="checkbox"],
+input[type="color"] {
   cursor: pointer;
+}
+
+fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+legend {
+  float: left;
 }
 
 a {
@@ -106,20 +147,12 @@ a:hover {
   color: var(--primary);
 }
 
-table {
-  border-collapse: collapse;
+ul {
+  padding-left: 20px;
 }
 
-td {
-  padding: 3px;
-}
-
-td:first-child {
-  padding-right: 1em;
-}
-
-td:not(:first-child) {
-  text-align: center;
+li {
+  padding: 5px 0;
 }
 
 .control {
@@ -133,6 +166,8 @@ td:not(:first-child) {
 }
 
 .tippy-box {
+  width: max-content;
+  max-width: min(90vw, 380px) !important;
   padding: 10px 15px;
   border-radius: var(--rounded);
   background: var(--dark-gray);
@@ -141,7 +176,22 @@ td:not(:first-child) {
 }
 
 .tippy-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   padding: 0;
+}
+
+.tippy-content > * {
+  margin: 0 !important;
+}
+
+.tippy-content a {
+  color: var(--white);
+}
+
+.tippy-content a:hover {
+  color: var(--primary);
 }
 
 .tippy-arrow {

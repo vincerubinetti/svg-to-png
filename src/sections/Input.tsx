@@ -1,18 +1,20 @@
 import { DragEventHandler, useEffect, useRef, useState } from "react";
 import { useAtom } from "jotai";
+import { isEqual } from "lodash";
 import { faTimes, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "@/components/Button";
 import Textarea from "@/components/Textarea";
 import Textbox from "@/components/Textbox";
+import { computed } from "@/state/computed";
 import {
   addFiles,
   clearFiles,
-  computed,
   files,
   removeFile,
+  sampleFile,
   setFile,
-} from "@/state";
+} from "@/state/files";
 import classes from "./Input.module.css";
 
 const Input = () => {
@@ -28,6 +30,9 @@ const Input = () => {
   /** upload file */
   const onLoad = async (files: FileList | null) => {
     if (!files) return;
+
+    /** clear sample */
+    if (isEqual(getFiles, [sampleFile])) clearFiles();
 
     /** parse file uploads as text */
     const data = await Promise.all(
@@ -70,7 +75,7 @@ const Input = () => {
 
   return (
     <section>
-      <h2>Input SVGs</h2>
+      <h2>Input</h2>
       {/* buttons */}
       <div className={classes.buttons}>
         <input
@@ -110,7 +115,12 @@ const Input = () => {
       {/* files */}
       <div className={classes.files}>
         {getFiles.map((file, index) => (
-          <div className={classes.file} key={index}>
+          <div
+            key={index}
+            className={classes.file}
+            role="group"
+            aria-label={file.name}
+          >
             <div className={classes.top}>
               <Textbox
                 value={file.name}
@@ -120,6 +130,7 @@ const Input = () => {
               <Button
                 onClick={() => removeFile(index)}
                 data-tooltip="Remove file"
+                data-square
               >
                 <FontAwesomeIcon icon={faTimes} />
               </Button>
