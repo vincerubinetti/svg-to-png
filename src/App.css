@@ -124,7 +124,7 @@ code {
 button,
 select,
 input[type="checkbox"],
-input[type="color"] {
+label {
   cursor: pointer;
 }
 
@@ -148,7 +148,7 @@ a:hover {
 }
 
 ul {
-  padding-left: 20px;
+  padding-left: 30px;
 }
 
 li {
@@ -159,10 +159,6 @@ li {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-}
-
-.control-label {
-  cursor: pointer;
 }
 
 .tippy-box {

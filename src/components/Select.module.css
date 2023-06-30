@@ -1,14 +1,25 @@
+.label {
+  position: relative;
+}
+
 .select {
   min-width: 0;
   min-height: 40px;
-  padding: 5px 10px;
+  padding: 5px 30px 5px 10px;
   border: none;
   border: solid 1px var(--gray);
   border-radius: var(--rounded);
   background: var(--off-white);
   transition: box-shadow var(--fast);
+  appearance: none;
 }
 
 .select:hover {
   box-shadow: var(--shadow);
+}
+
+.caret {
+  position: absolute;
+  right: 10px;
+  color: var(--gray);
 }

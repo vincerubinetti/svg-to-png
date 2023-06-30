@@ -18,7 +18,7 @@ const Textbox = ({
   ...props
 }: Props) => (
   <label
-    className={classes.textbox + " control"}
+    className={classes.label + " control"}
     data-tooltip={tooltip}
     data-resizable={resizable}
   >

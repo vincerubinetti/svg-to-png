@@ -1,8 +1,8 @@
-.textbox {
+.label {
   min-width: 0;
 }
 
-.textbox[data-resizable="true"] {
+.label[data-resizable="true"] {
   resize: horizontal;
   overflow: hidden;
   width: 150px;

@@ -1,4 +1,6 @@
 import { startCase } from "lodash";
+import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classes from "./Select.module.css";
 
 type Props<Option> = {
@@ -16,10 +18,10 @@ const Select = <Option extends string>({
   value,
   onChange,
 }: Props<Option>) => (
-  <label className="control" data-tooltip={tooltip}>
+  <label className={classes.label + " control"} data-tooltip={tooltip}>
     <span className="control-label">{label}</span>
     <select
-      className={classes.select + " control-primary"}
+      className={classes.select}
       value={value}
       onChange={(event) => onChange(options[event.target.selectedIndex])}
     >
@@ -29,6 +31,7 @@ const Select = <Option extends string>({
         </option>
       ))}
     </select>
+    <FontAwesomeIcon icon={faCaretDown} className={classes.caret} />
   </label>
 );
 

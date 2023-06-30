@@ -31,7 +31,7 @@ const Options = () => {
       <div>
         <Checkbox
           label="Edit all"
-          tooltip="Whether to update all files together when tweaking an option value."
+          tooltip="Whether to update all files together when changing a value."
           value={all}
           onChange={setAll}
         />
@@ -131,7 +131,7 @@ const Options = () => {
                 setOption(all ? -1 : index, "background", value)
               }
               tooltip={`
-                <p>Background color, with transparency. Examples:</p>
+                <p>Background color with transparency. Examples:</p>
                 <ul>
                   <li>blank or <code>transparent</code></li>
                   <li><code>maroon</code>, <code>navy</code>, <code>gold</code>, <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/named-color" target="_blank">etc.</a></li>

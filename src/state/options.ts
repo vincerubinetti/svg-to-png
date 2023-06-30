@@ -12,7 +12,7 @@ type Option = {
   background: string;
 };
 
-/** list of options for rendering */
+/** list of options associated with input files */
 export const options = atomWithImmer<Option[]>([]);
 
 /** add/remove options when files change */
@@ -30,9 +30,9 @@ store.sub(computed, () =>
   })
 );
 
-/** set arbitrary option field */
+/** set arbitrary option field for a file */
 export const setOption = <Key extends keyof Option>(
-  /** which options set in list to set. -1 to set all. */
+  /** index of file to set. -1 to set all. */
   index: number,
   /** which field to set */
   key: Key,
@@ -40,7 +40,7 @@ export const setOption = <Key extends keyof Option>(
   value: Option[Key]
 ) =>
   store.set(options, (newOptions) => {
-    /** list of list items to set */
+    /** list of indices to set */
     const indices = index === -1 ? range(store.get(options).length) : [index];
 
     for (const index of indices) {
@@ -62,7 +62,7 @@ export const setOption = <Key extends keyof Option>(
     }
   });
 
-/** reset option to default */
+/** reset option for a file to default */
 export const resetOption = (index: number) =>
   store.set(options, (newOptions) => {
     /** list items to set */
@@ -72,7 +72,7 @@ export const resetOption = (index: number) =>
     for (const index of indices) newOptions[index] = getDefaultOption(index);
   });
 
-/** get default options for list item */
+/** get default options for a file */
 const getDefaultOption = (index: number): Option => {
   const getComputed = store.get(computed);
 

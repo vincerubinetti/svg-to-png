@@ -61,7 +61,10 @@ const Output = () => {
       {/* options */}
       <Checkbox
         label="Dark checkers"
-        tooltip="Whether to show a dark checkerboard background for transparency. For previews only; does not show up in downloaded image."
+        tooltip={`
+          <p>Whether to show a dark checkerboard background for transparency.</p>
+          <p>For previews only; does not show up in downloaded images.</p>
+        `}
         value={dark}
         onChange={setDark}
       />

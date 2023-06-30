@@ -4,7 +4,7 @@
   border: solid 1px var(--gray);
   border-radius: var(--rounded);
   transition: box-shadow var(--fast);
-  white-space: nowrap;
+  white-space: pre;
   resize: none;
 }
 

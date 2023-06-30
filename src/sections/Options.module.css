@@ -1,11 +1,13 @@
 .options {
   display: grid;
   grid-template-columns: 1fr auto auto auto auto;
+  grid-template-rows: 1fr;
   align-items: center;
   gap: 20px;
   width: 100%;
   max-width: 100%;
   overflow-x: auto;
+  overflow-y: visible;
 }
 
 .option {

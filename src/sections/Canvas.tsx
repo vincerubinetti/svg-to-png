@@ -14,7 +14,7 @@ type Props = {
   background: string;
 } & CanvasHTMLAttributes<HTMLCanvasElement>;
 
-/** canvas component */
+/** draw svg to canvas */
 export const Canvas = ({
   image,
   width,
@@ -30,18 +30,20 @@ export const Canvas = ({
   let drawWidth = Math.abs(width) - margin * 2;
   let drawHeight = Math.abs(height) - margin * 2;
 
+  /** calc aspect ratios */
+  const originalAspect = originalWidth / originalHeight;
+  const drawAspect = drawWidth / drawHeight;
+
   /** scale down draw size to contain full svg within bounds of canvas */
   const contain = () => {
-    if (originalWidth / originalHeight < drawWidth / drawHeight)
-      drawWidth = (drawHeight * originalWidth) / originalHeight;
-    else drawHeight = (drawWidth * originalHeight) / originalWidth;
+    if (originalAspect < drawAspect) drawWidth = drawHeight * originalAspect;
+    else drawHeight = drawWidth / originalAspect;
   };
 
   /** scale up draw size to cover full canvas with svg */
   const cover = () => {
-    if (originalWidth / originalHeight > drawWidth / drawHeight)
-      drawWidth = (drawHeight * originalWidth) / originalHeight;
-    else drawHeight = (drawWidth * originalHeight) / originalWidth;
+    if (originalAspect > drawAspect) drawWidth = drawHeight * originalAspect;
+    else drawHeight = drawWidth / originalAspect;
   };
 
   /** draw canvas when rendering component */
