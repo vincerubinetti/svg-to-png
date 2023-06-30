@@ -2,6 +2,7 @@ import { atom } from "jotai";
 import { unstable_unwrap } from "jotai/utils";
 import { files } from "@/state/files";
 import { sourceToImage, sourceToSvg, unitsToPixels } from "@/util/svg";
+import { toFixed } from "./../util/math";
 
 /** default dimensions */
 export const defaultWidth = 512;
@@ -52,11 +53,37 @@ export const computed = unstable_unwrap(
           /** viewBox, exactly as specified in svg source */
           const viewBox = { x, y, width, height };
 
-          /** resulting dimensions */
-          const dimensions = {
-            width: absolute.width || viewBox.width || defaultWidth,
-            height: absolute.height || viewBox.height || defaultHeight,
+          /** final inferred dimensions of image */
+          const inferred = {
+            width: defaultWidth,
+            height: defaultHeight,
           };
+
+          if (absolute.width && absolute.height) {
+            /** use absolute if available */
+            inferred.width = absolute.width;
+            inferred.height = absolute.height;
+          } else if (absolute.width && viewBox.width && viewBox.height) {
+            /** if only width specified, calc height from view box aspect */
+            inferred.width = absolute.width;
+            inferred.height = absolute.width * (viewBox.height / viewBox.width);
+          } else if (absolute.height && viewBox.width && viewBox.height) {
+            /** if only height specified, calc width from view box aspect */
+            inferred.width = absolute.height * (viewBox.width / viewBox.height);
+            inferred.height = absolute.height;
+          } else if (viewBox.width && viewBox.height) {
+            /** use view box if available */
+            inferred.width = viewBox.width;
+            inferred.height = viewBox.height;
+          } else if (absolute.width) {
+            /** use absolute width for both */
+            inferred.width = absolute.width;
+            inferred.height = absolute.width;
+          } else if (absolute.height) {
+            /** use absolute height for both */
+            inferred.width = absolute.height;
+            inferred.height = absolute.height;
+          }
 
           /** remove unhelpful bits of error message */
           [
@@ -66,25 +93,46 @@ export const computed = unstable_unwrap(
             (phrase) => (errorMessage = errorMessage.replace(phrase, ""))
           );
 
+          /** dimension info table html */
           const info = `
             <table>
               <tr>
                 <td>Specified</td>
-                <td>${specified.width || "-"}</td>
+                <td>
+                  ${specified.width || "-"}</td>
                 <td>×</td>
-                <td>${specified.height || "-"}</td>
+                <td>
+                  ${specified.height || "-"}</td>
               </tr>
               <tr>
                 <td>Absolute</td>
-                <td>${absolute.width || "-"}px</td>
+                <td>
+                  ${absolute.width ? toFixed(absolute.width, 2) + "px" : "-"}
+                </td>
                 <td>×</td>
-                <td>${absolute.height || "-"}px</td>
+                <td>
+                  ${absolute.height ? toFixed(absolute.height, 2) + "px" : "-"}
+                </td>
               </tr>
               <tr>
                 <td>View Box</td>
-                <td>${viewBox.width || "-"}</td>
+                <td>
+                  ${viewBox.width ? toFixed(viewBox.width, 2) : "-"}
+                </td>
                 <td>×</td>
-                <td>${viewBox.height || "-"}</td>
+                <td>
+                  ${viewBox.height ? toFixed(viewBox.height, 2) : "-"}
+                </td>
+              </tr>
+              <tr>
+                <td>Inferred</td>
+                <td>
+                  ${inferred.width ? toFixed(inferred.width, 2) + "px" : "-"}
+                </td>
+                <td>×</td>
+                <td>
+                  ${inferred.height ? toFixed(inferred.height, 2) + "px" : "-"}
+                </td>
               </tr>
             </table>
           `;
@@ -97,7 +145,7 @@ export const computed = unstable_unwrap(
             specified,
             absolute,
             viewBox,
-            dimensions,
+            inferred,
             info,
           };
         })

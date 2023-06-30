@@ -33,8 +33,8 @@ const Output = () => {
               image={getComputed?.[index]?.image || null}
               width={getOptions?.[index]?.width || 0}
               height={getOptions?.[index]?.height || 0}
-              originalWidth={getComputed?.[index]?.dimensions.width || 0}
-              originalHeight={getComputed?.[index]?.dimensions.height || 0}
+              originalWidth={getComputed?.[index]?.inferred.width || 0}
+              originalHeight={getComputed?.[index]?.inferred.height || 0}
               fit={getOptions?.[index]?.fit || "contain"}
               margin={getOptions?.[index]?.margin || 0}
               background={getOptions?.[index]?.background || ""}

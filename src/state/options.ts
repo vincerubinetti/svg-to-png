@@ -78,8 +78,8 @@ export const resetOption = (index: number) =>
 const getDefaultOption = (index: number): Option => {
   const getComputed = store.get(computed);
 
-  const width = getComputed?.[index]?.dimensions.width || defaultWidth;
-  const height = getComputed?.[index]?.dimensions.height || defaultHeight;
+  const width = getComputed?.[index]?.inferred.width || defaultWidth;
+  const height = getComputed?.[index]?.inferred.height || defaultHeight;
 
   return {
     width,

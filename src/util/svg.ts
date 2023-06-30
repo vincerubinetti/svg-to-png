@@ -1,26 +1,25 @@
-/** convert string of CSS units -- 4in, 200mm, etc. -- to pixels */
+/** convert string of absolute css units to pixels */
 export const unitsToPixels = (string: string) => {
-  string = string || "";
-  /** unit constants */
-  const ppi = 96;
+  /** unit constants https://www.w3.org/TR/css-values-3/#absolute-lengths */
   const units: { [key: string]: number } = {
-    ch: 8,
-    ex: 7.15625,
-    em: 16,
-    rem: 16,
-    in: ppi,
-    cm: ppi / 2.54,
-    mm: ppi / 25.4,
-    pt: ppi / 72,
-    pc: ppi / 6,
     px: 1,
+    in: 96,
+    pt: 96 / 72,
+    pc: 96 / 6,
+    cm: 96 / 2.54,
+    mm: 96 / 2.54 / 10,
+    q: 96 / 2.54 / 40,
   };
-  /** get number */
-  let value = parseFloat(string) || 0;
-  /** get unit */
-  const unit = string.replace(String(value), "").trim();
+
+  /** extract number and unit */
+  const [, stringValue = "0", unit = "px"] =
+    string.match(/(\d+\.?\d*)\s*(\w*)/) || [];
+
+  /** parse value as number */
+  let value = Number(stringValue);
+
   /** multiply value by unit constant */
-  value *= units[unit] || 1;
+  value *= units[unit.toLowerCase()] || 0;
   return value;
 };
 

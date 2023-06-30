@@ -14,6 +14,7 @@ import Textbox from "@/components/Textbox";
 import { computed } from "@/state/computed";
 import { files } from "@/state/files";
 import { options, resetOption, setOption } from "@/state/options";
+import { toFixed } from "@/util/math";
 import classes from "./Options.module.css";
 
 const Options = () => {
@@ -64,7 +65,13 @@ const Options = () => {
                 onChange={(value) =>
                   setOption(all ? -1 : index, "width", value)
                 }
-                tooltip="Width of resulting PNG image, in pixels."
+                tooltip={`
+                  <p>Width of resulting PNG image, in pixels.</p>
+                  <p>Default from SVG: ${toFixed(
+                    getComputed?.[index]?.inferred.width || 0,
+                    2
+                  )}</p>
+                `}
               />
               ×
               <Range
@@ -75,7 +82,13 @@ const Options = () => {
                 onChange={(value) =>
                   setOption(all ? -1 : index, "height", value)
                 }
-                tooltip="Height of resulting PNG image, in pixels."
+                tooltip={`
+                  <p>Height of resulting PNG image, in pixels.</p>
+                  <p>Default from SVG: ${toFixed(
+                    getComputed?.[index]?.inferred.height || 0,
+                    2
+                  )}</p>
+                `}
               />
               <Button
                 onClick={() =>
@@ -89,7 +102,7 @@ const Options = () => {
                   (!option.aspect
                     ? "Lock aspect ratio"
                     : "Unlock aspect ratio") +
-                  ` (${(option.width / option.height).toFixed(3)})`
+                  ` (${toFixed(option.width / option.height, 3)})`
                 }
                 data-square
                 role="checkbox"
