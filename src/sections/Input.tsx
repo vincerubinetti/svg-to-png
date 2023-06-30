@@ -138,7 +138,10 @@ const Input = () => {
             <Textarea
               value={file.source}
               onChange={(value) => setFile(index, "source", value)}
-              data-tooltip="SVG source code"
+              data-tooltip={`
+                <p>SVG source code</p>
+                ${getComputed?.[index]?.info || ""}
+              `}
             />
             {getComputed?.[index]?.errorMessage && (
               <div className={classes.error}>

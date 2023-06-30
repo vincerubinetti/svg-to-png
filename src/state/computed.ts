@@ -66,6 +66,29 @@ export const computed = unstable_unwrap(
             (phrase) => (errorMessage = errorMessage.replace(phrase, ""))
           );
 
+          const info = `
+            <table>
+              <tr>
+                <td>Specified</td>
+                <td>${specified.width || "-"}</td>
+                <td>×</td>
+                <td>${specified.height || "-"}</td>
+              </tr>
+              <tr>
+                <td>Absolute</td>
+                <td>${absolute.width || "-"}px</td>
+                <td>×</td>
+                <td>${absolute.height || "-"}px</td>
+              </tr>
+              <tr>
+                <td>View Box</td>
+                <td>${viewBox.width || "-"}</td>
+                <td>×</td>
+                <td>${viewBox.height || "-"}</td>
+              </tr>
+            </table>
+          `;
+
           return {
             errorMessage,
             svg,
@@ -75,6 +98,7 @@ export const computed = unstable_unwrap(
             absolute,
             viewBox,
             dimensions,
+            info,
           };
         })
       ),

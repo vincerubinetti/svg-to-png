@@ -78,16 +78,17 @@ export const Canvas = ({
 
   /** render component */
   return (
-    <canvas
-      ref={drawCanvas}
-      {...props}
-      className={classes.canvas}
-      width={width}
-      height={height}
-      style={{
-        width: width / densityScale + "px",
-        height: height / densityScale + "px",
-      }}
-    />
+    <div className={classes.container}>
+      <canvas
+        ref={drawCanvas}
+        {...props}
+        width={width}
+        height={height}
+        style={{
+          width: width / densityScale + "px",
+          height: height / densityScale + "px",
+        }}
+      />
+    </div>
   );
 };

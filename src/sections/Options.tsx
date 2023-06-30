@@ -31,7 +31,7 @@ const Options = () => {
       <div>
         <Checkbox
           label="Edit all"
-          tooltip="Whether to update all files together when changing a value."
+          tooltip="Update all files together when changing a value."
           value={all}
           onChange={setAll}
         />
@@ -66,7 +66,7 @@ const Options = () => {
                 }
                 tooltip="Width of resulting PNG image, in pixels."
               />
-              &times;
+              ×
               <Range
                 min={0}
                 max={10000}

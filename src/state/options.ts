@@ -18,15 +18,17 @@ export const options = atomWithImmer<Option[]>([]);
 /** add/remove options when files change */
 store.sub(computed, () =>
   store.set(options, (newOptions) => {
-    const getOptions = newOptions?.length || 0;
-    const getComputed = store.get(computed)?.length || 0;
+    const getComputed = store.get(computed);
+    if (!getComputed) return;
 
     /** fill in any new files added with defaults */
-    for (let index = getOptions; index < getComputed; index++)
-      newOptions.push(getDefaultOption(index));
+    if (newOptions.length < getComputed.length)
+      for (let index = newOptions.length; index < getComputed.length; index++)
+        newOptions.push(getDefaultOption(index));
 
     /** remove options for deleted files */
-    newOptions.splice(getComputed);
+    if (newOptions.length > getComputed.length)
+      newOptions.splice(getComputed.length);
   })
 );
 

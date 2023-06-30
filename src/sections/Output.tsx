@@ -42,13 +42,12 @@ const Output = () => {
               data-tooltip="PNG preview"
             />
             <Button
-              onClick={(event) =>
+              onClick={() => {
                 downloadPNG(
-                  (event.currentTarget as HTMLElement)
-                    .previousElementSibling as HTMLCanvasElement,
+                  document.querySelectorAll("canvas")[index],
                   getComputed?.[index]?.name || "image"
-                )
-              }
+                );
+              }}
               data-tooltip="Download this PNG"
               data-square
             >
@@ -62,7 +61,7 @@ const Output = () => {
       <Checkbox
         label="Dark checkers"
         tooltip={`
-          <p>Whether to show a dark checkerboard background for transparency.</p>
+          <p>Show a dark checkerboard background for transparency.</p>
           <p>For previews only; does not show up in downloaded images.</p>
         `}
         value={dark}
@@ -88,7 +87,7 @@ const Output = () => {
         </Button>
         <Checkbox
           label="Zip"
-          tooltip="Whether to zip files together into single download."
+          tooltip="Zip files together into single download."
           value={zip}
           onChange={setZip}
         />

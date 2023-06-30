@@ -20,7 +20,7 @@ const options: Partial<Props> = {
     if (!instance?.reference?.getAttribute("data-tooltip")?.trim())
       return false;
   },
-  // onHide: () => false
+  // onHide: () => false,
 };
 
 /** extend normal element type with javascript-attached tippy instance */

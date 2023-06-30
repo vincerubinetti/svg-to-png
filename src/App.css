@@ -155,6 +155,25 @@ li {
   padding: 5px 0;
 }
 
+table {
+  border-collapse: collapse;
+}
+
+td:first-child {
+  padding-left: 0;
+  padding-right: 1em;
+  text-align: left;
+}
+
+td:last-child {
+  padding-right: 0;
+}
+
+td {
+  padding: 2px 5px;
+  text-align: center;
+}
+
 .control {
   display: inline-flex;
   align-items: center;
