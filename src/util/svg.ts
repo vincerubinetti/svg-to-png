@@ -1,3 +1,5 @@
+import { capitalize } from "lodash";
+
 /** convert string of absolute css units to pixels */
 export const unitsToPixels = (string: string) => {
   /** unit constants https://www.w3.org/TR/css-values-3/#absolute-lengths */
@@ -23,31 +25,51 @@ export const unitsToPixels = (string: string) => {
   return value;
 };
 
-/** load URI as image object, as an async-await-able function */
+/** load url as image object */
 const urlToImage = (url: string): Promise<HTMLImageElement> =>
   new Promise((resolve, reject) => {
     const image = new Image();
     image.addEventListener("load", () => resolve(image));
     image.addEventListener("error", () =>
-      reject("Couldn't convert SVG to image")
+      reject("Couldn't convert SVG to image element")
     );
     image.src = url;
   });
 
 /** convert svg source code to image dom object */
 export const sourceToImage = async (source: string) => {
-  const blob = new Blob([source || ""], { type: "image/svg+xml" });
-  const image = (await urlToImage(URL.createObjectURL(blob))) || null;
-  URL.revokeObjectURL(image.src);
+  const url =
+    "data:image/svg+xml;charset=utf8," +
+    encodeURIComponent(
+      new XMLSerializer().serializeToString(
+        sourceToSvg(
+          source,
+          /** use less strict html type (allows things like missing xmlns)
+           * because browser can still handle drawing it as image on canvas */
+          "text/html"
+        )
+      )
+    );
+  const image = (await urlToImage(url)) || null;
   return image;
 };
 
 /** convert svg source code to svg dom object */
-export const sourceToSvg = (source: string) => {
-  const doc = new DOMParser().parseFromString(source, "image/svg+xml");
+export const sourceToSvg = (
+  source: string,
+  /** use stricter type by default to get more helpful svg spec parse errors */
+  type: DOMParserSupportedType = "image/svg+xml"
+) => {
+  const doc = new DOMParser().parseFromString(source, type);
   const svg = doc.querySelector("svg");
-  const error = doc.querySelector("parsererror");
-  if (error) throw new Error(String(error.textContent));
+  let error = doc.querySelector("parsererror")?.textContent || "";
+  /** remove unhelpful bits of error message */
+  [
+    "This page contains the following errors:",
+    "Below is a rendering of the page up to the first error.",
+  ].forEach((phrase) => (error = error.replace(phrase, "")));
+  error = capitalize(error);
+  if (error) throw Error(error);
   if (svg) return svg;
-  throw new Error("unknown error");
+  throw Error("No root SVG element");
 };

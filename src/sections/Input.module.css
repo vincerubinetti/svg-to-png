@@ -41,6 +41,7 @@
   max-width: 100%;
   min-width: 200px;
   min-height: 100px;
+  padding-bottom: 10px;
   resize: both;
   overflow: hidden;
 }
@@ -60,4 +61,5 @@
 
 .error {
   color: var(--primary);
+  white-space: pre-wrap;
 }

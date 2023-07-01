@@ -21,13 +21,24 @@ export const computed = unstable_unwrap(
           /** image dom object, for convenient drawing */
           let image = null;
 
+          const handleError = (error: unknown) => {
+            if (typeof error === "string") errorMessage += error;
+            if (error instanceof Error) errorMessage += error.message;
+            errorMessage += "\n";
+          };
+
           try {
             svg = sourceToSvg(file.source);
+          } catch (error) {
+            handleError(error);
+          }
+          try {
             image = await sourceToImage(file.source);
           } catch (error) {
-            if (typeof error === "string") errorMessage = error;
-            if (error instanceof Error) errorMessage = error.message;
+            handleError(error);
           }
+
+          errorMessage = errorMessage.replace(/\n+/, "\n");
 
           /** filename, without extension */
           const name = file.name.replace(/\.svg$/, "");
@@ -84,14 +95,6 @@ export const computed = unstable_unwrap(
             inferred.width = absolute.height;
             inferred.height = absolute.height;
           }
-
-          /** remove unhelpful bits of error message */
-          [
-            "This page contains the following errors:",
-            "Below is a rendering of the page up to the first error.",
-          ].forEach(
-            (phrase) => (errorMessage = errorMessage.replace(phrase, ""))
-          );
 
           /** dimension info table html */
           const info = `
