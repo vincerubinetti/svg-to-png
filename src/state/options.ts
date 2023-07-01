@@ -15,23 +15,6 @@ type Option = {
 /** list of options associated with input files */
 export const options = atomWithImmer<Option[]>([]);
 
-/** add/remove options when files change */
-store.sub(computed, () =>
-  store.set(options, (newOptions) => {
-    const getComputed = store.get(computed);
-    if (!getComputed) return;
-
-    /** fill in any new files added with defaults */
-    if (newOptions.length < getComputed.length)
-      for (let index = newOptions.length; index < getComputed.length; index++)
-        newOptions.push(getDefaultOption(index));
-
-    /** remove options for deleted files */
-    if (newOptions.length > getComputed.length)
-      newOptions.splice(getComputed.length);
-  })
-);
-
 /** set arbitrary option field for a file */
 export const setOption = <Key extends keyof Option>(
   /** index of file to set. -1 to set all. */
@@ -75,7 +58,7 @@ export const resetOption = (index: number) =>
   });
 
 /** get default options for a file */
-const getDefaultOption = (index: number): Option => {
+export const getDefaultOption = (index: number): Option => {
   const getComputed = store.get(computed);
 
   const width = getComputed?.[index]?.inferred.width || defaultWidth;

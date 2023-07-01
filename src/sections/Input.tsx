@@ -1,6 +1,5 @@
 import { DragEventHandler, useEffect, useRef, useState } from "react";
 import { useAtom } from "jotai";
-import { isEqual } from "lodash";
 import { faTimes, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "@/components/Button";
@@ -12,7 +11,6 @@ import {
   clearFiles,
   files,
   removeFile,
-  sampleFile,
   setFile,
 } from "@/state/files";
 import classes from "./Input.module.css";
@@ -30,9 +28,6 @@ const Input = () => {
   /** upload file */
   const onLoad = async (files: FileList | null) => {
     if (!files) return;
-
-    /** clear sample */
-    if (isEqual(getFiles, [sampleFile])) clearFiles();
 
     /** parse file uploads as text */
     const data = await Promise.all(
