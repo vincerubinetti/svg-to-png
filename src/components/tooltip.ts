@@ -23,10 +23,7 @@ new MutationObserver((mutations) => {
         .forEach(makeTippy);
 
     /** when data-tooltip updates */
-    if (mutation.type === "attributes") {
-      makeTippy(element);
-      console.log(mutation);
-    }
+    if (mutation.type === "attributes") makeTippy(element);
   }
 }).observe(document.body, {
   childList: true,

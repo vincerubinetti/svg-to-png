@@ -1,17 +1,20 @@
-import { useState } from "react";
 import { useAtom } from "jotai";
-import { faDownload, faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
+import {
+  faDownload,
+  faFileZipper,
+  faMoon,
+  faSun,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "@/components/Button";
-import Checkbox from "@/components/Checkbox";
 import { Canvas } from "@/sections/Canvas";
-import { images, setImage } from "@/state";
-import { downloadPNG, downloadPNGs } from "@/util/download";
+import { all, Image, images, setImage } from "@/state";
+import { downloadPng, downloadPngs, downloadZip } from "@/util/download";
 import classes from "./Output.module.css";
 
 const Output = () => {
-  const [zip, setZip] = useState(false);
   const [getImages] = useAtom(images);
+  const [getAll] = useAtom(all);
 
   if (!getImages.length) return <></>;
 
@@ -38,12 +41,7 @@ const Output = () => {
 
             <div className={classes.actions}>
               <Button
-                onClick={() => {
-                  downloadPNG(
-                    document.querySelectorAll("canvas")[index],
-                    image.name || "image"
-                  );
-                }}
+                onClick={() => downloadPng(getPngs(getImages)[index])}
                 data-tooltip="Download this PNG"
                 data-square
               >
@@ -51,14 +49,18 @@ const Output = () => {
               </Button>
               <Button
                 onClick={() =>
-                  setImage(index, "darkCheckers", !image.darkCheckers)
+                  setImage(
+                    getAll ? -1 : index,
+                    "darkCheckers",
+                    !image.darkCheckers
+                  )
                 }
                 data-tooltip={`Show ${
                   image.darkCheckers ? "light" : "dark"
                 } checkerboard background for transparency preview.`}
                 data-square
               >
-                <FontAwesomeIcon icon={image.darkCheckers ? faSun : faMoon} />
+                <FontAwesomeIcon icon={image.darkCheckers ? faMoon : faSun} />
               </Button>
             </div>
           </fieldset>
@@ -67,29 +69,30 @@ const Output = () => {
 
       <div className={classes.buttons}>
         <Button
-          onClick={() =>
-            downloadPNGs(
-              [...document.querySelectorAll("canvas")].map((canvas, index) => ({
-                canvas,
-                filename: getImages[index].name || "image",
-              })),
-              zip
-            )
-          }
-          data-tooltip="Download all PNGs at once."
+          onClick={() => downloadPngs(getPngs(getImages))}
+          data-tooltip="Download all PNGs as individual downloads."
         >
           Download All
           <FontAwesomeIcon icon={faDownload} />
         </Button>
-        <Checkbox
-          label="Zip"
-          tooltip="Zip images together into single download."
-          value={zip}
-          onChange={setZip}
-        />
+
+        <Button
+          onClick={() => downloadZip(getPngs(getImages))}
+          data-tooltip="Zip PNGs together into single download."
+        >
+          Download Zip
+          <FontAwesomeIcon icon={faFileZipper} />
+        </Button>
       </div>
     </section>
   );
 };
 
 export default Output;
+
+/** get list of canvases and filenames to download as pngs */
+const getPngs = (getImages: Image[]) =>
+  [...document.querySelectorAll("canvas")].map((canvas, index) => ({
+    canvas,
+    filename: getImages[index].name || "image",
+  }));

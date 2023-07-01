@@ -14,12 +14,14 @@
 
 .actions {
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 10px;
 }
 
 .buttons {
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 20px;
 }

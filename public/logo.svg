@@ -1,13 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-50 -50 100 100">
-  <rect
-    fill="white"
-    x="-50"
-    y="-38"
-    width="100"
-    height="76"
-    rx="15"
-    ry="15"
-  />
+  <rect fill="white" x="-50" y="-38" width="100" height="76" rx="15" ry="15" />
   <g fill="#e91e63" transform="scale(0.22)">
     <path
       transform="rotate(0)"

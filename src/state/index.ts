@@ -15,7 +15,7 @@ type Props = Awaited<ReturnType<typeof svgProps>>;
 type Options = ReturnType<typeof getDefaultOptions>;
 
 /** full image object */
-type Image = File & Props & Options;
+export type Image = File & Props & Options;
 
 /** list of images */
 export const images = atom<Image[]>([]);
@@ -42,11 +42,8 @@ export const addImages = async (newFiles: File[]) => {
 
 /** set arbitrary field on image */
 export const setImage = async <Key extends keyof Image>(
-  /** index of image to set. -1 to set all. */
   index: number,
-  /** which field to set */
   key: Key,
-  /** value to set field to */
   value: Image[Key]
 ) => {
   let newImages = cloneDeep(store.get(images));
@@ -144,3 +141,6 @@ const sampleFile = {
 let justSample = true;
 addImages([sampleFile]);
 justSample = true;
+
+/** flag to edit all images together */
+export const all = atom(false);
