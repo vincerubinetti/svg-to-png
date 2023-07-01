@@ -1,4 +1,4 @@
-import { CanvasHTMLAttributes } from "react";
+import { HTMLAttributes } from "react";
 import classes from "./Canvas.module.css";
 
 const densityScale = window.devicePixelRatio;
@@ -12,7 +12,7 @@ type Props = {
   fit: string;
   margin: number;
   background: string;
-} & CanvasHTMLAttributes<HTMLCanvasElement>;
+} & HTMLAttributes<HTMLDivElement>;
 
 /** draw svg to canvas */
 export const Canvas = ({
@@ -78,10 +78,9 @@ export const Canvas = ({
 
   /** render component */
   return (
-    <div className={classes.container}>
+    <div className={classes.container} {...props}>
       <canvas
         ref={drawCanvas}
-        {...props}
         width={width}
         height={height}
         style={{

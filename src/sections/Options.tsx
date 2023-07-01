@@ -11,19 +11,15 @@ import Checkbox from "@/components/Checkbox";
 import Range from "@/components/Range";
 import Select from "@/components/Select";
 import Textbox from "@/components/Textbox";
-import { computed } from "@/state/computed";
-import { files } from "@/state/files";
-import { options, resetOption, setOption } from "@/state/options";
+import { images, resetOptions, setImage } from "@/state";
 import { toFixed } from "@/util/math";
 import classes from "./Options.module.css";
 
 const Options = () => {
   const [all, setAll] = useState(false);
-  const [getFiles] = useAtom(files);
-  const [getComputed] = useAtom(computed);
-  const [getOptions] = useAtom(options);
+  const [getImages] = useAtom(images);
 
-  if (!getFiles?.length) return <></>;
+  if (!getImages?.length) return <></>;
 
   return (
     <section>
@@ -32,43 +28,37 @@ const Options = () => {
       <div>
         <Checkbox
           label="Edit all"
-          tooltip="Update all files together when changing a value."
+          tooltip="Update all images together when changing a value."
           value={all}
           onChange={setAll}
         />
       </div>
 
-      <div className={classes.options}>
-        {getOptions?.slice(0, getFiles.length).map((option, index) => (
-          <fieldset key={index} className={classes.option}>
-            {/* name */}
-            <div className={classes.row}>
+      <div className={classes.table}>
+        {getImages.map((image, index) => (
+          <fieldset key={index} className={classes.row}>
+            <div className={classes.subrow}>
               <Button
-                onClick={() => resetOption(all ? -1 : index)}
+                onClick={() => resetOptions(all ? -1 : index)}
                 data-tooltip="Reset all values to defaults."
                 data-square
               >
                 <FontAwesomeIcon icon={faRefresh} />
               </Button>
-              <legend className={classes.title}>
-                {getComputed?.[index]?.name || ""}
-              </legend>
+              <legend className={classes.title}>{image.name || ""}</legend>
             </div>
 
-            {/* size */}
-            <div className={classes.row}>
+            <div className={classes.subrow}>
               <Range
                 min={0}
                 max={10000}
                 step={1}
-                value={option.width || 0}
-                onChange={(value) =>
-                  setOption(all ? -1 : index, "width", value)
-                }
+                value={image.width || 0}
+                onChange={(value) => setImage(all ? -1 : index, "width", value)}
                 tooltip={`
                   <p>Width of resulting PNG image, in pixels.</p>
                   <p>Default from SVG: ${toFixed(
-                    getComputed?.[index]?.inferred.width || 0,
+                    image.inferred.width || 0,
                     2
                   )}</p>
                 `}
@@ -78,56 +68,52 @@ const Options = () => {
                 min={0}
                 max={10000}
                 step={1}
-                value={option.height || 0}
+                value={image.height || 0}
                 onChange={(value) =>
-                  setOption(all ? -1 : index, "height", value)
+                  setImage(all ? -1 : index, "height", value)
                 }
                 tooltip={`
                   <p>Height of resulting PNG image, in pixels.</p>
                   <p>Default from SVG: ${toFixed(
-                    getComputed?.[index]?.inferred.height || 0,
+                    image.inferred.height || 0,
                     2
                   )}</p>
                 `}
               />
               <Button
                 onClick={() =>
-                  setOption(
+                  setImage(
                     all ? -1 : index,
                     "aspect",
-                    option.aspect ? 0 : Infinity
+                    image.aspect ? 0 : Infinity
                   )
                 }
                 data-tooltip={
-                  (!option.aspect
+                  (!image.aspect
                     ? "Lock aspect ratio"
                     : "Unlock aspect ratio") +
-                  ` (${toFixed(option.width / option.height, 3)})`
+                  ` (${toFixed(image.width / image.height, 3)})`
                 }
                 data-square
-                role="checkbox"
-                aria-checked={!!option.aspect}
-                aria-label="Whether to lock aspect ratio"
               >
-                <FontAwesomeIcon icon={option.aspect ? faLink : faLinkSlash} />
+                <FontAwesomeIcon icon={image.aspect ? faLink : faLinkSlash} />
               </Button>
             </div>
 
-            {/* more */}
             <Range
               label="Margin"
               min={-1000}
               max={1000}
               step={1}
-              value={option.margin || 0}
-              onChange={(value) => setOption(all ? -1 : index, "margin", value)}
+              value={image.margin || 0}
+              onChange={(value) => setImage(all ? -1 : index, "margin", value)}
               tooltip="How many pixels of space to add on each side."
             />
             <Select
               label="Fit"
               options={["contain", "cover", "stretch"]}
-              value={option.fit}
-              onChange={(value) => setOption(all ? -1 : index, "fit", value)}
+              value={image.fit}
+              onChange={(value) => setImage(all ? -1 : index, "fit", value)}
               tooltip={`
                 <p>How to fit original SVG into resulting PNG size if the aspect ratio is different.</p>
                 <ul>
@@ -139,9 +125,9 @@ const Options = () => {
             />
             <Textbox
               label="Bg."
-              value={option.background}
+              value={image.background}
               onChange={(value) =>
-                setOption(all ? -1 : index, "background", value)
+                setImage(all ? -1 : index, "background", value)
               }
               tooltip={`
                 <p>Background color with transparency. Examples:</p>

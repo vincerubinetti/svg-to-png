@@ -25,14 +25,14 @@
   gap: 20px;
 }
 
-.files {
+.grid {
   display: flex;
   flex-wrap: wrap;
   gap: 40px;
   width: 100%;
 }
 
-.file {
+.cell {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -46,7 +46,7 @@
   overflow: hidden;
 }
 
-.file:only-child {
+.cell:only-child {
   width: 100%;
 }
 

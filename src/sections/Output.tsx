@@ -1,81 +1,77 @@
 import { useState } from "react";
 import { useAtom } from "jotai";
-import { faDownload } from "@fortawesome/free-solid-svg-icons";
+import { faDownload, faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "@/components/Button";
 import Checkbox from "@/components/Checkbox";
 import { Canvas } from "@/sections/Canvas";
-import { computed } from "@/state/computed";
-import { files } from "@/state/files";
-import { options } from "@/state/options";
+import { images, setImage } from "@/state";
 import { downloadPNG, downloadPNGs } from "@/util/download";
 import classes from "./Output.module.css";
 
 const Output = () => {
-  const [dark, setDark] = useState(false);
   const [zip, setZip] = useState(false);
-  const [getFiles] = useAtom(files);
-  const [getComputed] = useAtom(computed);
-  const [getOptions] = useAtom(options);
+  const [getImages] = useAtom(images);
 
-  if (!getFiles.length) return <></>;
+  if (!getImages.length) return <></>;
 
   return (
     <section>
       <h2>Output</h2>
 
-      {/* resulting png previews */}
-      <div className={classes.results}>
-        {getFiles.map((_, index) => (
-          <fieldset key={index} className={classes.result}>
-            <legend>{getComputed?.[index]?.name}.png</legend>
+      <div className={classes.grid}>
+        {getImages.map((image, index) => (
+          <fieldset key={index} className={classes.cell}>
+            <legend>{image.name}.png</legend>
             <Canvas
-              image={getComputed?.[index]?.image || null}
-              width={getOptions?.[index]?.width || 0}
-              height={getOptions?.[index]?.height || 0}
-              originalWidth={getComputed?.[index]?.inferred.width || 0}
-              originalHeight={getComputed?.[index]?.inferred.height || 0}
-              fit={getOptions?.[index]?.fit || "contain"}
-              margin={getOptions?.[index]?.margin || 0}
-              background={getOptions?.[index]?.background || ""}
-              data-dark={dark}
+              image={image.image || null}
+              width={image.width || 0}
+              height={image.height || 0}
+              originalWidth={image.inferred.width || 0}
+              originalHeight={image.inferred.height || 0}
+              fit={image.fit || "contain"}
+              margin={image.margin || 0}
+              background={image.background || ""}
+              data-dark={image.darkCheckers}
               data-tooltip="PNG preview"
             />
-            <Button
-              onClick={() => {
-                downloadPNG(
-                  document.querySelectorAll("canvas")[index],
-                  getComputed?.[index]?.name || "image"
-                );
-              }}
-              data-tooltip="Download this PNG"
-              data-square
-            >
-              <FontAwesomeIcon icon={faDownload} />
-            </Button>
+
+            <div className={classes.actions}>
+              <Button
+                onClick={() => {
+                  downloadPNG(
+                    document.querySelectorAll("canvas")[index],
+                    image.name || "image"
+                  );
+                }}
+                data-tooltip="Download this PNG"
+                data-square
+              >
+                <FontAwesomeIcon icon={faDownload} />
+              </Button>
+              <Button
+                onClick={() =>
+                  setImage(index, "darkCheckers", !image.darkCheckers)
+                }
+                data-tooltip={`Show ${
+                  image.darkCheckers ? "light" : "dark"
+                } checkerboard background for transparency preview.`}
+                data-square
+              >
+                <FontAwesomeIcon icon={image.darkCheckers ? faSun : faMoon} />
+              </Button>
+            </div>
           </fieldset>
         ))}
       </div>
 
-      {/* options */}
-      <Checkbox
-        label="Dark checkers"
-        tooltip={`
-          <p>Show a dark checkerboard background for transparency.</p>
-          <p>For previews only; does not show up in downloaded images.</p>
-        `}
-        value={dark}
-        onChange={setDark}
-      />
-
-      {/* buttons */}
       <div className={classes.buttons}>
         <Button
           onClick={() =>
             downloadPNGs(
               [...document.querySelectorAll("canvas")].map((canvas, index) => ({
                 canvas,
-                filename: getComputed?.[index]?.name || "image",
+                filename: getImages[index].name || "image",
               })),
               zip
             )
@@ -87,7 +83,7 @@ const Output = () => {
         </Button>
         <Checkbox
           label="Zip"
-          tooltip="Zip files together into single download."
+          tooltip="Zip images together into single download."
           value={zip}
           onChange={setZip}
         />

@@ -5,22 +5,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "@/components/Button";
 import Textarea from "@/components/Textarea";
 import Textbox from "@/components/Textbox";
-import { computed } from "@/state/computed";
-import {
-  addFiles,
-  clearFiles,
-  files,
-  removeFile,
-  setFile,
-} from "@/state/files";
+import { addImages, clearImages, images, removeImage, setImage } from "@/state";
 import classes from "./Input.module.css";
 
 const Input = () => {
   const [dragging, setDragging] = useState(false);
   const input = useRef<HTMLInputElement>(null);
 
-  const [getFiles] = useAtom(files);
-  const [getComputed] = useAtom(computed);
+  const [getImages] = useAtom(images);
 
   /** click actual file input on button click */
   const onClick = () => input?.current?.click();
@@ -32,13 +24,13 @@ const Input = () => {
     /** parse file uploads as text */
     const data = await Promise.all(
       Array.from(files).map(async (file) => ({
-        name: file.name,
+        filename: file.name,
         source: await file.text(),
       }))
     );
 
     /** add files to list */
-    addFiles(data);
+    addImages(data);
 
     /** reset file input so the same file could be re-selected */
     if (input.current) input.current.value = "";
@@ -71,7 +63,7 @@ const Input = () => {
   return (
     <section>
       <h2>Input</h2>
-      {/* buttons */}
+
       <div className={classes.buttons}>
         <input
           ref={input}
@@ -90,7 +82,7 @@ const Input = () => {
         </Button>
         <Button
           className={classes.upload}
-          onClick={clearFiles}
+          onClick={clearImages}
           data-tooltip="Clear all files"
         >
           Clear
@@ -107,41 +99,38 @@ const Input = () => {
         Drop SVG files
       </div>
 
-      {/* files */}
-      <div className={classes.files}>
-        {getFiles.map((file, index) => (
+      <div className={classes.grid}>
+        {getImages.map((image, index) => (
           <div
             key={index}
-            className={classes.file}
+            className={classes.cell}
             role="group"
-            aria-label={file.name}
+            aria-label={image.name}
           >
             <div className={classes.top}>
               <Textbox
-                value={file.name}
-                onChange={(value) => setFile(index, "name", value)}
+                value={image.filename}
+                onChange={(value) => setImage(index, "filename", value)}
                 data-tooltip="Filename"
               />
               <Button
-                onClick={() => removeFile(index)}
-                data-tooltip="Remove file"
+                onClick={() => removeImage(index)}
+                data-tooltip="Remove image"
                 data-square
               >
                 <FontAwesomeIcon icon={faTimes} />
               </Button>
             </div>
             <Textarea
-              value={file.source}
-              onChange={(value) => setFile(index, "source", value)}
+              value={image.source}
+              onChange={(value) => setImage(index, "source", value)}
               data-tooltip={`
                 <p>SVG source code</p>
-                ${getComputed?.[index]?.info || ""}
+                ${image.info || ""}
               `}
             />
-            {getComputed?.[index]?.errorMessage && (
-              <div className={classes.error}>
-                {getComputed?.[index]?.errorMessage}
-              </div>
+            {image.errorMessage && (
+              <div className={classes.error}>{image.errorMessage}</div>
             )}
           </div>
         ))}
