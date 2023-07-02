@@ -4,7 +4,7 @@
 
 Convert SVG to PNG right in your browser, reliably and correctly
 
-[**⭐ Open the tool ⭐**](https://vincerubinetti.github.io/svg-to-png/)
+[**⭐⭐ OPEN THE TOOL ⭐⭐**](https://vincerubinetti.github.io/svg-to-png/)
 
 ### Motivation
 
