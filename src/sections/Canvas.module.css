@@ -1,0 +1,15 @@
+.container {
+  display: flex;
+  max-width: calc(100vw - 80px);
+  max-height: calc(100vh - 80px);
+  overflow-x: auto;
+  overflow-y: auto;
+  background-image: url("checkers-light.svg");
+  background-size: 3vmin;
+  background-attachment: fixed;
+  outline: solid 1px var(--gray);
+}
+
+.container[data-dark="true"] {
+  background-image: url("checkers-dark.svg");
+}

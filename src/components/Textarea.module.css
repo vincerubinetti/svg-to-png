@@ -1,0 +1,13 @@
+.textarea {
+  flex-grow: 1;
+  padding: 10px;
+  border: solid 1px var(--gray);
+  border-radius: var(--rounded);
+  white-space: pre;
+  resize: none;
+  transition: box-shadow var(--fast);
+}
+
+.textarea:hover {
+  box-shadow: var(--shadow);
+}

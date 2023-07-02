@@ -1,0 +1,24 @@
+.button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+  min-height: 40px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--rounded);
+  background: var(--light-gray);
+  transition: background var(--fast), color var(--fast);
+}
+
+.button:hover {
+  background: var(--primary);
+  color: var(--white);
+}
+
+.button[data-square] {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+}

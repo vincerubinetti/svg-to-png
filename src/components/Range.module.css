@@ -1,0 +1,13 @@
+.input {
+  width: 100px;
+  min-width: 0;
+  min-height: 40px;
+  padding: 5px 10px;
+  border: solid 1px var(--gray);
+  border-radius: var(--rounded);
+  transition: box-shadow var(--fast);
+}
+
+.input:hover {
+  box-shadow: var(--shadow);
+}

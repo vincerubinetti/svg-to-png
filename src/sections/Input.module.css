@@ -1,0 +1,71 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--white);
+  background: #000c;
+  opacity: 0;
+  font-size: 1.2rem;
+  pointer-events: none;
+  z-index: 99;
+  transition: opacity var(--fast);
+}
+
+.overlay[data-dragging="true"] {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  width: 100%;
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: calc(100% / 2 - 40px / 2);
+  height: 200px;
+  max-width: 100%;
+  min-width: 200px;
+  min-height: 100px;
+  resize: both;
+  overflow: hidden;
+}
+
+.cell:only-child {
+  width: 100%;
+}
+
+.top {
+  display: flex;
+  gap: 10px;
+}
+
+.top > :first-child {
+  flex-grow: 1;
+}
+
+.error {
+  color: var(--primary);
+  white-space: pre-wrap;
+}
+
+/** safari hack to make resize handle grabbable */
+@supports (font: -apple-system-body) and (-webkit-appearance: none) {
+  .cell {
+    padding-bottom: 10px;
+  }
+}

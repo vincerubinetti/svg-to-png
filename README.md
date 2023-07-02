@@ -1,8 +1,10 @@
+<img height="150" src="https://raw.githubusercontent.com/vincerubinetti/svg-to-png/main/public/logo.png?raw=true">
+
 # SVG to PNG
 
 Convert SVG to PNG right in your browser, reliably and correctly
 
-[**⭐ Open the tool ⭐**](https://vincerubinetti.github.io/svg-to-png/)
+[**⭐⭐ OPEN THE TOOL ⭐⭐**](https://vincerubinetti.github.io/svg-to-png/)
 
 ### Motivation
 
@@ -20,12 +22,12 @@ You draw an SVG in one program, and then open it in another to discover that all
 
 Or, if you're an SVG wizard who codes them by hand, you might use the [`<use>`](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/use) feature, or some elaborate [CSS `<styles>`'s](https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/SVG_and_CSS), or some [`<filter>`'s](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/filter) – only to find out that some GUI editor doesn't support those features, and the image is incomprehensible.
 
-#### *Why does this happen?*
+#### _Why does this happen?_
 
 Probably because the specification for the SVG format is enormous, and it's incredibly difficult to support all of the features it lays out.
 Even for popular programs like Inkscape and ImageMagick that have large teams of developers, it's a monumental task to get everything right.
 
-#### *What's the solution?*
+#### _What's the solution?_
 
 **Use a web browser to do the conversion.**
 SVG is first and foremost a web standard.
@@ -33,12 +35,12 @@ It was designed for the web, and web browsers were the first to implement it.
 It is meant to work well and be mixed in with other web technologies like HTML and CSS.
 As such, in my experience, **modern web browsers such as Chrome and Firefox are always the most accurate tools at displaying/rendering SVGs**, especially for uncommon, new, or otherwise "advanced" features.
 
-#### *How does this tool work?*
+#### _How does this tool work?_
 
 This little web tool simply leverages your browser's built-in capability to accurately display/render SVGs.
 Your browser "renders" the vector graphic to raster pixels so it can display it on the screen, and the tool essentially takes whatever pixels are on the screen and saves it as an image.
 
-#### *Why not just open the SVG in a browser and take a screenshot?*
+#### _Why not just open the SVG in a browser and take a screenshot?_
 
 This works fine for many cases.
 But it becomes a pain if you need a very high resolution image, where you would have to take multiple screenshots and stitch them together.

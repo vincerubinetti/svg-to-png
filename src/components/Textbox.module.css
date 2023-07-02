@@ -1,0 +1,32 @@
+.label {
+  min-width: 0;
+}
+
+.label[data-resizable="true"] {
+  width: 150px;
+  min-width: 100px;
+  max-width: 300px;
+  resize: horizontal;
+  overflow: hidden;
+}
+
+.input {
+  flex-grow: 1;
+  min-width: 0;
+  min-height: 40px;
+  padding: 5px 10px;
+  border: solid 1px var(--gray);
+  border-radius: var(--rounded);
+  transition: box-shadow var(--fast);
+}
+
+.input:hover {
+  box-shadow: var(--shadow);
+}
+
+/** safari hack to make resize handle grabbable */
+@supports (font: -apple-system-body) and (-webkit-appearance: none) {
+  .label[data-resizable="true"] {
+    padding-right: 10px;
+  }
+}

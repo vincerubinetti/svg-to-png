@@ -1,23 +1,44 @@
 {
   "name": "svg-to-png",
-  "version": "1.0.0",
-  "homepage": "https://vincerubinetti.github.io/svg-to-png/",
-  "dependencies": {
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1"
-  },
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext .tsx,.ts --fix && prettier --write \"**/*.{tsx,ts,css,json,yaml,svg,md}\" --no-error-on-unmatched-pattern"
   },
-  "browserslist": [
-    ">0.1%",
-    "not dead"
-  ],
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.4.0",
+    "@fortawesome/free-brands-svg-icons": "^6.4.0",
+    "@fortawesome/free-solid-svg-icons": "^6.4.0",
+    "@fortawesome/react-fontawesome": "^0.2.0",
+    "@zip.js/zip.js": "^2.7.17",
+    "jotai": "^2.2.1",
+    "lodash": "^4.17.21",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tippy.js": "^6.3.7"
+  },
   "devDependencies": {
-    "eslint-config-rubinetti": "git+https://git@github.com/vincerubinetti/eslint-config-rubinetti.git",
-    "prettier-config-rubinetti": "git+https://git@github.com/vincerubinetti/prettier-config-rubinetti.git"
+    "@ianvs/prettier-plugin-sort-imports": "^4.0.0-alpha.7",
+    "@types/lodash": "^4.14.195",
+    "@types/node": "^20.2.5",
+    "@types/react": "^18.0.28",
+    "@types/react-dom": "^18.0.11",
+    "@typescript-eslint/eslint-plugin": "^5.57.1",
+    "@typescript-eslint/parser": "^5.57.1",
+    "@vitejs/plugin-react": "^4.0.0",
+    "eslint": "^8.38.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.3.4",
+    "prettier": "^2.8.8",
+    "prettier-plugin-jsdoc": "^0.4.2",
+    "typescript": "^5.0.2",
+    "vite": "^4.3.2"
   }
 }
