@@ -51,7 +51,7 @@ const makeTippy = (element: HTMLElement) => {
   instance.setProps({ interactive: content.includes("<a") });
 
   /** set aria label to content */
-  instance.reference.setAttribute("aria-label", content);
+  instance.reference.setAttribute("aria-label", makeLabel(content));
 
   /** update tippy content */
   instance.setContent(content);
@@ -60,3 +60,9 @@ const makeTippy = (element: HTMLElement) => {
   if (instance.popperInstance)
     window.setTimeout(instance.popperInstance.update, 100);
 };
+
+/** make aria label from html string */
+export const makeLabel = (string: string) =>
+  (
+    new DOMParser().parseFromString(string, "text/html").body.textContent || ""
+  ).replaceAll(/\s+/g, " ");

@@ -25,10 +25,10 @@ const Textbox = ({
     {label && <span className="control-label">{label}</span>}
     <input
       type="text"
+      className={classes.input}
       {...props}
       value={value}
       onChange={(event) => onChange(event.target.value)}
-      className={classes.input}
     />
   </label>
 );

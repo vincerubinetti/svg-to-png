@@ -13,10 +13,10 @@ const Range = ({ label, tooltip, value, onChange, ...props }: Props) => (
     {label && <span className="control-label">{label}</span>}
     <input
       type="number"
-      value={value}
-      onChange={(event) => onChange(Number(event.target.value))}
       className={classes.input}
       {...props}
+      value={value}
+      onChange={(event) => onChange(Number(event.target.value))}
     />
   </label>
 );

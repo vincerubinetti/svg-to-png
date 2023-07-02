@@ -35,8 +35,8 @@ const Output = () => {
               fit={image.fit || "contain"}
               margin={image.margin || 0}
               background={image.background || ""}
-              data-dark={image.darkCheckers}
-              data-tooltip="PNG preview"
+              darkCheckers={image.darkCheckers}
+              tooltip="PNG preview"
             />
 
             <div className={classes.actions}>

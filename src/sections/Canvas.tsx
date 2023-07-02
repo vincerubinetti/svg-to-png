@@ -1,4 +1,3 @@
-import { HTMLAttributes } from "react";
 import classes from "./Canvas.module.css";
 
 const densityScale = window.devicePixelRatio;
@@ -12,7 +11,9 @@ type Props = {
   fit: string;
   margin: number;
   background: string;
-} & HTMLAttributes<HTMLDivElement>;
+  darkCheckers: boolean;
+  tooltip: string;
+};
 
 /** draw svg to canvas */
 export const Canvas = ({
@@ -24,7 +25,8 @@ export const Canvas = ({
   fit,
   margin,
   background,
-  ...props
+  darkCheckers,
+  tooltip,
 }: Props) => {
   /** size to draw svg image onto canvas */
   let drawWidth = Math.abs(width) - margin * 2;
@@ -78,7 +80,12 @@ export const Canvas = ({
 
   /** render component */
   return (
-    <div className={classes.container} {...props}>
+    <div
+      className={classes.container}
+      data-dark={darkCheckers}
+      data-tooltip={tooltip}
+      role="img"
+    >
       <canvas
         ref={drawCanvas}
         width={width}

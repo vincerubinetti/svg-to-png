@@ -8,11 +8,11 @@ type Props = {
 
 const Textarea = ({ value, onChange, ...props }: Props) => (
   <textarea
+    className={classes.textarea}
+    spellCheck={false}
     {...props}
     value={value}
     onChange={(event) => onChange(event.target.value)}
-    className={classes.textarea}
-    spellCheck={false}
   />
 );
 
