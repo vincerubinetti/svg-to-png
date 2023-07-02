@@ -1,29 +1,34 @@
-.table {
-  display: grid;
-  grid-template-columns: 1fr auto auto auto auto;
-  grid-template-rows: 1fr;
-  align-items: center;
-  gap: 20px;
+.wrapper {
   width: 100%;
-  max-width: 100%;
   overflow-x: auto;
-  overflow-y: visible;
 }
 
-.row {
-  display: contents;
+.wrapper table {
+  min-width: 100%;
+  text-align: left;
 }
 
-.subrow {
+.wrapper th {
+  white-space: nowrap;
+}
+
+.wrapper th,
+.wrapper td {
+  padding: 10px;
+}
+
+.wrapper :where(th, td):nth-child(2) {
+  width: 100%;
+  max-width: 380px;
+}
+
+.wrapper :where(th, td):not(:nth-child(2)) {
+  width: 0;
+  text-align: center;
+}
+
+.cell {
   display: flex;
   align-items: center;
   gap: 10px;
-  max-width: max-content;
-}
-
-.title {
-  max-width: 300px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }

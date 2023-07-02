@@ -23,3 +23,10 @@
 .input:hover {
   box-shadow: var(--shadow);
 }
+
+/** safari hack to make resize handle grabbable */
+@supports (font: -apple-system-body) and (-webkit-appearance: none) {
+  .label[data-resizable="true"] {
+    padding-right: 10px;
+  }
+}

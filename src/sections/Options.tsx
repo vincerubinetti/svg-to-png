@@ -69,112 +69,142 @@ const Options = () => {
         />
       </div>
 
-      <div className={classes.table}>
-        <div>Image</div>
-        <div data-tooltip={dimensionsLabel}>
-          <FontAwesomeIcon icon={faArrowsUpDownLeftRight} />
-          <span>Dimensions</span>
-        </div>
-        <div data-tooltip={marginLabel}>
-          <FontAwesomeIcon icon={faCompress} />
-          <span>Margin</span>
-        </div>
-        <div data-tooltip={fitLabel}>
-          <FontAwesomeIcon icon={faUpRightAndDownLeftFromCenter} />
-          <span>Fit</span>
-        </div>
-        <div data-tooltip={backgroundLabel}>
-          <FontAwesomeIcon icon={faFillDrip} />
-          <span>Background</span>
-        </div>
+      <div className={classes.wrapper}>
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>Image</th>
+              <th data-tooltip={dimensionsLabel}>
+                <FontAwesomeIcon icon={faArrowsUpDownLeftRight} />
+                <span>Dimensions</span>
+              </th>
+              <th></th>
+              <th data-tooltip={marginLabel}>
+                <FontAwesomeIcon icon={faCompress} />
+                <span>Margin</span>
+              </th>
+              <th data-tooltip={fitLabel}>
+                <FontAwesomeIcon icon={faUpRightAndDownLeftFromCenter} />
+                <span>Fit</span>
+              </th>
+              <th data-tooltip={backgroundLabel}>
+                <FontAwesomeIcon icon={faFillDrip} />
+                <span>Background</span>
+              </th>
+            </tr>
+          </thead>
 
-        {getImages.map((image, index) => (
-          <fieldset key={index} className={classes.row}>
-            <div className={classes.subrow}>
-              <Button
-                onClick={() => resetOptions(getAll ? -1 : index)}
-                data-tooltip="Reset all values to defaults."
-                data-square
-              >
-                <FontAwesomeIcon icon={faRefresh} />
-              </Button>
-              <legend className={classes.title}>{image.name || ""}</legend>
-            </div>
+          <tbody>
+            {getImages.map((image, index) => (
+              <tr key={index} aria-label={image.name}>
+                <td>
+                  <Button
+                    onClick={() => resetOptions(getAll ? -1 : index)}
+                    data-tooltip="Reset all values to defaults."
+                    data-square
+                  >
+                    <FontAwesomeIcon icon={faRefresh} />
+                  </Button>
+                </td>
 
-            <div className={classes.subrow}>
-              <Range
-                min={0}
-                max={10000}
-                step={1}
-                value={image.width || 0}
-                onChange={(value) =>
-                  setImage(getAll ? -1 : index, "width", value)
-                }
-                tooltip={`
-                  Default from SVG: ${toFixed(image.inferred.width || 0, 2)}
-                `}
-                aria-label="Width, in pixels"
-              />
-              ×
-              <Range
-                min={0}
-                max={10000}
-                step={1}
-                value={image.height || 0}
-                onChange={(value) =>
-                  setImage(getAll ? -1 : index, "height", value)
-                }
-                tooltip={`
-                  Default from SVG: ${toFixed(image.inferred.height || 0, 2)}
-                `}
-                aria-label="Height, in pixels"
-              />
-              <Button
-                onClick={() =>
-                  setImage(
-                    getAll ? -1 : index,
-                    "aspect",
-                    image.aspect ? 0 : Infinity
-                  )
-                }
-                data-tooltip={
-                  (!image.aspect
-                    ? "Lock aspect ratio"
-                    : "Unlock aspect ratio") +
-                  ` (${toFixed(image.width / image.height, 3)})`
-                }
-                data-square
-              >
-                <FontAwesomeIcon icon={image.aspect ? faLink : faLinkSlash} />
-              </Button>
-            </div>
+                <td>{image.name || ""}</td>
 
-            <Range
-              min={-1000}
-              max={1000}
-              step={1}
-              value={image.margin || 0}
-              onChange={(value) =>
-                setImage(getAll ? -1 : index, "margin", value)
-              }
-              aria-label={"Margin. " + makeLabel(marginLabel)}
-            />
-            <Select
-              options={["contain", "cover", "stretch"]}
-              value={image.fit}
-              onChange={(value) => setImage(getAll ? -1 : index, "fit", value)}
-              aria-label={"Fit. " + makeLabel(fitLabel)}
-            />
-            <Textbox
-              value={image.background}
-              onChange={(value) =>
-                setImage(getAll ? -1 : index, "background", value)
-              }
-              resizable={true}
-              aria-label={"Background. " + makeLabel(backgroundLabel)}
-            />
-          </fieldset>
-        ))}
+                <td>
+                  <div className={classes.cell}>
+                    <Range
+                      min={0}
+                      max={10000}
+                      step={1}
+                      value={image.width || 0}
+                      onChange={(value) =>
+                        setImage(getAll ? -1 : index, "width", value)
+                      }
+                      tooltip={`Default from SVG: ${toFixed(
+                        image.inferred.width || 0,
+                        2
+                      )}`}
+                      aria-label="Width, in pixels"
+                    />
+                    ×
+                    <Range
+                      min={0}
+                      max={10000}
+                      step={1}
+                      value={image.height || 0}
+                      onChange={(value) =>
+                        setImage(getAll ? -1 : index, "height", value)
+                      }
+                      tooltip={`Default from SVG: ${toFixed(
+                        image.inferred.height || 0,
+                        2
+                      )}`}
+                      aria-label="Height, in pixels"
+                    />
+                  </div>
+                </td>
+
+                <td>
+                  <Button
+                    onClick={() =>
+                      setImage(
+                        getAll ? -1 : index,
+                        "aspect",
+                        image.aspect ? 0 : Infinity
+                      )
+                    }
+                    data-tooltip={
+                      (!image.aspect
+                        ? "Lock aspect ratio"
+                        : "Unlock aspect ratio") +
+                      ` (${toFixed(image.width / image.height, 3)})`
+                    }
+                    data-square
+                  >
+                    <FontAwesomeIcon
+                      icon={image.aspect ? faLink : faLinkSlash}
+                    />
+                  </Button>
+                </td>
+
+                <td>
+                  <Range
+                    min={-1000}
+                    max={1000}
+                    step={1}
+                    value={image.margin || 0}
+                    onChange={(value) =>
+                      setImage(getAll ? -1 : index, "margin", value)
+                    }
+                    aria-label={"Margin." + marginLabel}
+                  />
+                </td>
+
+                <td>
+                  <Select
+                    options={["contain", "cover", "stretch"]}
+                    value={image.fit}
+                    onChange={(value) =>
+                      setImage(getAll ? -1 : index, "fit", value)
+                    }
+                    aria-label={"Fit. " + makeLabel(fitLabel)}
+                  />
+                </td>
+
+                <td>
+                  <Textbox
+                    value={image.background}
+                    onChange={(value) =>
+                      setImage(getAll ? -1 : index, "background", value)
+                    }
+                    resizable={true}
+                    aria-label={"Background. " + makeLabel(backgroundLabel)}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </section>
   );

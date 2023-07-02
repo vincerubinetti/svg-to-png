@@ -41,7 +41,6 @@
   max-width: 100%;
   min-width: 200px;
   min-height: 100px;
-  padding-bottom: 10px;
   resize: both;
   overflow: hidden;
 }
@@ -62,4 +61,11 @@
 .error {
   color: var(--primary);
   white-space: pre-wrap;
+}
+
+/** safari hack to make resize handle grabbable */
+@supports (font: -apple-system-body) and (-webkit-appearance: none) {
+  .cell {
+    padding-bottom: 10px;
+  }
 }

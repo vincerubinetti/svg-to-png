@@ -162,47 +162,47 @@ export const svgProps = async (source: string, filename: string) => {
 
   /** dimension info table html */
   const info = `
-      <table>
-        <tr>
-          <td>Specified</td>
-          <td>
-            ${specified.width || "-"}</td>
-          <td>×</td>
-          <td>
-            ${specified.height || "-"}</td>
-        </tr>
-        <tr>
-          <td>Absolute</td>
-          <td>
-            ${absolute.width ? toFixed(absolute.width, 2) + "px" : "-"}
-          </td>
-          <td>×</td>
-          <td>
-            ${absolute.height ? toFixed(absolute.height, 2) + "px" : "-"}
-          </td>
-        </tr>
-        <tr>
-          <td>View Box</td>
-          <td>
-            ${viewBox.width ? toFixed(viewBox.width, 2) : "-"}
-          </td>
-          <td>×</td>
-          <td>
-            ${viewBox.height ? toFixed(viewBox.height, 2) : "-"}
-          </td>
-        </tr>
-        <tr>
-          <td>Inferred</td>
-          <td>
-            ${inferred.width ? toFixed(inferred.width, 2) + "px" : "-"}
-          </td>
-          <td>×</td>
-          <td>
-            ${inferred.height ? toFixed(inferred.height, 2) + "px" : "-"}
-          </td>
-        </tr>
-      </table>
-    `;
+    <table>
+      <tr>
+        <td>Specified</td>
+        <td>
+          ${specified.width || "-"}</td>
+        <td>×</td>
+        <td>
+          ${specified.height || "-"}</td>
+      </tr>
+      <tr>
+        <td>Absolute</td>
+        <td>
+          ${absolute.width ? toFixed(absolute.width, 2) + "px" : "-"}
+        </td>
+        <td>×</td>
+        <td>
+          ${absolute.height ? toFixed(absolute.height, 2) + "px" : "-"}
+        </td>
+      </tr>
+      <tr>
+        <td>View Box</td>
+        <td>
+          ${viewBox.width ? toFixed(viewBox.width, 2) : "-"}
+        </td>
+        <td>×</td>
+        <td>
+          ${viewBox.height ? toFixed(viewBox.height, 2) : "-"}
+        </td>
+      </tr>
+      <tr>
+        <td>Inferred</td>
+        <td>
+          ${inferred.width ? toFixed(inferred.width, 2) + "px" : "-"}
+        </td>
+        <td>×</td>
+        <td>
+          ${inferred.height ? toFixed(inferred.height, 2) + "px" : "-"}
+        </td>
+      </tr>
+    </table>
+  `;
 
   return {
     errorMessage,
