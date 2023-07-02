@@ -37,7 +37,7 @@
   flex-direction: column;
   gap: 10px;
   width: calc(100% / 2 - 40px / 2);
-  height: 200px;
+  height: 150px;
   max-width: 100%;
   min-width: 200px;
   min-height: 100px;

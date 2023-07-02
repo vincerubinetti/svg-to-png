@@ -13,16 +13,20 @@ const options: Partial<Props> = {
 /** listen for changes to document */
 new MutationObserver((mutations) => {
   for (const mutation of mutations) {
-    const element = mutation.target as HTMLElement;
-
     /** when nodes added/removed */
-    if (mutation.type === "childList")
-      element
-        .querySelectorAll<HTMLElement>("[data-tooltip]")
-        .forEach(makeTippy);
+    if (mutation.type === "childList") {
+      for (const node of mutation.addedNodes)
+        if (node instanceof Element)
+          selectAll(node, "[data-tooltip]").forEach(update);
+
+      for (const node of mutation.removedNodes)
+        if (node instanceof Element)
+          selectAll(node, "[data-tooltip]").forEach(remove);
+    }
 
     /** when data-tooltip attrs updated */
-    if (mutation.type === "attributes") makeTippy(element);
+    if (mutation.type === "attributes" && mutation.target instanceof Element)
+      update(mutation.target);
   }
 }).observe(document.body, {
   childList: true,
@@ -32,15 +36,18 @@ new MutationObserver((mutations) => {
 });
 
 /** extend normal element with attached tippy instance */
-type _Element = HTMLElement & { _tippy: Instance };
+type _Element = Element & { _tippy?: Instance };
 
 /** create or update tippy instance */
-const makeTippy = (element: HTMLElement) => {
+const update = (element: Element) => {
   /** get tooltip content from attribute */
   const content = element.getAttribute("data-tooltip")?.trim() || "";
 
   /** don't show if content blank */
-  if (!content) return;
+  if (!content) {
+    remove(element);
+    return;
+  }
 
   /** get existing tippy instance or create new */
   const instance: Instance =
@@ -60,8 +67,17 @@ const makeTippy = (element: HTMLElement) => {
     window.setTimeout(instance.popperInstance.update, 20);
 };
 
+/** remove tippy instance */
+const remove = (element: Element) => (element as _Element)._tippy?.destroy();
+
 /** make aria label from html string */
 export const makeLabel = (string: string) =>
   (
     new DOMParser().parseFromString(string, "text/html").body.textContent || ""
   ).replaceAll(/\s+/g, " ");
+
+/** query select all, including self */
+const selectAll = <T extends Element>(element: Element, selector: string) => [
+  ...(element.matches(selector) ? [element] : []),
+  ...element.querySelectorAll<T>(selector),
+];
