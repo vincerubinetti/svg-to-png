@@ -7,22 +7,22 @@ export const unitsToPixels = (string: string) => {
   const units: { [key: string]: number } = {
     px: 1,
     in: 96,
-    pt: 96 / 72,
     pc: 96 / 6,
+    pt: 96 / 72,
     cm: 96 / 2.54,
     mm: 96 / 2.54 / 10,
     q: 96 / 2.54 / 40,
   };
 
   /** extract number and unit */
-  const [, stringValue = "0", unit = "px"] =
-    string.match(/(\d+\.?\d*)\s*(\w*)/) || [];
+  const [, stringValue, unit] = string.match(/(\d+\.?\d*)\s*(\w*)/) || [];
 
   /** parse value as number */
-  let value = Number(stringValue);
+  let value = Number(stringValue || 0);
 
   /** multiply value by unit constant */
-  value *= units[unit.toLowerCase()] || 0;
+  value *= units[(unit || "px").toLowerCase()] || 0;
+
   return value;
 };
 
@@ -39,20 +39,14 @@ const urlToImage = (url: string): Promise<HTMLImageElement> =>
 
 /** convert svg source code to image dom object */
 export const sourceToImage = async (source: string) => {
+  /** use less strict html type (allows things like missing xmlns)
+   * because browser can still handle drawing it as image on canvas */
+  const svg = sourceToSvg(source, "text/html");
+  /** encode svg as data url */
   const url =
     "data:image/svg+xml;charset=utf8," +
-    encodeURIComponent(
-      new XMLSerializer().serializeToString(
-        sourceToSvg(
-          source,
-          /** use less strict html type (allows things like missing xmlns)
-           * because browser can still handle drawing it as image on canvas */
-          "text/html"
-        )
-      )
-    );
-  const image = (await urlToImage(url)) || null;
-  return image;
+    encodeURIComponent(new XMLSerializer().serializeToString(svg));
+  return (await urlToImage(url)) || null;
 };
 
 /** convert svg source code to svg dom object */
@@ -63,6 +57,7 @@ export const sourceToSvg = (
 ) => {
   const doc = new DOMParser().parseFromString(source, type);
   const svg = doc.querySelector("svg");
+  /** element for displaying xml parsing error */
   let error = doc.querySelector("parsererror")?.textContent || "";
   /** remove unhelpful bits of error message */
   [
@@ -84,26 +79,31 @@ export const svgProps = async (source: string, filename: string) => {
   /** image dom object, for convenient drawing */
   let image = null;
 
+  /** util for handling source parse errors */
   const handleError = (error: unknown) => {
     if (typeof error === "string") errorMessage += error;
     if (error instanceof Error) errorMessage += error.message;
     errorMessage += "\n";
   };
 
+  /** parse source as svg */
   try {
     svg = sourceToSvg(source);
   } catch (error) {
     handleError(error);
   }
+
+  /** parse source as image */
   try {
     image = await sourceToImage(source);
   } catch (error) {
     handleError(error);
   }
 
-  errorMessage = errorMessage.replace(/\n+/, "\n");
+  /** collapse error whitespace */
+  errorMessage = errorMessage.replaceAll(/\n+/g, "\n");
 
-  /** filename, without extension */
+  /** filename without extension */
   const name = filename.replace(/\.svg$/, "");
 
   /** dimensions, exactly as specified in svg source */
@@ -129,7 +129,7 @@ export const svgProps = async (source: string, filename: string) => {
 
   /** final inferred dimensions of image */
   const inferred = {
-    /** default/fallback dimensions */
+    /** fallback dimensions */
     width: 512,
     height: 512,
   };
@@ -158,6 +158,14 @@ export const svgProps = async (source: string, filename: string) => {
     /** use absolute height for both */
     inferred.width = absolute.height;
     inferred.height = absolute.height;
+  } else if (viewBox.width) {
+    /** use viewBox width for both */
+    inferred.width = viewBox.width;
+    inferred.height = viewBox.width;
+  } else if (viewBox.height) {
+    /** use viewBox height for both */
+    inferred.width = viewBox.height;
+    inferred.height = viewBox.height;
   }
 
   /** dimension info table html */

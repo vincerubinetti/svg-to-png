@@ -11,7 +11,7 @@ type File = { source: string; filename: string };
 /** computed/derived props from input file */
 type Props = Awaited<ReturnType<typeof svgProps>>;
 
-/** options to determine output */
+/** options for output */
 type Options = ReturnType<typeof getDefaultOptions>;
 
 /** full image object */
@@ -22,12 +22,6 @@ export const images = atom<Image[]>([]);
 
 /** add images to list */
 export const addImages = async (newFiles: File[]) => {
-  /** clear images first if still on just starting sample file */
-  if (justSample) {
-    justSample = false;
-    clearImages();
-  }
-
   /** expand provided new files into full images */
   const newImages: Image[] = await Promise.all(
     newFiles.map(async (file) => {
@@ -37,7 +31,15 @@ export const addImages = async (newFiles: File[]) => {
     })
   );
 
-  store.set(images, (prevImages) => prevImages.concat(newImages));
+  store.set(images, (prevImages) =>
+    /** if still on just starting sample file */
+    (prevImages.length === 1 && prevImages[0].source === sampleFile.source
+      ? /** clear sample */
+        []
+      : /** else, add to existing images, like normal */
+        prevImages
+    ).concat(newImages)
+  );
 };
 
 /** set arbitrary field on image */
@@ -48,7 +50,7 @@ export const setImage = async <Key extends keyof Image>(
 ) => {
   let newImages = cloneDeep(store.get(images));
 
-  /** list of indices to set */
+  /** list of indices to set. set all if -1. */
   const indices = index === -1 ? range(newImages.length) : [index];
 
   /** set as much as possible synchronously first
@@ -58,24 +60,24 @@ export const setImage = async <Key extends keyof Image>(
     newImages[index][key] = value;
 
     /** lock aspect ratio */
-    if (key === "aspect" && value === Infinity)
-      newImages[index].aspect =
+    if (key === "aspectLock" && value === Infinity)
+      newImages[index].aspectLock =
         newImages[index].width / newImages[index].height;
 
     /** preserve aspect ratio */
-    if (key === "width" && newImages[index].aspect)
+    if (key === "width" && newImages[index].aspectLock)
       newImages[index].height =
-        newImages[index].width / newImages[index].aspect;
-    if (key === "height" && newImages[index].aspect)
+        newImages[index].width / newImages[index].aspectLock;
+    if (key === "height" && newImages[index].aspectLock)
       newImages[index].width =
-        newImages[index].height * newImages[index].aspect;
+        newImages[index].height * newImages[index].aspectLock;
   }
 
   /** set sync changes */
   store.set(images, newImages);
 
-  /** re-fresh new images */
-  newImages = cloneDeep(store.get(images));
+  /** re-clone so second store set works */
+  newImages = cloneDeep(newImages);
 
   /** then do async changes */
   for (const index of indices) {
@@ -94,7 +96,7 @@ export const setImage = async <Key extends keyof Image>(
   store.set(images, newImages);
 };
 
-/** reset options for a image to default */
+/** reset options for image to default */
 export const resetOptions = (index: number) => {
   const newImages = cloneDeep(store.get(images));
 
@@ -125,7 +127,7 @@ export const getDefaultOptions = (props: Props) => {
   return {
     width,
     height,
-    aspect: width / height,
+    aspectLock: width / height,
     margin: 0,
     fit: "contain",
     background: "",
@@ -138,9 +140,7 @@ const sampleFile = {
   filename: "sample.svg",
 };
 
-let justSample = true;
 addImages([sampleFile]);
-justSample = true;
 
 /** flag to edit all images together */
 export const all = atom(false);

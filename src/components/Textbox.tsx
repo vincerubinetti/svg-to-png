@@ -22,7 +22,7 @@ const Textbox = ({
     data-tooltip={tooltip}
     data-resizable={resizable}
   >
-    {label && <span className="control-label">{label}</span>}
+    {label && <span>{label}</span>}
     <input
       type="text"
       className={classes.input}

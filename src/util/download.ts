@@ -12,24 +12,21 @@ const downloadFile = (url: string, filename: string) => {
   link.click();
 };
 
-type Png = { canvas: HTMLCanvasElement; filename: string };
+type Png = { canvas: HTMLCanvasElement; name: string };
 
 /** download single png from canvas */
-export const downloadPng = ({ canvas, filename }: Png) =>
-  downloadFile(getCanvasUrl(canvas), filename + ".png");
+export const downloadPng = ({ canvas, name }: Png) =>
+  downloadFile(getCanvasUrl(canvas), name + ".png");
 
 /** download list of pngs */
 export const downloadPngs = async (pngs: Png[]) => pngs.forEach(downloadPng);
 
-/** download zipped pngs */
+/** download zip of pngs */
 export const downloadZip = async (pngs: Png[]) => {
   const zipWriter = new ZipWriter(new BlobWriter("application/zip"));
   await Promise.all(
-    pngs.map(({ canvas, filename }) =>
-      zipWriter.add(
-        filename + ".png",
-        new Data64URIReader(getCanvasUrl(canvas))
-      )
+    pngs.map(({ canvas, name }) =>
+      zipWriter.add(name + ".png", new Data64URIReader(getCanvasUrl(canvas)))
     )
   );
   const blob = await zipWriter.close();

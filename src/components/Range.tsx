@@ -10,7 +10,7 @@ type Props = {
 
 const Range = ({ label, tooltip, value, onChange, ...props }: Props) => (
   <label className="control" data-tooltip={tooltip}>
-    {label && <span className="control-label">{label}</span>}
+    {label && <span>{label}</span>}
     <input
       type="number"
       className={classes.input}

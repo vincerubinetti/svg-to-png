@@ -7,9 +7,9 @@
   color: var(--white);
   background: #000c;
   opacity: 0;
+  font-size: 1.2rem;
   pointer-events: none;
   z-index: 99;
-  font-size: 1.2rem;
   transition: opacity var(--fast);
 }
 

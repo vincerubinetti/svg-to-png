@@ -57,7 +57,7 @@ export const Canvas = ({
 
     if (!ctx) return;
 
-    /** clear any existing contents on canvas */
+    /** clear existing contents */
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     /** fill background */

@@ -25,7 +25,7 @@ const Select = <Option extends string>({
     data-tooltip={tooltip}
     aria-label={props["aria-label"]}
   >
-    {label && <span className="control-label">{label}</span>}
+    {label && <span>{label}</span>}
     <select
       className={classes.select}
       {...props}

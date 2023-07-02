@@ -24,8 +24,20 @@ const Output = () => {
 
       <div className={classes.grid}>
         {getImages.map((image, index) => (
-          <fieldset key={index} className={classes.cell}>
-            <legend>{image.name}.png</legend>
+          <div
+            key={index}
+            className={classes.cell}
+            role="group"
+            aria-label={image.name + ".png"}
+          >
+            <div
+              style={{
+                maxWidth:
+                  Math.max(image.width, 100) / window.devicePixelRatio + "px",
+              }}
+            >
+              {image.name}.png
+            </div>
             <Canvas
               image={image.image || null}
               width={image.width || 0}
@@ -63,7 +75,7 @@ const Output = () => {
                 <FontAwesomeIcon icon={image.darkCheckers ? faMoon : faSun} />
               </Button>
             </div>
-          </fieldset>
+          </div>
         ))}
       </div>
 
@@ -94,5 +106,5 @@ export default Output;
 const getPngs = (getImages: Image[]) =>
   [...document.querySelectorAll("canvas")].map((canvas, index) => ({
     canvas,
-    filename: getImages[index].name || "image",
+    name: getImages[index].name || "image",
   }));

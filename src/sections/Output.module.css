@@ -1,6 +1,7 @@
 .grid {
   display: flex;
   justify-content: center;
+  align-items: flex-end;
   flex-wrap: wrap;
   gap: 40px;
 }
@@ -10,6 +11,7 @@
   align-items: center;
   flex-direction: column;
   gap: 10px;
+  text-align: center;
 }
 
 .actions {

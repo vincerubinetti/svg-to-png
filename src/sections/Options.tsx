@@ -149,12 +149,12 @@ const Options = () => {
                     onClick={() =>
                       setImage(
                         getAll ? -1 : index,
-                        "aspect",
-                        image.aspect ? 0 : Infinity
+                        "aspectLock",
+                        image.aspectLock ? 0 : Infinity
                       )
                     }
                     data-tooltip={
-                      (!image.aspect
+                      (!image.aspectLock
                         ? "Lock aspect ratio"
                         : "Unlock aspect ratio") +
                       ` (${toFixed(image.width / image.height, 3)})`
@@ -162,7 +162,7 @@ const Options = () => {
                     data-square
                   >
                     <FontAwesomeIcon
-                      icon={image.aspect ? faLink : faLinkSlash}
+                      icon={image.aspectLock ? faLink : faLinkSlash}
                     />
                   </Button>
                 </td>

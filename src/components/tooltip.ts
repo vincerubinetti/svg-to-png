@@ -7,7 +7,6 @@ const options: Partial<Props> = {
   duration: [100, 100],
   allowHTML: true,
   appendTo: document.body,
-  aria: { content: "auto" },
   // onHide: () => false,
 };
 
@@ -22,7 +21,7 @@ new MutationObserver((mutations) => {
         .querySelectorAll<HTMLElement>("[data-tooltip]")
         .forEach(makeTippy);
 
-    /** when data-tooltip updates */
+    /** when data-tooltip attrs updated */
     if (mutation.type === "attributes") makeTippy(element);
   }
 }).observe(document.body, {
@@ -32,7 +31,7 @@ new MutationObserver((mutations) => {
   attributeFilter: ["data-tooltip"],
 });
 
-/** extend normal element type with javascript-attached tippy instance */
+/** extend normal element with attached tippy instance */
 type _Element = HTMLElement & { _tippy: Instance };
 
 /** create or update tippy instance */
@@ -58,7 +57,7 @@ const makeTippy = (element: HTMLElement) => {
 
   /** force re-position after rendering updates */
   if (instance.popperInstance)
-    window.setTimeout(instance.popperInstance.update, 100);
+    window.setTimeout(instance.popperInstance.update, 20);
 };
 
 /** make aria label from html string */

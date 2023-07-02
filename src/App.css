@@ -62,6 +62,15 @@ footer a:hover {
   color: var(--black);
 }
 
+section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  width: 100%;
+  padding: 40px max(40px, (100% - 1200px) / 2);
+}
+
 h1 {
   display: inline-flex;
   justify-content: center;
@@ -92,56 +101,6 @@ h2:after {
   background: var(--mid-gray);
 }
 
-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 40px;
-  width: 100%;
-  padding: 40px max(40px, (100% - 1200px) / 2);
-}
-
-button,
-select,
-input,
-textarea {
-  font: inherit;
-  color: inherit;
-}
-
-textarea,
-code {
-  font-family: "IBM Plex Mono", monospace;
-}
-
-code {
-  padding: 2px 5px;
-  border-radius: var(--rounded);
-  background: #eceff120;
-  color: var(--light-gray);
-}
-
-button,
-select,
-input[type="checkbox"],
-label {
-  cursor: pointer;
-}
-
-input[type="number"] {
-  text-align: center;
-}
-
-fieldset {
-  margin: 0;
-  padding: 0;
-  border: 0;
-}
-
-legend {
-  float: left;
-}
-
 a {
   color: var(--primary);
   transition: color var(--fast);
@@ -157,6 +116,37 @@ ul {
 
 li {
   padding: 5px 0;
+}
+
+button,
+select,
+input,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button,
+select,
+input[type="checkbox"],
+label {
+  cursor: pointer;
+}
+
+input[type="number"] {
+  text-align: center;
+}
+
+textarea,
+code {
+  font-family: "IBM Plex Mono", monospace;
+}
+
+code {
+  padding: 2px 5px;
+  border-radius: var(--rounded);
+  background: #eceff120;
+  color: var(--light-gray);
 }
 
 table {
@@ -194,6 +184,11 @@ svg + span {
   padding: 0;
 }
 
+.tippy-arrow {
+  color: var(--dark-gray);
+  z-index: 99;
+}
+
 .tippy-content > * {
   margin: 0 !important;
 }
@@ -204,11 +199,6 @@ svg + span {
 
 .tippy-content a:hover {
   color: var(--primary);
-}
-
-.tippy-arrow {
-  color: var(--dark-gray);
-  z-index: 99;
 }
 
 .tippy-content td:first-child {
