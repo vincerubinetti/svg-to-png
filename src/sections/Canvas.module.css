@@ -4,10 +4,10 @@
   max-height: calc(100vh - 80px);
   overflow-x: auto;
   overflow-y: auto;
+  outline: solid 1px var(--gray);
   background-image: url("/checkers-light.svg");
   background-size: 3vmin;
   background-attachment: fixed;
-  outline: solid 1px var(--gray);
 }
 
 .container[data-dark="true"] {

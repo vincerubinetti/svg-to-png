@@ -26,7 +26,7 @@ const Input = () => {
       Array.from(files).map(async (file) => ({
         filename: file.name,
         source: await file.text(),
-      }))
+      })),
     );
 
     /** add files to list */

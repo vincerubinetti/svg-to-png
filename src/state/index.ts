@@ -28,7 +28,7 @@ export const addImages = async (newFiles: File[]) => {
       const props = await svgProps(file.source, file.filename);
       const options = getDefaultOptions(props);
       return { ...file, ...props, ...options };
-    })
+    }),
   );
 
   store.set(images, (prevImages) =>
@@ -38,7 +38,7 @@ export const addImages = async (newFiles: File[]) => {
         []
       : /** else, add to existing images, like normal */
         prevImages
-    ).concat(newImages)
+    ).concat(newImages),
   );
 };
 
@@ -46,7 +46,7 @@ export const addImages = async (newFiles: File[]) => {
 export const setImage = async <Key extends keyof Image>(
   index: number,
   key: Key,
-  value: Image[Key]
+  value: Image[Key],
 ) => {
   let newImages = cloneDeep(store.get(images));
 
@@ -86,7 +86,7 @@ export const setImage = async <Key extends keyof Image>(
       /** update computed props */
       const props = await svgProps(
         newImages[index].source,
-        newImages[index].filename
+        newImages[index].filename,
       );
       Object.assign(newImages[index], props);
     }
@@ -113,7 +113,7 @@ export const resetOptions = (index: number) => {
 /** remove image from list */
 export const removeImage = (index: number) =>
   store.set(images, (prevImages) =>
-    prevImages.slice(0, index).concat(prevImages.slice(index + 1))
+    prevImages.slice(0, index).concat(prevImages.slice(index + 1)),
   );
 
 /** clear image list */

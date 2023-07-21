@@ -1,14 +1,16 @@
 .button {
   display: inline-flex;
-  justify-content: center;
   align-items: center;
-  gap: 0.5em;
+  justify-content: center;
   min-height: 40px;
   padding: 10px 20px;
+  gap: 0.5em;
   border: none;
   border-radius: var(--rounded);
   background: var(--light-gray);
-  transition: background var(--fast), color var(--fast);
+  transition:
+    background var(--fast),
+    color var(--fast);
 }
 
 .button:hover {

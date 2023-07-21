@@ -1,8 +1,8 @@
 .input {
-  margin: 0;
   width: 20px;
   height: 20px;
+  margin: 0;
   border-radius: var(--rounded);
-  accent-color: var(--primary);
   border-color: var(--gray);
+  accent-color: var(--primary);
 }

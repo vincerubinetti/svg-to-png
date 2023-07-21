@@ -122,7 +122,7 @@ const Options = () => {
                       }
                       tooltip={`Default from SVG: ${toFixed(
                         image.inferred.width || 0,
-                        2
+                        2,
                       )}`}
                       aria-label="Width, in pixels"
                     />
@@ -137,7 +137,7 @@ const Options = () => {
                       }
                       tooltip={`Default from SVG: ${toFixed(
                         image.inferred.height || 0,
-                        2
+                        2,
                       )}`}
                       aria-label="Height, in pixels"
                     />
@@ -150,7 +150,7 @@ const Options = () => {
                       setImage(
                         getAll ? -1 : index,
                         "aspectLock",
-                        image.aspectLock ? 0 : Infinity
+                        image.aspectLock ? 0 : Infinity,
                       )
                     }
                     data-tooltip={

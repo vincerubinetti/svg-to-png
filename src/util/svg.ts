@@ -32,7 +32,7 @@ const urlToImage = (url: string): Promise<HTMLImageElement> =>
     const image = new Image();
     image.addEventListener("load", () => resolve(image));
     image.addEventListener("error", () =>
-      reject("Couldn't convert SVG to image element")
+      reject("Couldn't convert SVG to image element"),
     );
     image.src = url;
   });
@@ -53,7 +53,7 @@ export const sourceToImage = async (source: string) => {
 export const sourceToSvg = (
   source: string,
   /** use stricter type by default to get more helpful svg spec parse errors */
-  type: DOMParserSupportedType = "image/svg+xml"
+  type: DOMParserSupportedType = "image/svg+xml",
 ) => {
   const doc = new DOMParser().parseFromString(source, type);
   const svg = doc.querySelector("svg");

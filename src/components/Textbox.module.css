@@ -6,8 +6,8 @@
   width: 150px;
   min-width: 100px;
   max-width: 300px;
-  resize: horizontal;
   overflow: hidden;
+  resize: horizontal;
 }
 
 .input {

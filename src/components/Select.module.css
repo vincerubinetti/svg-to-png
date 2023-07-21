@@ -3,6 +3,7 @@
 }
 
 .select {
+  appearance: none;
   min-width: 0;
   min-height: 40px;
   padding: 5px 30px 5px 10px;
@@ -11,7 +12,6 @@
   border-radius: var(--rounded);
   background: var(--off-white);
   transition: box-shadow var(--fast);
-  appearance: none;
 }
 
 .select:hover {

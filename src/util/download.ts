@@ -26,8 +26,8 @@ export const downloadZip = async (pngs: Png[]) => {
   const zipWriter = new ZipWriter(new BlobWriter("application/zip"));
   await Promise.all(
     pngs.map(({ canvas, name }) =>
-      zipWriter.add(name + ".png", new Data64URIReader(getCanvasUrl(canvas)))
-    )
+      zipWriter.add(name + ".png", new Data64URIReader(getCanvasUrl(canvas))),
+    ),
   );
   const blob = await zipWriter.close();
   const url = window.URL.createObjectURL(blob);

@@ -64,7 +64,7 @@ const Output = () => {
                   setImage(
                     getAll ? -1 : index,
                     "darkCheckers",
-                    !image.darkCheckers
+                    !image.darkCheckers,
                   )
                 }
                 data-tooltip={`Show ${

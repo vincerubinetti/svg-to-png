@@ -34,22 +34,22 @@ body {
 }
 
 main {
-  flex-grow: 1;
   display: flex;
+  flex-grow: 1;
   flex-direction: column;
 }
 
 header,
 footer {
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-wrap: wrap;
-  gap: 10px 40px;
+  align-items: center;
+  justify-content: center;
   padding: 40px;
-  text-align: center;
+  gap: 10px 40px;
   background: var(--primary);
   color: var(--white);
+  text-align: center;
 }
 
 header a,
@@ -66,39 +66,39 @@ section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 40px;
   width: 100%;
   padding: 40px max(40px, (100% - 1200px) / 2);
+  gap: 40px;
 }
 
 h1 {
   display: inline-flex;
-  justify-content: center;
   align-items: center;
-  gap: 20px;
+  justify-content: center;
   margin: 0;
+  gap: 20px;
   font: inherit;
   font-size: 1.5rem;
 }
 
 h2 {
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 20px;
+  justify-content: center;
   width: 100%;
   margin: 0;
-  text-align: center;
+  gap: 20px;
   font: inherit;
   font-size: 1.2rem;
+  text-align: center;
 }
 
 h2:before,
 h2:after {
-  content: "";
   flex-grow: 1;
   height: 1px;
   background: var(--mid-gray);
+  content: "";
 }
 
 a {
@@ -122,8 +122,8 @@ button,
 select,
 input,
 textarea {
-  font: inherit;
   color: inherit;
+  font: inherit;
 }
 
 button,
@@ -173,20 +173,20 @@ svg + span {
   padding: 10px 15px;
   border-radius: var(--rounded);
   background: var(--dark-gray);
-  font-size: 1rem;
   box-shadow: var(--shadow);
+  font-size: 1rem;
 }
 
 .tippy-content {
   display: flex;
   flex-direction: column;
-  gap: 10px;
   padding: 0;
+  gap: 10px;
 }
 
 .tippy-arrow {
-  color: var(--dark-gray);
   z-index: 99;
+  color: var(--dark-gray);
 }
 
 .tippy-content > * {
@@ -202,8 +202,8 @@ svg + span {
 }
 
 .tippy-content td:first-child {
-  padding-left: 0;
   padding-right: 1em;
+  padding-left: 0;
   text-align: left;
 }
 
