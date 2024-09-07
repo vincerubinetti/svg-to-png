@@ -2,14 +2,6 @@
   min-width: 0;
 }
 
-.label[data-resizable="true"] {
-  width: 150px;
-  min-width: 100px;
-  max-width: 300px;
-  overflow: hidden;
-  resize: horizontal;
-}
-
 .input {
   flex-grow: 1;
   min-width: 0;
@@ -22,11 +14,4 @@
 
 .input:hover {
   box-shadow: var(--shadow);
-}
-
-/** safari hack to make resize handle grabbable */
-@supports (font: -apple-system-body) and (-webkit-appearance: none) {
-  .label[data-resizable="true"] {
-    padding-right: 10px;
-  }
 }

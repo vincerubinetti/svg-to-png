@@ -8,7 +8,6 @@
   min-height: 40px;
   padding: 5px 30px 5px 10px;
   border: none;
-  border: solid 1px var(--gray);
   border-radius: var(--rounded);
   background: var(--off-white);
   transition: box-shadow var(--fast);

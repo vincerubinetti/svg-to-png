@@ -2,10 +2,10 @@
   --primary: #e91e63;
 
   --white: white;
-  --light-gray: #eceff1;
-  --mid-gray: #cfd8dc;
+  --off-white: #eceff1;
+  --light-gray: #cfd8dc;
   --gray: #90a4ae;
-  --dark-gray: #263238;
+  --off-black: #263238;
   --black: black;
 
   --shadow: 0 0 10px #0002;
@@ -24,7 +24,7 @@ body {
   min-height: 100vh;
   margin: 0;
   background: var(--white);
-  color: var(--dark-gray);
+  color: var(--off-black);
 }
 
 #root {
@@ -97,7 +97,7 @@ h2:before,
 h2:after {
   flex-grow: 1;
   height: 1px;
-  background: var(--mid-gray);
+  background: var(--light-gray);
   content: "";
 }
 
@@ -146,7 +146,7 @@ code {
   padding: 2px 5px;
   border-radius: var(--rounded);
   background: #eceff120;
-  color: var(--light-gray);
+  color: var(--off-white);
 }
 
 table {
@@ -172,7 +172,7 @@ svg + span {
   max-width: min(90vw, 380px) !important;
   padding: 10px 15px;
   border-radius: var(--rounded);
-  background: var(--dark-gray);
+  background: var(--off-black);
   box-shadow: var(--shadow);
   font-size: 1rem;
 }
@@ -186,7 +186,7 @@ svg + span {
 
 .tippy-arrow {
   z-index: 99;
-  color: var(--dark-gray);
+  color: var(--off-black);
 }
 
 .tippy-content > * {
@@ -214,4 +214,15 @@ svg + span {
 .tippy-content td {
   padding: 2px 5px;
   text-align: center;
+}
+
+:not(html) ::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+}
+
+:not(html) ::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: var(--off-white);
 }

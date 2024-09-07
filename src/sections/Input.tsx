@@ -1,4 +1,5 @@
-import { DragEventHandler, useEffect, useRef, useState } from "react";
+import type { DragEventHandler } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAtom } from "jotai";
 import { faTimes, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,7 +16,7 @@ const Input = () => {
   const [getImages] = useAtom(images);
 
   /** click actual file input on button click */
-  const onClick = () => input?.current?.click();
+  const onClick = () => input.current?.click();
 
   /** upload file */
   const onLoad = async (files: FileList | null) => {
@@ -39,10 +40,13 @@ const Input = () => {
   /** on button drag file over, set drag flag on */
   const onDragEnter = () => setDragging(true);
 
-  /** add drag enter listener to window, because overlay not interactable until dragging started */
+  /**
+   * add drag enter listener to window, because overlay not interact-able until
+   * dragging started
+   */
   useEffect(() => {
     window.addEventListener("dragenter", onDragEnter);
-    () => window.removeEventListener("dragenter", onDragEnter);
+    return () => window.removeEventListener("dragenter", onDragEnter);
   });
 
   /** on button drag file off, set drag flag off */
@@ -67,7 +71,7 @@ const Input = () => {
       <div className={classes.buttons}>
         <input
           ref={input}
-          onChange={(event) => onLoad(event.target?.files)}
+          onChange={(event) => onLoad(event.target.files)}
           type="file"
           accept="image/svg+xml"
           multiple
@@ -111,7 +115,7 @@ const Input = () => {
               <Textbox
                 value={image.filename}
                 onChange={(value) => setImage(index, "filename", value)}
-                data-tooltip="Filename"
+                tooltip="Filename"
               />
               <Button
                 onClick={() => removeImage(index)}

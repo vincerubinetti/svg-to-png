@@ -49,12 +49,12 @@ export const Canvas = ({
   };
 
   /** draw canvas when rendering component */
-  const drawCanvas = (canvas: HTMLCanvasElement) => {
+  const drawCanvas = (canvas: HTMLCanvasElement | null) => {
     if (!canvas) return;
+    if (!image) return;
 
     /** get draw context */
     const ctx = canvas.getContext("2d");
-
     if (!ctx) return;
 
     /** clear existing contents */
@@ -63,8 +63,6 @@ export const Canvas = ({
     /** fill background */
     ctx.fillStyle = background.trim() || "transparent";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    if (!image) return;
 
     /** run fit calculations */
     if (fit === "contain") contain();

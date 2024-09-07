@@ -1,14 +1,14 @@
-import { InputHTMLAttributes } from "react";
-import classes from "./Range.module.css";
+import type { ComponentProps } from "react";
+import classes from "./Numberbox.module.css";
 
 type Props = {
   label?: string;
   tooltip?: string;
   value: number;
   onChange: (value: number) => void;
-} & Omit<InputHTMLAttributes<HTMLInputElement>, "value" | "onChange">;
+} & Omit<ComponentProps<"input">, "value" | "onChange">;
 
-const Range = ({ label, tooltip, value, onChange, ...props }: Props) => (
+const Numberbox = ({ label, tooltip, value, onChange, ...props }: Props) => (
   <label className="control" data-tooltip={tooltip}>
     {label && <span>{label}</span>}
     <input
@@ -21,4 +21,4 @@ const Range = ({ label, tooltip, value, onChange, ...props }: Props) => (
   </label>
 );
 
-export default Range;
+export default Numberbox;

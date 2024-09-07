@@ -1,4 +1,4 @@
-import { InputHTMLAttributes, ReactNode } from "react";
+import type { ComponentProps, ReactNode } from "react";
 import classes from "./Checkbox.module.css";
 
 type Props = {
@@ -6,7 +6,7 @@ type Props = {
   tooltip?: string;
   value: boolean;
   onChange: (value: boolean) => void;
-} & Omit<InputHTMLAttributes<HTMLInputElement>, "value" | "onChange">;
+} & Omit<ComponentProps<"input">, "value" | "onChange">;
 
 const Checkbox = ({ label, tooltip, value, onChange, ...props }: Props) => (
   <label className="control" data-tooltip={tooltip}>

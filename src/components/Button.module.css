@@ -7,14 +7,16 @@
   gap: 0.5em;
   border: none;
   border-radius: var(--rounded);
-  background: var(--light-gray);
+  background: var(--off-white);
   transition:
     background var(--fast),
-    color var(--fast);
+    color var(--fast),
+    box-shadow var(--fast);
 }
 
 .button:hover {
   background: var(--primary);
+  box-shadow: var(--shadow);
   color: var(--white);
 }
 

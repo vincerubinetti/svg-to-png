@@ -1,4 +1,4 @@
-import { SelectHTMLAttributes } from "react";
+import type { ComponentProps } from "react";
 import { startCase } from "lodash";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,7 +10,7 @@ type Props<Option> = {
   options: Option[];
   value: Option;
   onChange: (value: Option) => void;
-} & Omit<SelectHTMLAttributes<HTMLSelectElement>, "value" | "onChange">;
+} & Omit<ComponentProps<"select">, "value" | "onChange">;
 
 const Select = <Option extends string>({
   label,
@@ -18,12 +18,13 @@ const Select = <Option extends string>({
   options,
   value,
   onChange,
+  "aria-label": ariaLabel,
   ...props
 }: Props<Option>) => (
   <label
     className={classes.label + " control"}
     data-tooltip={tooltip}
-    aria-label={props["aria-label"]}
+    aria-label={ariaLabel}
   >
     {label && <span>{label}</span>}
     <select

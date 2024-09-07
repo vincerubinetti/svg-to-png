@@ -12,11 +12,11 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "@/components/Button";
 import Checkbox from "@/components/Checkbox";
-import Range from "@/components/Range";
+import Numberbox from "@/components/Numberbox";
 import Select from "@/components/Select";
 import Textbox from "@/components/Textbox";
 import { makeLabel } from "@/components/tooltip";
-import { all, images, resetOptions, setImage } from "@/state";
+import { editAll, images, resetOptions, setImage } from "@/state";
 import { toFixed } from "@/util/math";
 import classes from "./Options.module.css";
 
@@ -47,9 +47,9 @@ const backgroundLabel = `
 
 const Options = () => {
   const [getImages] = useAtom(images);
-  const [getAll, setAll] = useAtom(all);
+  const [getEditAll, setEditAll] = useAtom(editAll);
 
-  if (!getImages?.length) return <></>;
+  if (!getImages.length) return <></>;
 
   return (
     <section>
@@ -64,8 +64,8 @@ const Options = () => {
             </>
           }
           tooltip="Update all images together when changing a value."
-          value={getAll}
-          onChange={setAll}
+          value={getEditAll}
+          onChange={setEditAll}
         />
       </div>
 
@@ -100,7 +100,7 @@ const Options = () => {
               <tr key={index} aria-label={image.name}>
                 <td>
                   <Button
-                    onClick={() => resetOptions(getAll ? -1 : index)}
+                    onClick={() => resetOptions(getEditAll ? -1 : index)}
                     data-tooltip="Reset all values to defaults."
                     data-square
                   >
@@ -112,13 +112,13 @@ const Options = () => {
 
                 <td>
                   <div className={classes.cell}>
-                    <Range
+                    <Numberbox
                       min={0}
                       max={10000}
                       step={1}
                       value={image.width || 0}
                       onChange={(value) =>
-                        setImage(getAll ? -1 : index, "width", value)
+                        setImage(getEditAll ? -1 : index, "width", value)
                       }
                       tooltip={`Default from SVG: ${toFixed(
                         image.inferred.width || 0,
@@ -127,13 +127,13 @@ const Options = () => {
                       aria-label="Width, in pixels"
                     />
                     ×
-                    <Range
+                    <Numberbox
                       min={0}
                       max={10000}
                       step={1}
                       value={image.height || 0}
                       onChange={(value) =>
-                        setImage(getAll ? -1 : index, "height", value)
+                        setImage(getEditAll ? -1 : index, "height", value)
                       }
                       tooltip={`Default from SVG: ${toFixed(
                         image.inferred.height || 0,
@@ -148,7 +148,7 @@ const Options = () => {
                   <Button
                     onClick={() =>
                       setImage(
-                        getAll ? -1 : index,
+                        getEditAll ? -1 : index,
                         "aspectLock",
                         image.aspectLock ? 0 : Infinity,
                       )
@@ -168,13 +168,13 @@ const Options = () => {
                 </td>
 
                 <td>
-                  <Range
+                  <Numberbox
                     min={-1000}
                     max={1000}
                     step={1}
                     value={image.margin || 0}
                     onChange={(value) =>
-                      setImage(getAll ? -1 : index, "margin", value)
+                      setImage(getEditAll ? -1 : index, "margin", value)
                     }
                     aria-label={"Margin." + marginLabel}
                   />
@@ -185,7 +185,7 @@ const Options = () => {
                     options={["contain", "cover", "stretch"]}
                     value={image.fit}
                     onChange={(value) =>
-                      setImage(getAll ? -1 : index, "fit", value)
+                      setImage(getEditAll ? -1 : index, "fit", value)
                     }
                     aria-label={"Fit. " + makeLabel(fitLabel)}
                   />
@@ -195,9 +195,8 @@ const Options = () => {
                   <Textbox
                     value={image.background}
                     onChange={(value) =>
-                      setImage(getAll ? -1 : index, "background", value)
+                      setImage(getEditAll ? -1 : index, "background", value)
                     }
-                    resizable={true}
                     aria-label={"Background. " + makeLabel(backgroundLabel)}
                   />
                 </td>

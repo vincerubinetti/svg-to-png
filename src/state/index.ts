@@ -1,6 +1,6 @@
 import { atom, getDefaultStore } from "jotai";
 import { cloneDeep, range } from "lodash";
-import { svgProps } from "./../util/svg";
+import { svgProps } from "@/util/svg";
 
 /** singleton store instance to access state outside of react */
 const store = getDefaultStore();
@@ -53,8 +53,10 @@ export const setImage = async <Key extends keyof Image>(
   /** list of indices to set. set all if -1. */
   const indices = index === -1 ? range(newImages.length) : [index];
 
-  /** set as much as possible synchronously first
-   * https://stackoverflow.com/questions/46000544/react-controlled-input-cursor-jumps#comment126597443_48608293 */
+  /**
+   * set as much as possible synchronously first
+   * https://stackoverflow.com/questions/46000544/react-controlled-input-cursor-jumps#comment126597443_48608293
+   */
   for (const index of indices) {
     /** update value */
     newImages[index][key] = value;
@@ -143,4 +145,4 @@ const sampleFile = {
 addImages([sampleFile]);
 
 /** flag to edit all images together */
-export const all = atom(false);
+export const editAll = atom(false);

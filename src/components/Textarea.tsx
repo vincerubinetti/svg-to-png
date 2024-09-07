@@ -1,10 +1,10 @@
-import { TextareaHTMLAttributes } from "react";
+import type { ComponentProps } from "react";
 import classes from "./Textarea.module.css";
 
 type Props = {
   value: string;
   onChange: (value: string) => void;
-} & Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "value" | "onChange">;
+} & Omit<ComponentProps<"textarea">, "value" | "onChange">;
 
 const Textarea = ({ value, onChange, ...props }: Props) => (
   <textarea

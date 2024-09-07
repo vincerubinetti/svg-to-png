@@ -8,13 +8,14 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "@/components/Button";
 import { Canvas } from "@/sections/Canvas";
-import { all, Image, images, setImage } from "@/state";
+import type { Image } from "@/state";
+import { editAll, images, setImage } from "@/state";
 import { downloadPng, downloadPngs, downloadZip } from "@/util/download";
 import classes from "./Output.module.css";
 
 const Output = () => {
   const [getImages] = useAtom(images);
-  const [getAll] = useAtom(all);
+  const [getEditAll] = useAtom(editAll);
 
   if (!getImages.length) return <></>;
 
@@ -39,7 +40,7 @@ const Output = () => {
               {image.name}.png
             </div>
             <Canvas
-              image={image.image || null}
+              image={image.image}
               width={image.width || 0}
               height={image.height || 0}
               originalWidth={image.inferred.width || 0}
@@ -62,7 +63,7 @@ const Output = () => {
               <Button
                 onClick={() =>
                   setImage(
-                    getAll ? -1 : index,
+                    getEditAll ? -1 : index,
                     "darkCheckers",
                     !image.darkCheckers,
                   )

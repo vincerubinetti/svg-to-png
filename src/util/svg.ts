@@ -4,7 +4,7 @@ import { toFixed } from "@/util/math";
 /** convert string of absolute css units to pixels */
 export const unitsToPixels = (string: string) => {
   /** unit constants https://www.w3.org/TR/css-values-3/#absolute-lengths */
-  const units: { [key: string]: number } = {
+  const units: Record<string, number> = {
     px: 1,
     in: 96,
     pc: 96 / 6,
@@ -37,10 +37,12 @@ const urlToImage = (url: string): Promise<HTMLImageElement> =>
     image.src = url;
   });
 
-/** convert svg source code to image dom object */
+/** convert svg source code to image object */
 export const sourceToImage = async (source: string) => {
-  /** use less strict html type (allows things like missing xmlns)
-   * because browser can still handle drawing it as image on canvas */
+  /**
+   * use less strict html type (allows things like missing xmlns) because
+   * browser can still handle drawing it as image on canvas
+   */
   const svg = sourceToSvg(source, "text/html");
   /** encode svg as data url */
   const url =

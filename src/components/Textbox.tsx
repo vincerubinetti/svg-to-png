@@ -1,4 +1,4 @@
-import { InputHTMLAttributes } from "react";
+import type { ComponentProps } from "react";
 import classes from "./Textbox.module.css";
 
 type Props = {
@@ -6,22 +6,10 @@ type Props = {
   tooltip?: string;
   value: string;
   onChange: (value: string) => void;
-  resizable?: boolean;
-} & Omit<InputHTMLAttributes<HTMLInputElement>, "value" | "onChange">;
+} & Omit<ComponentProps<"input">, "value" | "onChange">;
 
-const Textbox = ({
-  label,
-  tooltip,
-  value,
-  onChange,
-  resizable,
-  ...props
-}: Props) => (
-  <label
-    className={classes.label + " control"}
-    data-tooltip={tooltip}
-    data-resizable={resizable}
-  >
+const Textbox = ({ label, tooltip, value, onChange, ...props }: Props) => (
+  <label className={classes.label + " control"} data-tooltip={tooltip}>
     {label && <span>{label}</span>}
     <input
       type="text"

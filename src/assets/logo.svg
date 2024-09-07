@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-50 -50 100 100" class="logo">
+  <style>
+    .logo * {
+      animation-duration: 2s;
+      animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+      animation-fill-mode: both;
+    }
+
+    .frame {
+      animation-name: draw-frame;
+    }
+
+    @keyframes draw-frame {
+      0% {
+        stroke-dashoffset: 5;
+      }
+
+      50% {
+        stroke-dashoffset: 3.75;
+        stroke-dasharray: 5 0;
+      }
+    }
+
+    .star {
+      animation-name: draw-star;
+    }
+
+    @keyframes draw-star {
+      0% {
+        rotate: 90deg;
+      }
+
+      50% {
+        scale: 0.75;
+      }
+    }
+
+    .spokes path {
+      animation-name: draw-spoke;
+      stroke-dasharray: 1;
+    }
+
+    @keyframes draw-spoke {
+      50% {
+        stroke-dashoffset: 1;
+      }
+    }
+  </style>
+
+  <script>
+    const svg = document.currentScript.closest("svg");
+    svg.addEventListener("mousemove", () =>
+      svg
+        .getAnimations({ subtree: true })
+        .forEach((animation) => animation.play()),
+    );
+  </script>
+
+  <path
+    class="frame"
+    fill="none"
+    stroke="#ffffff"
+    stroke-width="7"
+    stroke-linecap="round"
+    stroke-dasharray="2.5 2.5"
+    pathLength="20"
+    d="
+      M -46 -18
+      A 20 20 0 0 1 -25 -39
+      L 25 -39
+      A 20 20 0 0 1 46 -18
+      L 46 18
+      A 20 20 0 0 1 25 39
+      L -25 39
+      A 20 20 0 0 1 -46 18
+      z
+    "
+  />
+
+  <g class="star">
+    <g class="spokes" stroke="#ffffff" stroke-width="5">
+      <path transform="rotate(0)" d="M 0 25 L 0 0" pathLength="1" />
+      <path transform="rotate(45)" d="M 0 25 L 0 0" pathLength="1" />
+      <path transform="rotate(90)" d="M 0 25 L 0 0" pathLength="1" />
+      <path transform="rotate(135)" d="M 0 25 L 0 0" pathLength="1" />
+      <path transform="rotate(180)" d="M 0 25 L 0 0" pathLength="1" />
+      <path transform="rotate(225)" d="M 0 22 L 0 0" pathLength="1" />
+      <path transform="rotate(270)" d="M 0 25 L 0 0" pathLength="1" />
+      <path transform="rotate(315)" d="M 0 25 L 0 0" pathLength="1" />
+    </g>
+    <g class="balls" fill="#ffffff">
+      <circle transform="rotate(0)" cx="0" cy="25" r="5" />
+      <circle transform="rotate(45)" cx="0" cy="25" r="5" />
+      <circle transform="rotate(90)" cx="0" cy="25" r="5" />
+      <circle transform="rotate(135)" cx="0" cy="25" r="5" />
+      <circle transform="rotate(180)" cx="0" cy="25" r="5" />
+      <circle transform="rotate(225)" cx="0" cy="25" r="5" />
+      <circle transform="rotate(270)" cx="0" cy="25" r="5" />
+      <circle transform="rotate(315)" cx="0" cy="25" r="5" />
+    </g>
+  </g>
+</svg>

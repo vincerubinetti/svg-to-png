@@ -1,7 +1,7 @@
-import { ButtonHTMLAttributes } from "react";
+import type { ComponentProps } from "react";
 import classes from "./Button.module.css";
 
-const Button = (props: ButtonHTMLAttributes<HTMLButtonElement>) => (
+const Button = (props: ComponentProps<"button">) => (
   <button {...props} className={classes.button} />
 );
 
