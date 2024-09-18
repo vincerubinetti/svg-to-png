@@ -1,5 +1,6 @@
 .textarea {
   flex-grow: 1;
+  width: 100%;
   padding: 10px;
   border: solid 1px var(--gray);
   border-radius: var(--rounded);
