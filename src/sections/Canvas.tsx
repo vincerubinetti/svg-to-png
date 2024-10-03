@@ -1,98 +1,108 @@
+import { clamp } from "lodash";
+import type { Image } from "@/state";
+import { sourceToImage } from "@/util/svg";
 import classes from "./Canvas.module.css";
 
-const densityScale = window.devicePixelRatio;
+export const densityScale = window.devicePixelRatio;
 
-type Props = {
-  image: HTMLImageElement | null;
-  width: number;
-  height: number;
-  originalWidth: number;
-  originalHeight: number;
-  fit: string;
-  margin: number;
-  background: string;
-  darkCheckers: boolean;
+type Props = Image & {
   tooltip: string;
 };
 
-/** draw svg to canvas */
+/** draw svg image to canvas */
 export const Canvas = ({
-  image,
+  source,
+  name,
+  size,
   width,
   height,
-  originalWidth,
-  originalHeight,
-  fit,
+  trim,
   margin,
+  fit,
   background,
+  color,
   darkCheckers,
   tooltip,
 }: Props) => {
-  /** size to draw svg image onto canvas */
-  let drawWidth = Math.abs(width) - margin * 2;
-  let drawHeight = Math.abs(height) - margin * 2;
-
-  /** calc aspect ratios */
-  const originalAspect = originalWidth / originalHeight;
-  const drawAspect = drawWidth / drawHeight;
-
-  /** scale down draw size to contain full svg within bounds of canvas */
-  const contain = () => {
-    if (originalAspect < drawAspect) drawWidth = drawHeight * originalAspect;
-    else drawHeight = drawWidth / originalAspect;
-  };
-
-  /** scale up draw size to cover full canvas with svg */
-  const cover = () => {
-    if (originalAspect > drawAspect) drawWidth = drawHeight * originalAspect;
-    else drawHeight = drawWidth / originalAspect;
-  };
-
-  /** draw canvas when rendering component */
-  const drawCanvas = (canvas: HTMLCanvasElement | null) => {
+  /** when rendering component */
+  const drawCanvas = async (canvas: HTMLCanvasElement | null) => {
     if (!canvas) return;
-    if (!image) return;
 
     /** get draw context */
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    /** convert svg to image */
+    let image = null;
+    try {
+      image = await sourceToImage(source, { trim, color });
+    } catch (error) {
+      //
+    }
+
+    if (!image) return;
+
+    /** size to draw image onto canvas */
+    const target = {
+      x: 0,
+      y: 0,
+      width: clamp(Math.abs(width) - margin * 2, 0, Infinity),
+      height: clamp(Math.abs(height) - margin * 2, 0, Infinity),
+    };
+
+    /** calc aspect ratios */
+    const sourceAspect = size.width / size.height;
+    const targetAspect = target.width / target.height;
+
+    /** scale down target size to contain full image within bounds of canvas */
+    if (fit === "contain") {
+      if (sourceAspect < targetAspect)
+        target.width = target.height * sourceAspect;
+      else target.height = target.width / sourceAspect;
+    }
+
+    /** scale up target size to cover full canvas with image */
+    if (fit === "cover") {
+      if (sourceAspect > targetAspect)
+        target.width = target.height * sourceAspect;
+      else target.height = target.width / sourceAspect;
+    }
+
+    /** center within canvas */
+    target.x = (width - target.width) / 2;
+    target.y = (height - target.height) / 2;
+
     /** clear existing contents */
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, width, height);
 
     /** fill background */
     ctx.fillStyle = background.trim() || "transparent";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, width, height);
 
-    /** run fit calculations */
-    if (fit === "contain") contain();
-    if (fit === "cover") cover();
-
-    /** center svg image within canvas */
-    const x = (width - drawWidth) / 2;
-    const y = (height - drawHeight) / 2;
-
-    /** draw svg to canvas */
-    ctx.drawImage(image, x, y, drawWidth, drawHeight);
+    /** draw image to canvas */
+    ctx.drawImage(image, target.x, target.y, target.width, target.height);
   };
 
   /** render component */
   return (
-    <div
-      className={classes.container}
-      data-dark={darkCheckers}
-      data-tooltip={tooltip}
-      role="img"
-    >
-      <canvas
-        ref={drawCanvas}
-        width={width}
-        height={height}
-        style={{
-          width: width / densityScale + "px",
-          height: height / densityScale + "px",
-        }}
-      />
-    </div>
+    <>
+      <div
+        className={classes.container}
+        data-dark={darkCheckers}
+        data-tooltip={tooltip}
+        role="img"
+      >
+        <canvas
+          ref={drawCanvas}
+          width={width}
+          height={height}
+          style={{
+            width: width / densityScale + "px",
+            height: height / densityScale + "px",
+          }}
+          title={name}
+        />
+      </div>
+    </>
   );
 };

@@ -15,20 +15,20 @@
 .wrapper th,
 .wrapper td {
   padding: 10px;
-}
-
-.wrapper :where(th, td):nth-child(2) {
-  width: 100%;
-  max-width: 380px;
-}
-
-.wrapper :where(th, td):not(:nth-child(2)) {
-  width: 0;
   text-align: center;
+}
+
+.name {
+  width: 100%;
+  max-width: 300px;
+  text-align: left !important;
+  white-space: normal;
+  overflow-wrap: break-word;
 }
 
 .cell {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
 }

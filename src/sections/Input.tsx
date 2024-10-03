@@ -25,8 +25,8 @@ const Input = () => {
     /** parse file uploads as text */
     const data = await Promise.all(
       Array.from(files).map(async (file) => ({
-        filename: file.name,
         source: await file.text(),
+        filename: file.name.replace(/\.svg$/i, ""),
       })),
     );
 
@@ -109,29 +109,27 @@ const Input = () => {
             key={index}
             className={classes.cell}
             role="group"
-            aria-label={image.name}
+            aria-label={image.filename}
           >
-            <div className={classes.top}>
-              <Textbox
-                value={image.filename}
-                onChange={(value) => setImage(index, "filename", value)}
-                tooltip="Filename"
-              />
-              <Button
-                onClick={() => removeImage(index)}
-                data-tooltip="Remove image"
-                data-square
-              >
-                <FontAwesomeIcon icon={faTimes} />
-              </Button>
-            </div>
+            <Textbox
+              className={classes.filename}
+              value={image.filename}
+              onChange={(value) => setImage(index, "filename", value)}
+              tooltip="Filename"
+            />
+            <Button
+              className={classes.actions}
+              onClick={() => removeImage(index)}
+              data-tooltip="Remove image"
+              data-square
+            >
+              <FontAwesomeIcon icon={faTimes} />
+            </Button>
             <Textarea
+              className={classes.source}
               value={image.source}
               onChange={(value) => setImage(index, "source", value)}
-              data-tooltip={`
-                <p>SVG source code</p>
-                ${image.info || ""}
-              `}
+              data-tooltip="SVG source code"
             />
             {image.errorMessage && (
               <div className={classes.error}>{image.errorMessage}</div>

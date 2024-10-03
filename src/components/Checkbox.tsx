@@ -1,4 +1,5 @@
 import type { ComponentProps, ReactNode } from "react";
+import clsx from "clsx";
 import classes from "./Checkbox.module.css";
 
 type Props = {
@@ -8,8 +9,15 @@ type Props = {
   onChange: (value: boolean) => void;
 } & Omit<ComponentProps<"input">, "value" | "onChange">;
 
-const Checkbox = ({ label, tooltip, value, onChange, ...props }: Props) => (
-  <label className="control" data-tooltip={tooltip}>
+const Checkbox = ({
+  label,
+  tooltip,
+  value,
+  onChange,
+  className,
+  ...props
+}: Props) => (
+  <label className={clsx("control", className)} data-tooltip={tooltip}>
     {label && <span>{label}</span>}
     <input
       type="checkbox"

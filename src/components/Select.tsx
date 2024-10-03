@@ -1,4 +1,5 @@
 import type { ComponentProps } from "react";
+import clsx from "clsx";
 import { startCase } from "lodash";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -19,10 +20,11 @@ const Select = <Option extends string>({
   value,
   onChange,
   "aria-label": ariaLabel,
+  className,
   ...props
 }: Props<Option>) => (
   <label
-    className={classes.label + " control"}
+    className={clsx("control", classes.label, className)}
     data-tooltip={tooltip}
     aria-label={ariaLabel}
   >

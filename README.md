@@ -1,4 +1,6 @@
-<img height="150" src="https://raw.githubusercontent.com/vincerubinetti/svg-to-png/main/public/logo.png?raw=true">
+<a href="https://vincerubinetti.github.io/svg-to-png/">
+  <img height="150" src="https://raw.githubusercontent.com/vincerubinetti/svg-to-png/main/public/logo.png?raw=true">
+</a>
 
 # SVG to PNG
 

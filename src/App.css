@@ -1,5 +1,6 @@
 :root {
   --primary: #e91e63;
+  --primary-light: #ee769e;
 
   --white: white;
   --off-white: #eceff1;
@@ -146,15 +147,11 @@ code {
   padding: 2px 5px;
   border-radius: var(--rounded);
   background: #eceff120;
-  color: var(--off-white);
+  color: currentColor;
 }
 
 table {
   border-collapse: collapse;
-}
-
-th {
-  font-weight: inherit;
 }
 
 svg + span {
@@ -164,12 +161,13 @@ svg + span {
 .control {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
 }
 
 .tippy-box {
   width: max-content;
-  max-width: min(90vw, 380px) !important;
+  max-width: min(90vw, 300px) !important;
   padding: 10px 15px;
   border-radius: var(--rounded);
   background: var(--off-black);
@@ -198,7 +196,7 @@ svg + span {
 }
 
 .tippy-content a:hover {
-  color: var(--primary);
+  color: var(--primary-light);
 }
 
 .tippy-content td:first-child {
@@ -219,10 +217,10 @@ svg + span {
 :not(html) ::-webkit-scrollbar {
   width: 7px;
   height: 7px;
-  border-radius: 999px;
+  background: var(--white);
 }
 
 :not(html) ::-webkit-scrollbar-thumb {
   border-radius: 999px;
-  background: var(--off-white);
+  background: var(--light-gray);
 }

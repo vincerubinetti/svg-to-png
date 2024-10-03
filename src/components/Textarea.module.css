@@ -1,11 +1,15 @@
 .textarea {
-  flex-grow: 1;
   width: 100%;
+  min-width: 200px;
+  max-width: 100%;
+  height: 5lh;
+  min-height: 5lh;
+  max-height: 90vh;
   padding: 10px;
   border: solid 1px var(--gray);
   border-radius: var(--rounded);
   white-space: pre;
-  resize: none;
+  resize: both;
   transition: box-shadow var(--fast);
 }
 

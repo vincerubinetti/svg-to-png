@@ -3,9 +3,12 @@ import {
   faArrowsUpDown,
   faArrowsUpDownLeftRight,
   faCompress,
+  faCropSimple,
   faFillDrip,
+  faImage,
   faLink,
   faLinkSlash,
+  faPaintBrush,
   faRefresh,
   faUpRightAndDownLeftFromCenter,
 } from "@fortawesome/free-solid-svg-icons";
@@ -15,34 +18,33 @@ import Checkbox from "@/components/Checkbox";
 import Numberbox from "@/components/Numberbox";
 import Select from "@/components/Select";
 import Textbox from "@/components/Textbox";
-import { makeLabel } from "@/components/tooltip";
+import { cleanLabel } from "@/components/tooltip";
 import { editAll, images, resetOptions, setImage } from "@/state";
-import { toFixed } from "@/util/math";
 import classes from "./Options.module.css";
 
 /** tooltips/aria labels for options */
-const dimensionsLabel = "Width × height of resulting PNG image, in pixels.";
+const sizeLabel = "Width × height of output PNG image, in pixels.";
+const trimLabel = `
+  <p>
+    Whether to crop <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/viewBox" target="_blank"><code>viewBox</code></a> to contents of SVG.
+  </p>
+`;
 const marginLabel = "How many pixels of space to add on each side.";
 const fitLabel = `
-  <p>How to fit original SVG into resulting PNG size if the aspect ratio is different.</p>
-  <ul>
-    <li>Contain = scale down so all image content lies within frame</li>
-    <li>Cover = scale up so image content completely covers frame</li>
-    <li>Stretch = distort aspect ratio so image content fills frame</li>
-  </ul>
+  <p>How to <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit" target="_blank">fit</a> original SVG into specified PNG size, if aspect ratio is different.</p>
 `;
 const backgroundLabel = `
-  <p>Background color, with transparency.</p>
-  <p>Examples:</p>
-  <ul>
-    <li>blank (100% transparent)</li>
-    <li><code>maroon</code>, <code>navy</code>, <code>gold</code>, <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/named-color" target="_blank">etc.</a></li>
-    <li><code>#ff0000</code> (red)</li>
-    <li><code>#ff000080</code> (red, 50% transp.)</li>
-    <li><code>rgba(255, 0, 255, 50%)</code></li>
-    <li><code>hsla(180, 100%, 50%, 50%)</code></li>
-    <li>...or any other <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/color_value" target="_blank">CSS color</a></li>
-  </ul>
+  <p>
+    Fill transparent areas with this background <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/color_value" target="_blank">CSS color</a>.
+  </p>
+`;
+const colorLabel = `
+  <p>
+    Force non-transparent areas to this <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/color_value" target="_blank">CSS color</a>.
+  </p>
+  <p>
+    Prefix with a <code>~</code> to only set <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#currentcolor_keyword" target="_blank"><code>currentColor</code></a> values.
+  </p>
 `;
 
 const Options = () => {
@@ -55,31 +57,24 @@ const Options = () => {
     <section>
       <h2>Options</h2>
 
-      <div>
-        <Checkbox
-          label={
-            <>
-              <FontAwesomeIcon icon={faArrowsUpDown} />
-              <span>Edit all</span>
-            </>
-          }
-          tooltip="Update all images together when changing a value."
-          value={getEditAll}
-          onChange={setEditAll}
-        />
-      </div>
-
       <div className={classes.wrapper}>
         <table>
           <thead>
             <tr>
               <th></th>
-              <th>Image</th>
-              <th data-tooltip={dimensionsLabel}>
+              <th className={classes.name}>
+                <FontAwesomeIcon icon={faImage} />
+                <span>Image</span>
+              </th>
+              <th data-tooltip={sizeLabel}>
                 <FontAwesomeIcon icon={faArrowsUpDownLeftRight} />
-                <span>Dimensions</span>
+                <span>Size</span>
               </th>
               <th></th>
+              <th data-tooltip={trimLabel}>
+                <FontAwesomeIcon icon={faCropSimple} />
+                <span>Trim</span>
+              </th>
               <th data-tooltip={marginLabel}>
                 <FontAwesomeIcon icon={faCompress} />
                 <span>Margin</span>
@@ -90,14 +85,18 @@ const Options = () => {
               </th>
               <th data-tooltip={backgroundLabel}>
                 <FontAwesomeIcon icon={faFillDrip} />
-                <span>Background</span>
+                <span>Bg.</span>
+              </th>
+              <th data-tooltip={colorLabel}>
+                <FontAwesomeIcon icon={faPaintBrush} />
+                <span>Color</span>
               </th>
             </tr>
           </thead>
 
           <tbody>
             {getImages.map((image, index) => (
-              <tr key={index} aria-label={image.name}>
+              <tr key={index} aria-label={cleanLabel(image.name)}>
                 <td>
                   <Button
                     onClick={() => resetOptions(getEditAll ? -1 : index)}
@@ -108,7 +107,7 @@ const Options = () => {
                   </Button>
                 </td>
 
-                <td>{image.name || ""}</td>
+                <td className={classes.name}>{image.name}</td>
 
                 <td>
                   <div className={classes.cell}>
@@ -120,10 +119,6 @@ const Options = () => {
                       onChange={(value) =>
                         setImage(getEditAll ? -1 : index, "width", value)
                       }
-                      tooltip={`Default from SVG: ${toFixed(
-                        image.inferred.width || 0,
-                        2,
-                      )}`}
                       aria-label="Width, in pixels"
                     />
                     ×
@@ -135,10 +130,6 @@ const Options = () => {
                       onChange={(value) =>
                         setImage(getEditAll ? -1 : index, "height", value)
                       }
-                      tooltip={`Default from SVG: ${toFixed(
-                        image.inferred.height || 0,
-                        2,
-                      )}`}
                       aria-label="Height, in pixels"
                     />
                   </div>
@@ -157,7 +148,7 @@ const Options = () => {
                       (!image.aspectLock
                         ? "Lock aspect ratio"
                         : "Unlock aspect ratio") +
-                      ` (${toFixed(image.width / image.height, 3)})`
+                      ` (${(image.width / image.height).toFixed(3)})`
                     }
                     data-square
                   >
@@ -165,6 +156,16 @@ const Options = () => {
                       icon={image.aspectLock ? faLink : faLinkSlash}
                     />
                   </Button>
+                </td>
+
+                <td>
+                  <Checkbox
+                    value={image.trim}
+                    onChange={(value) =>
+                      setImage(getEditAll ? -1 : index, "trim", value)
+                    }
+                    aria-label={"Trim. " + cleanLabel(trimLabel)}
+                  />
                 </td>
 
                 <td>
@@ -176,7 +177,7 @@ const Options = () => {
                     onChange={(value) =>
                       setImage(getEditAll ? -1 : index, "margin", value)
                     }
-                    aria-label={"Margin." + marginLabel}
+                    aria-label={"Margin." + cleanLabel(marginLabel)}
                   />
                 </td>
 
@@ -187,7 +188,7 @@ const Options = () => {
                     onChange={(value) =>
                       setImage(getEditAll ? -1 : index, "fit", value)
                     }
-                    aria-label={"Fit. " + makeLabel(fitLabel)}
+                    aria-label={"Fit. " + cleanLabel(fitLabel)}
                   />
                 </td>
 
@@ -197,13 +198,37 @@ const Options = () => {
                     onChange={(value) =>
                       setImage(getEditAll ? -1 : index, "background", value)
                     }
-                    aria-label={"Background. " + makeLabel(backgroundLabel)}
+                    aria-label={"Background. " + cleanLabel(backgroundLabel)}
+                  />
+                </td>
+
+                <td>
+                  <Textbox
+                    value={image.color}
+                    onChange={(value) =>
+                      setImage(getEditAll ? -1 : index, "color", value)
+                    }
+                    aria-label={"Color. " + cleanLabel(colorLabel)}
                   />
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+      </div>
+
+      <div>
+        <Checkbox
+          label={
+            <>
+              <FontAwesomeIcon icon={faArrowsUpDown} />
+              <span>Edit all</span>
+            </>
+          }
+          tooltip="Update all images together when changing an option value."
+          value={getEditAll}
+          onChange={setEditAll}
+        />
       </div>
     </section>
   );

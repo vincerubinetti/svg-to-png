@@ -1,4 +1,5 @@
 import type { ComponentProps } from "react";
+import clsx from "clsx";
 import classes from "./Textarea.module.css";
 
 type Props = {
@@ -6,9 +7,9 @@ type Props = {
   onChange: (value: string) => void;
 } & Omit<ComponentProps<"textarea">, "value" | "onChange">;
 
-const Textarea = ({ value, onChange, ...props }: Props) => (
+const Textarea = ({ value, onChange, className, ...props }: Props) => (
   <textarea
-    className={classes.textarea}
+    className={clsx(classes.textarea, className)}
     spellCheck={false}
     {...props}
     value={value}

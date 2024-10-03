@@ -1,4 +1,5 @@
 import type { ComponentProps } from "react";
+import clsx from "clsx";
 import classes from "./Numberbox.module.css";
 
 type Props = {
@@ -8,8 +9,18 @@ type Props = {
   onChange: (value: number) => void;
 } & Omit<ComponentProps<"input">, "value" | "onChange">;
 
-const Numberbox = ({ label, tooltip, value, onChange, ...props }: Props) => (
-  <label className="control" data-tooltip={tooltip}>
+const Numberbox = ({
+  label,
+  tooltip,
+  value,
+  onChange,
+  className,
+  ...props
+}: Props) => (
+  <label
+    className={clsx("control", classes.label, className)}
+    data-tooltip={tooltip}
+  >
     {label && <span>{label}</span>}
     <input
       type="number"
