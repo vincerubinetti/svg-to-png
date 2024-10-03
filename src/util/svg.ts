@@ -57,7 +57,7 @@ export const sourceToImage = async (
 ) => {
   /**
    * use less strict html type (allows things like missing xmlns) because
-   * browser can still handle drawing it as image on canvas
+   * browser can still handle drawing it to canvas
    */
   const svg = await sourceToSvg(source, { ...options, type: "text/html" });
   return await svgToImage(svg);
@@ -120,12 +120,11 @@ export const sourceToSvg = async (
   }
 
   /** set currentColor */
-  if (color.startsWith("~")) {
-    svg.setAttribute("color", color.replace(/^~/, ""));
-  } else if (color) {
+  if (color.startsWith("~")) svg.setAttribute("color", color.replace(/^~/, ""));
+  else if (color) {
     /** apply svg-wide color. implement using filter as catch-all. */
 
-    /** avoid collision with any user ids */
+    /** avoid collision with any existing ids */
     const id = "colorize-" + String(Math.random()).slice(2);
 
     /** filter element */
@@ -161,7 +160,11 @@ export const sourceToSvg = async (
 };
 
 /** derive computed properties from svg input file, e.g. sizes */
-export const svgProps = async (source: string, options?: SourceOptions) => {
+export const svgProps = async (
+  source: string,
+  filename: string,
+  options?: SourceOptions,
+) => {
   let errorMessage = "";
 
   /** svg dom object */
@@ -176,7 +179,7 @@ export const svgProps = async (source: string, options?: SourceOptions) => {
 
   /** try to convert source to svg and capture parsing errors */
   try {
-    /** use stricter type to get more helpful svg spec parse errors */
+    /** use stricter svg type to get more helpful parse errors */
     svg = await sourceToSvg(source, { ...options, type: "image/svg+xml" });
   } catch (error) {
     handleError(error);
@@ -192,25 +195,24 @@ export const svgProps = async (source: string, options?: SourceOptions) => {
   /** collapse error whitespace */
   errorMessage = errorMessage.replaceAll(/\n+/g, "\n");
 
-  /** sizes, exactly as specified in svg source */
+  /** size exactly as specified in svg source attributes */
   const specified = {
     width: svg?.getAttribute("width") || "",
     height: svg?.getAttribute("height") || "",
   };
 
-  /** specified sizes converted to pixels */
+  /** specified size converted to pixels */
   const absolute = {
     width: unitsToPixels(specified.width),
     height: unitsToPixels(specified.height),
   };
 
-  /** read viewBox attribute from svg source */
+  /** get viewBox attribute from svg source */
   const [x = 0, y = 0, width = 0, height = 0] = (
     svg?.getAttribute("viewBox") || ""
   )
     .split(/\s/)
     .map(parseFloat);
-  /** viewBox, exactly as specified in svg source */
   const viewBox = { x, y, width, height };
 
   /** final inferred size of image */
@@ -255,6 +257,7 @@ export const svgProps = async (source: string, options?: SourceOptions) => {
   }
 
   return {
+    name: filename.replace(/\.svg$/i, "") || "image",
     errorMessage,
     specified,
     absolute,
@@ -262,6 +265,3 @@ export const svgProps = async (source: string, options?: SourceOptions) => {
     size,
   };
 };
-
-/** remove svg extension */
-export const removeExt = (filename: string) => filename.replace(/\.svg$/i, "");

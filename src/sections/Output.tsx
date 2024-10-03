@@ -8,10 +8,8 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "@/components/Button";
 import { Canvas } from "@/sections/Canvas";
-import type { Image } from "@/state";
 import { editAll, images, setImage } from "@/state";
 import { downloadPng, downloadPngs, downloadZip } from "@/util/download";
-import { removeExt } from "@/util/svg";
 import classes from "./Output.module.css";
 
 const Output = () => {
@@ -32,19 +30,13 @@ const Output = () => {
             role="group"
             aria-label={image.name + ".png"}
           >
-            <div
-              style={{
-                maxWidth:
-                  Math.max(image.width, 100) / window.devicePixelRatio + "px",
-              }}
-            >
-              {removeExt(image.name)}.png
-            </div>
+            <div className={classes.name}>{image.name}.png</div>
+
             <Canvas {...image} tooltip="PNG preview" />
 
             <div className={classes.actions}>
               <Button
-                onClick={() => downloadPng(getPngs(getImages)[index])}
+                onClick={() => downloadPng(getPngs()[index])}
                 data-tooltip="Download this PNG"
                 data-square
               >
@@ -72,7 +64,7 @@ const Output = () => {
 
       <div className={classes.buttons}>
         <Button
-          onClick={() => downloadPngs(getPngs(getImages))}
+          onClick={() => downloadPngs(getPngs())}
           data-tooltip="Download all PNGs as individual downloads."
         >
           Download All
@@ -80,7 +72,7 @@ const Output = () => {
         </Button>
 
         <Button
-          onClick={() => downloadZip(getPngs(getImages))}
+          onClick={() => downloadZip(getPngs())}
           data-tooltip="Zip PNGs together into single download."
         >
           Download Zip
@@ -94,8 +86,8 @@ const Output = () => {
 export default Output;
 
 /** get list of canvases and names to download as pngs */
-const getPngs = (getImages: Image[]) =>
-  [...document.querySelectorAll("canvas")].map((canvas, index) => ({
+const getPngs = () =>
+  [...document.querySelectorAll("canvas")].map((canvas) => ({
     canvas,
-    name: removeExt(getImages[index].name) || "image",
+    name: canvas.getAttribute("title") || "",
   }));

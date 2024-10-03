@@ -7,7 +7,7 @@ import { svgProps } from "@/util/svg";
 const store = getDefaultStore();
 
 /** input file */
-type File = { source: string; name: string };
+type File = { source: string; filename: string };
 
 /** computed/derived props from input file */
 type Props = Awaited<ReturnType<typeof svgProps>>;
@@ -25,13 +25,14 @@ export const images = atomWithStorage<Image[]>("images", []);
 export const addImages = async (newFiles: File[]) => {
   const newImages = cloneDeep(store.get(images));
 
-  /** remove first sample file */
+  /** remove sample file */
   if (newImages[0]?.source === sampleFile.source) newImages.splice(0, 1);
 
   /** expand provided new files into full images */
   const results: Image[] = await Promise.all(
     newFiles.map(async (file) => {
-      const props = await svgProps(file.source);
+      const { trim } = getDefaultOptions();
+      const props = await svgProps(file.source, file.filename, { trim });
       const options = getDefaultOptions(props);
       return { ...file, ...props, ...options };
     }),
@@ -51,13 +52,11 @@ export const setImage = async <Key extends keyof Image>(
 ) => {
   let newImages = cloneDeep(store.get(images));
 
-  /** list of indices to set. set all if -1. */
+  /** list of indices to set */
   const indices = index === -1 ? range(newImages.length) : [index];
 
-  /**
-   * set as much as possible synchronously first
-   * https://stackoverflow.com/questions/46000544/react-controlled-input-cursor-jumps#comment126597443_48608293
-   */
+  /** set as much as possible synchronously first to preserve text box cursors */
+  /** https://stackoverflow.com/questions/46000544/react-controlled-input-cursor-jumps#comment126597443_48608293 */
   for (const index of indices) {
     /** update value */
     newImages[index][key] = value;
@@ -82,13 +81,14 @@ export const setImage = async <Key extends keyof Image>(
   /** re-clone so second store set works */
   newImages = cloneDeep(newImages);
 
-  /** when input file changes */
-  if (["source", "trim"].includes(key)) {
+  if (["source", "filename", "trim"].includes(key)) {
     for (const index of indices) {
       /** update computed props */
-      const props = await svgProps(newImages[index].source, {
-        trim: newImages[index].trim,
-      });
+      const props = await svgProps(
+        newImages[index].source,
+        newImages[index].filename,
+        { trim: newImages[index].trim },
+      );
       /** reset size */
       const { width, height, aspectLock } = getDefaultOptions(props);
       Object.assign(newImages[index], { ...props, width, height, aspectLock });
@@ -108,7 +108,10 @@ export const resetOptions = async (index: number) => {
 
   /** reset images */
   for (const index of indices) {
-    const props = await svgProps(newImages[index].source);
+    const props = await svgProps(
+      newImages[index].source,
+      newImages[index].filename,
+    );
     const options = getDefaultOptions(props);
     Object.assign(newImages[index], { ...props, ...options });
   }
@@ -127,9 +130,9 @@ export const removeImage = (index: number) => {
 export const clearImages = () => store.set(images, []);
 
 /** get default options for an image */
-export const getDefaultOptions = (props: Props) => {
-  const width = props.size.width;
-  const height = props.size.height;
+export const getDefaultOptions = (props?: Props) => {
+  const width = props?.size.width ?? 512;
+  const height = props?.size.height ?? 512;
 
   return {
     width,
@@ -146,7 +149,7 @@ export const getDefaultOptions = (props: Props) => {
 
 const sampleFile = {
   source: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-100 -100 200 200">\n  <circle fill="#e91e63" cx="0" cy="0" r="100" />\n</svg>`,
-  name: "sample.svg",
+  filename: "sample.svg",
 };
 
 /** add sample file on page load, if no files there */

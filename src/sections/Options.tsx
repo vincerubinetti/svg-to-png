@@ -20,7 +20,6 @@ import Select from "@/components/Select";
 import Textbox from "@/components/Textbox";
 import { cleanLabel } from "@/components/tooltip";
 import { editAll, images, resetOptions, setImage } from "@/state";
-import { removeExt } from "@/util/svg";
 import classes from "./Options.module.css";
 
 /** tooltips/aria labels for options */
@@ -108,7 +107,7 @@ const Options = () => {
                   </Button>
                 </td>
 
-                <td className={classes.name}>{removeExt(image.name) || ""}</td>
+                <td className={classes.name}>{image.name}</td>
 
                 <td>
                   <div className={classes.cell}>
@@ -226,7 +225,7 @@ const Options = () => {
               <span>Edit all</span>
             </>
           }
-          tooltip="Update all images together when changing a value."
+          tooltip="Update all images together when changing an option value."
           value={getEditAll}
           onChange={setEditAll}
         />

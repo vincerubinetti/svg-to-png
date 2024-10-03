@@ -25,8 +25,8 @@ const Input = () => {
     /** parse file uploads as text */
     const data = await Promise.all(
       Array.from(files).map(async (file) => ({
-        name: file.name,
         source: await file.text(),
+        filename: file.name.replace(/\.svg$/i, ""),
       })),
     );
 
@@ -109,13 +109,13 @@ const Input = () => {
             key={index}
             className={classes.cell}
             role="group"
-            aria-label={image.name}
+            aria-label={image.filename}
           >
             <Textbox
-              className={classes.name}
-              value={image.name}
-              onChange={(value) => setImage(index, "name", value)}
-              tooltip="Name"
+              className={classes.filename}
+              value={image.filename}
+              onChange={(value) => setImage(index, "filename", value)}
+              tooltip="Filename"
             />
             <Button
               className={classes.actions}

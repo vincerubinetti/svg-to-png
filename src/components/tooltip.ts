@@ -71,7 +71,7 @@ const update = (element: Element) => {
 /** remove tippy instance */
 const remove = (element: Element) => (element as _Element)._tippy?.destroy();
 
-/** make plain text aria label from html string */
+/** make plain text aria label from string possibly containing html */
 export const cleanLabel = (string: string) =>
   (
     new DOMParser().parseFromString(string, "text/html").body.textContent || ""

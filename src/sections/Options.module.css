@@ -20,8 +20,8 @@
 
 .name {
   width: 100%;
-  text-align: left !important;
   max-width: 300px;
+  text-align: left !important;
   white-space: normal;
   overflow-wrap: break-word;
 }
