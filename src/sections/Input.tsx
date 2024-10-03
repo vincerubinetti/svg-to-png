@@ -26,7 +26,7 @@ const Input = () => {
     const data = await Promise.all(
       Array.from(files).map(async (file) => ({
         source: await file.text(),
-        filename: file.name.replace(/\.svg$/i, ""),
+        filename: file.name,
       })),
     );
 

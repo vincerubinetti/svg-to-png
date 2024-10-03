@@ -1,6 +1,6 @@
 import { getDefaultStore } from "jotai";
 import { atomWithStorage } from "jotai/utils";
-import { cloneDeep, range } from "lodash";
+import { cloneDeep, isEqual, range } from "lodash";
 import { svgProps } from "@/util/svg";
 
 /** singleton store instance to access state outside of react */
@@ -86,15 +86,21 @@ export const setImage = async <Key extends keyof Image>(
 
   if (["source", "filename", "trim"].includes(key)) {
     for (const index of indices) {
+      const oldSize = newImages[index].size;
+
       /** update computed props */
       const props = await svgProps(
         newImages[index].source,
         newImages[index].filename,
         { trim: newImages[index].trim },
       );
+      Object.assign(newImages[index], props);
+
       /** reset size */
-      const { width, height, aspectLock } = getDefaultOptions(props);
-      Object.assign(newImages[index], { ...props, width, height, aspectLock });
+      if (!isEqual(newImages[index].size, oldSize)) {
+        const { width, height, aspectLock } = getDefaultOptions(props);
+        Object.assign(newImages[index], { width, height, aspectLock });
+      }
     }
   }
 

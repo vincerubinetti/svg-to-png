@@ -147,13 +147,8 @@ export const sourceToSvg = async (
     filter.append(composite);
     svg.append(filter);
 
-    /**
-     * apply filter to all top-level children. can't apply to root svg element
-     * because of firefox.
-     */
-    svg
-      .querySelectorAll(":scope > *")
-      .forEach((child) => child.setAttribute("filter", `url(#${id})`));
+    /** apply filter (won't work in firefox) */
+    svg.setAttribute("filter", `url(#${id})`);
   }
 
   return svg;
