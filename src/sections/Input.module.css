@@ -39,7 +39,7 @@
   grid-template-rows: max-content 1fr max-content;
   grid-template-columns: 1fr max-content;
   grid-template-areas:
-    "name actions"
+    "filename actions"
     "source source"
     "error error";
   max-width: 100%;
@@ -55,8 +55,8 @@
   width: 100cqw;
 }
 
-.name {
-  grid-area: name;
+.filename {
+  grid-area: filename;
 }
 
 .actions {
