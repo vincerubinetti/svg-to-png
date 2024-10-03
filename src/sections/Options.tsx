@@ -24,14 +24,14 @@ import classes from "./Options.module.css";
 
 /** tooltips/aria labels for options */
 const sizeLabel = "Width × height of output PNG image, in pixels.";
-const marginLabel = "How many pixels of space to add on each side.";
-const fitLabel = `
-  <p>How to <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit" target="_blank">fit</a> original SVG into specified size if aspect ratio is different.</p>
-`;
 const trimLabel = `
   <p>
     Whether to crop <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/viewBox" target="_blank"><code>viewBox</code></a> to contents of SVG.
   </p>
+`;
+const marginLabel = "How many pixels of space to add on each side.";
+const fitLabel = `
+  <p>How to <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit" target="_blank">fit</a> original SVG into specified PNG size, if aspect ratio is different.</p>
 `;
 const backgroundLabel = `
   <p>

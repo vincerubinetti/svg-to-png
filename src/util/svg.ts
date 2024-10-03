@@ -170,14 +170,13 @@ export const svgProps = async (
   /** svg dom object */
   let svg = null;
 
-  /** util for handling source conversion errors */
   const handleError = (error: unknown) => {
     if (typeof error === "string") errorMessage += error;
     if (error instanceof Error) errorMessage += error.message;
     errorMessage += "\n";
   };
 
-  /** try to convert source to svg and capture parsing errors */
+  /** try to convert source to svg and capture errors */
   try {
     /** use stricter svg type to get more helpful parse errors */
     svg = await sourceToSvg(source, { ...options, type: "image/svg+xml" });
@@ -185,7 +184,7 @@ export const svgProps = async (
     handleError(error);
   }
 
-  /** try to convert source to image and capture error */
+  /** try to convert source to image and capture errors */
   try {
     await sourceToImage(source, { type: "image/svg+xml" });
   } catch (error) {

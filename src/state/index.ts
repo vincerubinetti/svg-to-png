@@ -46,8 +46,11 @@ export const addImages = async (newFiles: File[]) => {
 
 /** set arbitrary field on image */
 export const setImage = async <Key extends keyof Image>(
+  /** image number to set. -1 to set all. */
   index: number,
+  /** field to set */
   key: Key,
+  /** value to set */
   value: Image[Key],
 ) => {
   let newImages = cloneDeep(store.get(images));
