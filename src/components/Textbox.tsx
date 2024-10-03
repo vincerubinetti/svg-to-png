@@ -1,4 +1,5 @@
 import type { ComponentProps } from "react";
+import clsx from "clsx";
 import classes from "./Textbox.module.css";
 
 type Props = {
@@ -8,8 +9,18 @@ type Props = {
   onChange: (value: string) => void;
 } & Omit<ComponentProps<"input">, "value" | "onChange">;
 
-const Textbox = ({ label, tooltip, value, onChange, ...props }: Props) => (
-  <label className={classes.label + " control"} data-tooltip={tooltip}>
+const Textbox = ({
+  label,
+  tooltip,
+  value,
+  onChange,
+  className,
+  ...props
+}: Props) => (
+  <label
+    className={clsx("control", classes.label, className)}
+    data-tooltip={tooltip}
+  >
     {label && <span>{label}</span>}
     <input
       type="text"

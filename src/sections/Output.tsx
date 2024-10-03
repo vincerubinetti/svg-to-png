@@ -11,6 +11,7 @@ import { Canvas } from "@/sections/Canvas";
 import type { Image } from "@/state";
 import { editAll, images, setImage } from "@/state";
 import { downloadPng, downloadPngs, downloadZip } from "@/util/download";
+import { removeExt } from "@/util/svg";
 import classes from "./Output.module.css";
 
 const Output = () => {
@@ -37,20 +38,9 @@ const Output = () => {
                   Math.max(image.width, 100) / window.devicePixelRatio + "px",
               }}
             >
-              {image.name}.png
+              {removeExt(image.name)}.png
             </div>
-            <Canvas
-              image={image.image}
-              width={image.width || 0}
-              height={image.height || 0}
-              originalWidth={image.inferred.width || 0}
-              originalHeight={image.inferred.height || 0}
-              fit={image.fit || "contain"}
-              margin={image.margin || 0}
-              background={image.background || ""}
-              darkCheckers={image.darkCheckers}
-              tooltip="PNG preview"
-            />
+            <Canvas {...image} tooltip="PNG preview" />
 
             <div className={classes.actions}>
               <Button
@@ -103,9 +93,9 @@ const Output = () => {
 
 export default Output;
 
-/** get list of canvases and filenames to download as pngs */
+/** get list of canvases and names to download as pngs */
 const getPngs = (getImages: Image[]) =>
   [...document.querySelectorAll("canvas")].map((canvas, index) => ({
     canvas,
-    name: getImages[index].name || "image",
+    name: removeExt(getImages[index].name) || "image",
   }));

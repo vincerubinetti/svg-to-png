@@ -58,7 +58,7 @@ const update = (element: Element) => {
   instance.setProps({ interactive: content.includes("<a") });
 
   /** set aria label to content */
-  instance.reference.setAttribute("aria-label", makeLabel(content));
+  instance.reference.setAttribute("aria-label", cleanLabel(content));
 
   /** update tippy content */
   instance.setContent(content);
@@ -71,8 +71,8 @@ const update = (element: Element) => {
 /** remove tippy instance */
 const remove = (element: Element) => (element as _Element)._tippy?.destroy();
 
-/** make aria label from html string */
-export const makeLabel = (string: string) =>
+/** make plain text aria label from html string */
+export const cleanLabel = (string: string) =>
   (
     new DOMParser().parseFromString(string, "text/html").body.textContent || ""
   ).replaceAll(/\s+/g, " ");

@@ -13,6 +13,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@zip.js/zip.js": "^2.7.52",
+    "clsx": "^2.1.1",
     "jotai": "^2.9.3",
     "lodash": "^4.17.21",
     "react": "^18.3.1",

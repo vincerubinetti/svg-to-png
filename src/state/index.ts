@@ -1,4 +1,5 @@
-import { atom, getDefaultStore } from "jotai";
+import { getDefaultStore } from "jotai";
+import { atomWithStorage } from "jotai/utils";
 import { cloneDeep, range } from "lodash";
 import { svgProps } from "@/util/svg";
 
@@ -6,7 +7,7 @@ import { svgProps } from "@/util/svg";
 const store = getDefaultStore();
 
 /** input file */
-type File = { source: string; filename: string };
+type File = { source: string; name: string };
 
 /** computed/derived props from input file */
 type Props = Awaited<ReturnType<typeof svgProps>>;
@@ -18,28 +19,28 @@ type Options = ReturnType<typeof getDefaultOptions>;
 export type Image = File & Props & Options;
 
 /** list of images */
-export const images = atom<Image[]>([]);
+export const images = atomWithStorage<Image[]>("images", []);
 
 /** add images to list */
 export const addImages = async (newFiles: File[]) => {
+  const newImages = cloneDeep(store.get(images));
+
+  /** remove first sample file */
+  if (newImages[0]?.source === sampleFile.source) newImages.splice(0, 1);
+
   /** expand provided new files into full images */
-  const newImages: Image[] = await Promise.all(
+  const results: Image[] = await Promise.all(
     newFiles.map(async (file) => {
-      const props = await svgProps(file.source, file.filename);
+      const props = await svgProps(file.source);
       const options = getDefaultOptions(props);
       return { ...file, ...props, ...options };
     }),
   );
 
-  store.set(images, (prevImages) =>
-    /** if still on just starting sample file */
-    (prevImages.length === 1 && prevImages[0].source === sampleFile.source
-      ? /** clear sample */
-        []
-      : /** else, add to existing images, like normal */
-        prevImages
-    ).concat(newImages),
-  );
+  /** append to end */
+  newImages.push(...results);
+
+  store.set(images, newImages);
 };
 
 /** set arbitrary field on image */
@@ -81,16 +82,16 @@ export const setImage = async <Key extends keyof Image>(
   /** re-clone so second store set works */
   newImages = cloneDeep(newImages);
 
-  /** then do async changes */
-  for (const index of indices) {
-    /** when input file changes */
-    if (["source", "filename"].includes(key)) {
+  /** when input file changes */
+  if (["source", "trim"].includes(key)) {
+    for (const index of indices) {
       /** update computed props */
-      const props = await svgProps(
-        newImages[index].source,
-        newImages[index].filename,
-      );
-      Object.assign(newImages[index], props);
+      const props = await svgProps(newImages[index].source, {
+        trim: newImages[index].trim,
+      });
+      /** reset size */
+      const { width, height, aspectLock } = getDefaultOptions(props);
+      Object.assign(newImages[index], { ...props, width, height, aspectLock });
     }
   }
 
@@ -99,50 +100,59 @@ export const setImage = async <Key extends keyof Image>(
 };
 
 /** reset options for image to default */
-export const resetOptions = (index: number) => {
+export const resetOptions = async (index: number) => {
   const newImages = cloneDeep(store.get(images));
 
   /** list of indices to set */
   const indices = index === -1 ? range(newImages.length) : [index];
 
   /** reset images */
-  for (const index of indices)
-    Object.assign(newImages[index], getDefaultOptions(newImages[index]));
+  for (const index of indices) {
+    const props = await svgProps(newImages[index].source);
+    const options = getDefaultOptions(props);
+    Object.assign(newImages[index], { ...props, ...options });
+  }
 
   store.set(images, newImages);
 };
 
 /** remove image from list */
-export const removeImage = (index: number) =>
-  store.set(images, (prevImages) =>
-    prevImages.slice(0, index).concat(prevImages.slice(index + 1)),
-  );
+export const removeImage = (index: number) => {
+  const newImages = cloneDeep(store.get(images));
+  newImages.splice(index, 1);
+  store.set(images, newImages);
+};
 
 /** clear image list */
 export const clearImages = () => store.set(images, []);
 
 /** get default options for an image */
 export const getDefaultOptions = (props: Props) => {
-  const width = props.inferred.width;
-  const height = props.inferred.height;
+  const width = props.size.width;
+  const height = props.size.height;
 
   return {
     width,
     height,
     aspectLock: width / height,
+    trim: false,
     margin: 0,
     fit: "contain",
     background: "",
+    color: "",
     darkCheckers: false,
   };
 };
 
 const sampleFile = {
   source: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-100 -100 200 200">\n  <circle fill="#e91e63" cx="0" cy="0" r="100" />\n</svg>`,
-  filename: "sample.svg",
+  name: "sample.svg",
 };
 
-addImages([sampleFile]);
+/** add sample file on page load, if no files there */
+images.onMount = () => {
+  if (!store.get(images).length) addImages([sampleFile]);
+};
 
 /** flag to edit all images together */
-export const editAll = atom(false);
+export const editAll = atomWithStorage("edit-all", false);

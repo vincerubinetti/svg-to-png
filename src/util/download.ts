@@ -4,11 +4,11 @@ import { BlobWriter, Data64URIReader, ZipWriter } from "@zip.js/zip.js";
 const getCanvasUrl = (canvas: HTMLCanvasElement) =>
   canvas.toDataURL("image/png").replace("image/png", "octet/stream");
 
-/** download file from url and filename */
-const downloadFile = (url: string, filename: string) => {
+/** download file from url and name */
+const downloadFile = (url: string, name: string) => {
   const link = document.createElement("a");
   link.href = url;
-  link.download = filename;
+  link.download = name;
   link.click();
 };
 

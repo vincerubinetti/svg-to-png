@@ -25,7 +25,7 @@ const Input = () => {
     /** parse file uploads as text */
     const data = await Promise.all(
       Array.from(files).map(async (file) => ({
-        filename: file.name,
+        name: file.name,
         source: await file.text(),
       })),
     );
@@ -111,27 +111,25 @@ const Input = () => {
             role="group"
             aria-label={image.name}
           >
-            <div className={classes.top}>
-              <Textbox
-                value={image.filename}
-                onChange={(value) => setImage(index, "filename", value)}
-                tooltip="Filename"
-              />
-              <Button
-                onClick={() => removeImage(index)}
-                data-tooltip="Remove image"
-                data-square
-              >
-                <FontAwesomeIcon icon={faTimes} />
-              </Button>
-            </div>
+            <Textbox
+              className={classes.name}
+              value={image.name}
+              onChange={(value) => setImage(index, "name", value)}
+              tooltip="Name"
+            />
+            <Button
+              className={classes.actions}
+              onClick={() => removeImage(index)}
+              data-tooltip="Remove image"
+              data-square
+            >
+              <FontAwesomeIcon icon={faTimes} />
+            </Button>
             <Textarea
+              className={classes.source}
               value={image.source}
               onChange={(value) => setImage(index, "source", value)}
-              data-tooltip={`
-                <p>SVG source code</p>
-                ${image.info || ""}
-              `}
+              data-tooltip="SVG source code"
             />
             {image.errorMessage && (
               <div className={classes.error}>{image.errorMessage}</div>
