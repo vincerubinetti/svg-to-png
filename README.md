@@ -11,7 +11,7 @@ Convert SVG to PNG right in your browser, reliably and correctly
 ## Screenshot
 
 <a href="https://vincerubinetti.github.io/svg-to-png/">
-  <img width="200" src="https://private-user-images.githubusercontent.com/8326331/373400743-44bd1a65-4654-4e24-9951-2d5807121b73.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Mjc5ODY2MjYsIm5iZiI6MTcyNzk4NjMyNiwicGF0aCI6Ii84MzI2MzMxLzM3MzQwMDc0My00NGJkMWE2NS00NjU0LTRlMjQtOTk1MS0yZDU4MDcxMjFiNzMucG5nP1gtQW16LUFsZ29yaXRobT1BV1M0LUhNQUMtU0hBMjU2JlgtQW16LUNyZWRlbnRpYWw9QUtJQVZDT0RZTFNBNTNQUUs0WkElMkYyMDI0MTAwMyUyRnVzLWVhc3QtMSUyRnMzJTJGYXdzNF9yZXF1ZXN0JlgtQW16LURhdGU9MjAyNDEwMDNUMjAxMjA2WiZYLUFtei1FeHBpcmVzPTMwMCZYLUFtei1TaWduYXR1cmU9ZjIwNGQ0MTI5MjFhMzdiNTMyZGJiNzQzMzEwYzUyODJjOTkyNTk3ZTRjODc2NjNlN2U5YmJmZDgwZmI2OTY5OCZYLUFtei1TaWduZWRIZWFkZXJzPWhvc3QifQ.fjc06XRbyhJPAav9crnSeksGVhxsOuZcczKmzWv5t50" />
+  <img width="200" src="https://github.com/user-attachments/assets/1806fc56-a7d7-4eee-92be-739400c74239" />
 </a>
 
 ## Motivation

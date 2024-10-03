@@ -24,6 +24,8 @@ export const Canvas = ({
   darkCheckers,
   tooltip,
 }: Props) => {
+  const filter = getFilterId();
+
   /** when rendering component */
   const drawCanvas = async (canvas: HTMLCanvasElement | null) => {
     if (!canvas) return;
@@ -76,8 +78,15 @@ export const Canvas = ({
     ctx.clearRect(0, 0, width, height);
 
     /** fill background */
+    ctx.filter = "none";
     ctx.fillStyle = background.trim() || "transparent";
     ctx.fillRect(0, 0, width, height);
+
+    /**
+     * apply svg-wide color/tint. do via filter as catch-all (gradients,
+     * transparency, markers, etc). doesn't work in safari.
+     */
+    if (!isSafari && !color.startsWith("~")) ctx.filter = `url(#${filter})`;
 
     /** draw image to canvas */
     ctx.drawImage(image, target.x, target.y, target.width, target.height);
@@ -86,6 +95,14 @@ export const Canvas = ({
   /** render component */
   return (
     <>
+      {!isSafari && (
+        <svg style={{ width: 0, height: 0 }}>
+          <filter id={filter}>
+            <feFlood floodColor={color} result="flood" />
+            <feComposite operator="in" in="flood" in2="SourceAlpha" />
+          </filter>
+        </svg>
+      )}
       <div
         className={classes.container}
         data-dark={darkCheckers}
@@ -106,3 +123,9 @@ export const Canvas = ({
     </>
   );
 };
+
+/** get pseudo-unique id for filter */
+export const getFilterId = () => "filter-" + String(Math.random()).slice(2);
+
+/** is safari browser */
+export const isSafari = !!navigator.userAgent.match(/safari/i);

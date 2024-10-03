@@ -1,3 +1,5 @@
+import { getFilterId, isSafari } from "@/sections/Canvas";
+
 /** convert string of absolute css units to pixels */
 export const unitsToPixels = (string: string) => {
   /** unit constants https://www.w3.org/TR/css-values-3/#absolute-lengths */
@@ -121,11 +123,13 @@ export const sourceToSvg = async (
 
   /** set currentColor */
   if (color.startsWith("~")) svg.setAttribute("color", color.replace(/^~/, ""));
-  else if (color) {
-    /** apply svg-wide color. implement using filter as catch-all. */
+  else if (color && isSafari) {
+    /**
+     * apply svg-wide color/tint. fallback method for safari where canvas filter
+     * not supported.
+     */
 
-    /** avoid collision with any existing ids */
-    const id = "colorize-" + String(Math.random()).slice(2);
+    const id = getFilterId();
 
     /** filter element */
     const filter = doc.createElementNS(ns, "filter");
@@ -145,9 +149,11 @@ export const sourceToSvg = async (
     /** append elements */
     filter.append(flood);
     filter.append(composite);
+
+    /** put filter within svg */
     svg.append(filter);
 
-    /** apply filter (won't work in firefox) */
+    /** apply contained filter to root svg element. doesn't work in firefox. */
     svg.setAttribute("filter", `url(#${id})`);
   }
 

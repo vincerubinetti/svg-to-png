@@ -22,7 +22,6 @@
 }
 
 body {
-  min-height: 100vh;
   margin: 0;
   background: var(--white);
   color: var(--off-black);
