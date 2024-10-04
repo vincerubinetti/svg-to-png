@@ -26,6 +26,9 @@ export const Canvas = ({
 }: Props) => {
   const filter = getFilterId();
 
+  /** whether to use canvas svg method for color filter */
+  const canvasFilter = color && !color.startsWith("~") && !isSafari;
+
   /** when rendering component */
   const drawCanvas = async (canvas: HTMLCanvasElement | null) => {
     if (!canvas) return;
@@ -37,7 +40,10 @@ export const Canvas = ({
     /** convert svg to image */
     let image = null;
     try {
-      image = await sourceToImage(source, { trim, color });
+      image = await sourceToImage(source, {
+        trim,
+        color: canvasFilter ? undefined : color,
+      });
     } catch (error) {
       //
     }
@@ -82,11 +88,8 @@ export const Canvas = ({
     ctx.fillStyle = background.trim() || "transparent";
     ctx.fillRect(0, 0, width, height);
 
-    /**
-     * apply svg-wide color/tint. do via filter as catch-all (gradients,
-     * transparency, markers, etc). doesn't work in safari.
-     */
-    if (!isSafari && !color.startsWith("~")) ctx.filter = `url(#${filter})`;
+    /** apply color tint with canvas svg filter (doesn't work in safari) */
+    if (canvasFilter) ctx.filter = `url(#${filter})`;
 
     /** draw image to canvas */
     ctx.drawImage(image, target.x, target.y, target.width, target.height);
@@ -95,7 +98,7 @@ export const Canvas = ({
   /** render component */
   return (
     <>
-      {!isSafari && (
+      {canvasFilter && (
         <svg style={{ width: 0, height: 0 }}>
           <filter id={filter}>
             <feFlood floodColor={color} result="flood" />
@@ -128,4 +131,4 @@ export const Canvas = ({
 export const getFilterId = () => "filter-" + String(Math.random()).slice(2);
 
 /** is safari browser */
-export const isSafari = !!navigator.userAgent.match(/safari/i);
+const isSafari = !!navigator.userAgent.match(/safari/i);

@@ -1,4 +1,4 @@
-import { getFilterId, isSafari } from "@/sections/Canvas";
+import { getFilterId } from "@/sections/Canvas";
 
 /** convert string of absolute css units to pixels */
 export const unitsToPixels = (string: string) => {
@@ -123,12 +123,8 @@ export const sourceToSvg = async (
 
   /** set currentColor */
   if (color.startsWith("~")) svg.setAttribute("color", color.replace(/^~/, ""));
-  else if (color && isSafari) {
-    /**
-     * apply svg-wide color/tint. fallback method for safari where canvas filter
-     * not supported.
-     */
-
+  else if (color) {
+    /** apply color tint with inner svg filter */
     const id = getFilterId();
 
     /** filter element */
@@ -153,7 +149,7 @@ export const sourceToSvg = async (
     /** put filter within svg */
     svg.append(filter);
 
-    /** apply contained filter to root svg element. doesn't work in firefox. */
+    /** apply inner filter to root svg element (doesn't work in firefox) */
     svg.setAttribute("filter", `url(#${id})`);
   }
 
