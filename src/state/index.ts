@@ -146,6 +146,7 @@ export const getDefaultOptions = (props?: Props) => {
   return {
     width,
     height,
+    scale: "1x",
     aspectLock: width / height,
     trim: false,
     margin: 0,

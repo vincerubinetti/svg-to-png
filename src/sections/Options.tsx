@@ -24,6 +24,7 @@ import classes from "./Options.module.css";
 
 /** tooltips/aria labels for options */
 const sizeLabel = "Width × height of output PNG image, in pixels.";
+const scaleLabel = "Export PNG at 1x or 2x pixel density without changing the logical output size.";
 const trimLabel = `
   <p>
     Whether to crop <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/viewBox" target="_blank"><code>viewBox</code></a> to contents of SVG.
@@ -46,6 +47,7 @@ const colorLabel = `
     Prefix with a <code>~</code> to only set <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#currentcolor_keyword" target="_blank"><code>currentColor</code></a> values.
   </p>
 `;
+const scaleOptions = ["1x", "2x"];
 
 const Options = () => {
   const [getImages] = useAtom(images);
@@ -69,6 +71,10 @@ const Options = () => {
               <th data-tooltip={sizeLabel}>
                 <FontAwesomeIcon icon={faArrowsUpDownLeftRight} />
                 <span>Size</span>
+              </th>
+              <th data-tooltip={scaleLabel}>
+                <FontAwesomeIcon icon={faArrowsUpDownLeftRight} />
+                <span>Scale</span>
               </th>
               <th></th>
               <th data-tooltip={trimLabel}>
@@ -133,6 +139,17 @@ const Options = () => {
                       aria-label="Height, in pixels"
                     />
                   </div>
+                </td>
+
+                <td>
+                  <Select
+                    options={scaleOptions}
+                    value={image.scale}
+                    onChange={(value) =>
+                      setImage(getEditAll ? -1 : index, "scale", value)
+                    }
+                    aria-label={"Scale. " + cleanLabel(scaleLabel)}
+                  />
                 </td>
 
                 <td>

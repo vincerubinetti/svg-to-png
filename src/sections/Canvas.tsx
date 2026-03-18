@@ -16,6 +16,7 @@ export const Canvas = ({
   size,
   width,
   height,
+  scale,
   trim,
   margin,
   fit,
@@ -25,6 +26,9 @@ export const Canvas = ({
   tooltip,
 }: Props) => {
   const filter = getFilterId();
+  const exportScale = Number.parseInt(scale, 10) || 1;
+  const canvasWidth = width * exportScale;
+  const canvasHeight = height * exportScale;
 
   /** whether to use canvas svg method for color filter */
   const canvasFilter = color && !color.startsWith("~") && !isSafari;
@@ -81,7 +85,9 @@ export const Canvas = ({
     target.y = (height - target.height) / 2;
 
     /** clear existing contents */
-    ctx.clearRect(0, 0, width, height);
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    ctx.setTransform(exportScale, 0, 0, exportScale, 0, 0);
 
     /** fill background */
     ctx.filter = "none";
@@ -114,8 +120,9 @@ export const Canvas = ({
       >
         <canvas
           ref={drawCanvas}
-          width={width}
-          height={height}
+          width={canvasWidth}
+          height={canvasHeight}
+          data-scale={scale}
           style={{
             width: width / densityScale + "px",
             height: height / densityScale + "px",

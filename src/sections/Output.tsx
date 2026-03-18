@@ -9,7 +9,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "@/components/Button";
 import { Canvas } from "@/sections/Canvas";
 import { editAll, images, setImage } from "@/state";
-import { downloadPng, downloadPngs, downloadZip } from "@/util/download";
+import {
+  downloadPng,
+  downloadPngs,
+  downloadZip,
+  getPngFilename,
+} from "@/util/download";
 import classes from "./Output.module.css";
 
 const Output = () => {
@@ -28,9 +33,11 @@ const Output = () => {
             key={index}
             className={classes.cell}
             role="group"
-            aria-label={image.name + ".png"}
+            aria-label={getPngFilename(image.name, image.scale)}
           >
-            <div className={classes.name}>{image.name}.png</div>
+            <div className={classes.name}>
+              {getPngFilename(image.name, image.scale)}
+            </div>
 
             <Canvas {...image} tooltip="PNG preview" />
 
@@ -90,4 +97,5 @@ const getPngs = () =>
   [...document.querySelectorAll("canvas")].map((canvas) => ({
     canvas,
     name: canvas.getAttribute("title") || "",
+    scale: canvas.getAttribute("data-scale") || "1x",
   }));
