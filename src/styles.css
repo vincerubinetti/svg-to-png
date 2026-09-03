@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@theme {
+  --color-*: initial;
+
+  --color-theme: oklch(60% 0.2 10);
+
+  --color-white: oklch(100% 0.025 10);
+  --color-light-gray: oklch(95% 0.025 200);
+  --color-gray: oklch(80% 0.025 200);
+  --color-dark-gray: oklch(40% 0.025 200);
+  --color-black: oklch(0% 0.025 200);
+
+  --font-sans: "Outfit Variable", sans-serif;
+  --font-mono: "Sometype Mono Variable", monospace;
+}
