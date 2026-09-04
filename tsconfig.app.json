@@ -4,7 +4,7 @@
     "target": "esnext",
     "lib": ["ESNext", "DOM"],
     "module": "esnext",
-    "types": ["vite/client"],
+    "types": ["vite/client", "vite-plugin-svgr/client"],
     "allowArbitraryExtensions": true,
     "skipLibCheck": true,
 

@@ -1,7 +1,15 @@
 import "@/styles.css";
-import "@fontsource-variable/sometype-mono";
+import "@fontsource-variable/jetbrains-mono/wght.css";
 import "@fontsource-variable/outfit";
+import Header from "@/Header";
 
 export default function App() {
-  return "Hello World";
+  return (
+    <>
+      <Header />
+      <main>
+        <section></section>
+      </main>
+    </>
+  );
 }
