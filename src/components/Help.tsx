@@ -9,10 +9,7 @@ type Props = {
 export default function Help({ children }: Props) {
   return (
     <Tooltip content={children}>
-      <div
-        className="text-gray transition hover:text-dark-gray"
-        aria-label="Help"
-      >
+      <div className="text-gray hover:text-dark-gray" aria-label="Help">
         <Info />
       </div>
     </Tooltip>

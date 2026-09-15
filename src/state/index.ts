@@ -1,3 +1,4 @@
+import type { Format } from "@/util/download";
 import { atomWithStorage } from "jotai/utils";
 import { cloneDeep, isEqual, range } from "lodash";
 import { getAtom, setAtom } from "@/util/atoms";
@@ -158,5 +159,8 @@ export const sampleFile = {
 /** flag to edit all images together */
 export const editAllAtom = atomWithStorage("edit-all", false);
 
-/** save format */
-export const formatAtom = atomWithStorage<"png" | "jpeg">("format", "png");
+/** output format */
+export const formatAtom = atomWithStorage<Format>("format", "png");
+
+/** output quality */
+export const qualityAtom = atomWithStorage("quality", 0.8);

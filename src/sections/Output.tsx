@@ -1,11 +1,13 @@
+import type { Format } from "@/util/download";
 import { useRef } from "react";
 import { useAtom, useAtomValue } from "jotai";
 import { Download, FileArchive, FileStack, Moon, Sun } from "lucide-react";
 import Button from "@/components/Button";
 import Help from "@/components/Help";
+import NumberBox from "@/components/NumberBox";
 import Select from "@/components/Select";
 import Canvas from "@/sections/Canvas";
-import { formatAtom, imagesAtom, setImage } from "@/state";
+import { formatAtom, imagesAtom, qualityAtom, setImage } from "@/state";
 import { downloadCanvas, downloadZip } from "@/util/download";
 
 export default function Output() {
@@ -15,8 +17,11 @@ export default function Output() {
   /** images state */
   const images = useAtomValue(imagesAtom);
 
-  /** selected format state */
+  /** output format */
   const [format, setFormat] = useAtom(formatAtom);
+
+  /** output quality */
+  const [quality, setQuality] = useAtom(qualityAtom);
 
   /** whether all images use dark transparency preview pattern */
   const allDark = images.every((image) => image.darkPreview);
@@ -27,6 +32,7 @@ export default function Output() {
       canvas,
       name: images[index]?.name ?? "",
       format,
+      quality,
     }));
 
   return (
@@ -60,7 +66,7 @@ export default function Output() {
                     const canvas = canvases.current[index];
                     const name = images[index]?.name ?? "";
                     if (!canvas) return;
-                    downloadCanvas({ canvas, name, format });
+                    downloadCanvas({ canvas, name, format, quality });
                   }}
                   aria-label={`Download ${image.name}`}
                 >
@@ -94,12 +100,28 @@ export default function Output() {
       </div>
 
       <div className="flex flex-wrap justify-center gap-4">
-        <Select
-          options={["png", "jpeg"]}
-          value={format}
-          onChange={setFormat}
-          aria-label="Format"
-        />
+        <label>
+          Quality
+          <NumberBox
+            min={0}
+            max={1}
+            step={0.01}
+            value={quality}
+            onChange={setQuality}
+          />
+        </label>
+        <label>
+          Format
+          <Select
+            options={["png", "jpeg", "webp"] as Format[]}
+            value={format}
+            onChange={setFormat}
+            aria-label="Format"
+          />
+        </label>
+      </div>
+
+      <div className="flex flex-wrap justify-center gap-4">
         <Button onClick={() => getCanvases().forEach(downloadCanvas)}>
           Download All
           <FileStack />

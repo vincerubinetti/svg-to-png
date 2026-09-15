@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Fragment } from "react";
+import clsx from "clsx";
 import { useAtom, useAtomValue } from "jotai";
 import {
   Crop,
@@ -99,7 +100,7 @@ export default function Options() {
     <section>
       <h2>Options</h2>
 
-      <div className="grid grid-cols-[repeat(9,auto)] place-content-center-safe gap-x-8 gap-y-4 overflow-x-auto pb-1 *:flex *:items-center *:justify-center *:gap-2">
+      <div className="grid grid-cols-[1fr_1fr_auto_auto_1fr_auto_1fr_1fr_auto] gap-x-8 gap-y-4 overflow-x-auto p-1 *:flex *:items-center *:justify-center *:gap-2">
         <b></b>
         <b>
           <Scaling />
@@ -140,37 +141,36 @@ export default function Options() {
           <Help>{help.reset}</Help>
         </b>
 
-        {images.map((image, index) => (
-          <Fragment key={index}>
-            <div className="justify-start!">{image.name}</div>
+        {images.map((image, index) => {
+          const ratio = getRatio(image.width / image.height);
+          return (
+            <Fragment key={index}>
+              <div className="justify-start!">{image.name}</div>
 
-            <div className="flex items-center gap-1">
-              <NumberBox
-                className="w-24"
-                min={0}
-                max={10000}
-                step={1}
-                value={image.width || 0}
-                onChange={(value) =>
-                  setImage(editAll ? -1 : index, "width", value)
-                }
-                aria-label={`${image.name} width`}
-              />
-              ×
-              <NumberBox
-                className="w-24"
-                min={0}
-                max={10000}
-                step={1}
-                value={image.height || 0}
-                onChange={(value) =>
-                  setImage(editAll ? -1 : index, "height", value)
-                }
-                aria-label={`${image.name} height`}
-              />
-            </div>
+              <div className="flex items-center gap-1">
+                <NumberBox
+                  min={0}
+                  max={10000}
+                  step={1}
+                  value={image.width || 0}
+                  onChange={(value) =>
+                    setImage(editAll ? -1 : index, "width", value)
+                  }
+                  aria-label={`${image.name} width`}
+                />
+                ×
+                <NumberBox
+                  min={0}
+                  max={10000}
+                  step={1}
+                  value={image.height || 0}
+                  onChange={(value) =>
+                    setImage(editAll ? -1 : index, "height", value)
+                  }
+                  aria-label={`${image.name} height`}
+                />
+              </div>
 
-            <div>
               <Button
                 onClick={() =>
                   setImage(
@@ -186,83 +186,111 @@ export default function Options() {
                     : "unlock aspect ratio",
                 ].join(" ")}
               >
+                <div className="flex grow justify-start gap-1 text-xs tabular-nums">
+                  <div className={clsx(!ratio.approximate && "opacity-0")}>
+                    ~
+                  </div>
+                  <div>{ratio.numerator}</div>
+                  <div>/</div>
+                  <div>{ratio.denominator}</div>
+                </div>
                 {image.aspectLock ? <Link /> : <Unlink />}
               </Button>
-            </div>
 
-            <div>
-              <CheckBox
-                value={image.trim}
-                onChange={(value) =>
-                  setImage(editAll ? -1 : index, "trim", value)
-                }
-                aria-label={`${image.name} trim`}
-              />
-            </div>
+              <div>
+                <CheckBox
+                  value={image.trim}
+                  onChange={(value) =>
+                    setImage(editAll ? -1 : index, "trim", value)
+                  }
+                  aria-label={`${image.name} trim`}
+                />
+              </div>
 
-            <div>
-              <NumberBox
-                className="w-24"
-                min={-1000}
-                max={1000}
-                step={1}
-                value={image.margin || 0}
-                onChange={(value) =>
-                  setImage(editAll ? -1 : index, "margin", value)
-                }
-                aria-label={`${image.name} margin`}
-              />
-            </div>
+              <div>
+                <NumberBox
+                  min={-1000}
+                  max={1000}
+                  step={1}
+                  value={image.margin || 0}
+                  onChange={(value) =>
+                    setImage(editAll ? -1 : index, "margin", value)
+                  }
+                  aria-label={`${image.name} margin`}
+                />
+              </div>
 
-            <div>
-              <Select
-                options={["contain", "cover", "stretch"]}
-                value={image.fit}
-                onChange={(value) =>
-                  setImage(editAll ? -1 : index, "fit", value)
-                }
-                aria-label={`${image.name} fit`}
-              />
-            </div>
+              <div>
+                <Select
+                  options={["contain", "cover", "stretch"]}
+                  value={image.fit}
+                  onChange={(value) =>
+                    setImage(editAll ? -1 : index, "fit", value)
+                  }
+                  aria-label={`${image.name} fit`}
+                />
+              </div>
 
-            <div>
-              <TextBox
-                className="w-32"
-                value={image.background}
-                onChange={(value) =>
-                  setImage(editAll ? -1 : index, "background", value)
-                }
-                aria-label={`${image.name} background`}
-              />
-            </div>
+              <div>
+                <TextBox
+                  value={image.background}
+                  onChange={(value) =>
+                    setImage(editAll ? -1 : index, "background", value)
+                  }
+                  aria-label={`${image.name} background`}
+                />
+              </div>
 
-            <div>
-              <TextBox
-                className="w-32"
-                value={image.color}
-                onChange={(value) =>
-                  setImage(editAll ? -1 : index, "color", value)
-                }
-                aria-label={`${image.name} color`}
-              />
-            </div>
+              <div>
+                <TextBox
+                  value={image.color}
+                  onChange={(value) =>
+                    setImage(editAll ? -1 : index, "color", value)
+                  }
+                  aria-label={`${image.name} color`}
+                />
+              </div>
 
-            <div>
-              <Button
-                onClick={() => resetOptions(editAll ? -1 : index)}
-                aria-label={`${image.name} reset`}
-              >
-                <RefreshCw />
-              </Button>
-            </div>
-          </Fragment>
-        ))}
+              <div>
+                <Button
+                  onClick={() => resetOptions(editAll ? -1 : index)}
+                  aria-label={`${image.name} reset`}
+                >
+                  <RefreshCw />
+                </Button>
+              </div>
+            </Fragment>
+          );
+        })}
       </div>
 
-      <CheckBox value={editAll} onChange={setEditAll}>
+      <label>
+        <CheckBox value={editAll} onChange={setEditAll} />
         Edit all
         <Help>Update all images together when changing a value.</Help>
-      </CheckBox>
+      </label>
     </section>
   );
 }
+
+/** get ratio from decimal */
+const getRatio = (decimal: number, maxDenominator = 100) => {
+  let bestNumerator = 1;
+  let bestDenominator = 1;
+  let bestError = Infinity;
+  for (let denominator = 1; denominator <= maxDenominator; denominator++) {
+    const numerator = Math.round(decimal * denominator);
+    const error = Math.abs(decimal - numerator / denominator);
+    if (error < bestError) {
+      bestError = error;
+      bestNumerator = numerator;
+      bestDenominator = denominator;
+    }
+  }
+  const approximate = bestError > 0.0000000001;
+  return {
+    approximate,
+    numerator: bestNumerator,
+    denominator: bestDenominator,
+  };
+};

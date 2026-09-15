@@ -1,10 +1,28 @@
-import { BlobWriter, Data64URIReader, ZipWriter } from "@zip.js/zip.js";
+import { BlobReader, BlobWriter, ZipWriter } from "@zip.js/zip.js";
 
-/** turn canvas image into data url */
-const canvasToUrl = (canvas: HTMLCanvasElement, format: "png" | "jpeg") =>
-  canvas.toDataURL(`image/${format}`);
+export type Format = "png" | "jpeg" | "webp";
 
-/** download file from url and name */
+type Download = {
+  canvas: HTMLCanvasElement;
+  name: string;
+  format: Format;
+  quality: number;
+};
+
+/** turn canvas image into downloadable blob */
+const canvasToBlob = ({ canvas, format, quality }: Download) =>
+  new Promise<Blob>((resolve, reject) =>
+    canvas.toBlob(
+      (blob) => {
+        if (blob) resolve(blob);
+        else reject(Error("Couldn't convert canvas to blob"));
+      },
+      `image/${format}`,
+      quality,
+    ),
+  );
+
+/** download file */
 const downloadFile = (url: string, name: string) => {
   const link = document.createElement("a");
   link.href = url;
@@ -12,29 +30,30 @@ const downloadFile = (url: string, name: string) => {
   link.click();
 };
 
-type Download = {
-  canvas: HTMLCanvasElement;
-  name: string;
-  format: "png" | "jpeg";
+/** download blob */
+const downloadBlob = (blob: Blob, name: string) => {
+  const url = URL.createObjectURL(blob);
+  downloadFile(url, name);
+  URL.revokeObjectURL(url);
 };
 
 /** download single image from canvas */
-export const downloadCanvas = ({ canvas, name, format }: Download) =>
-  downloadFile(canvasToUrl(canvas, format), `${name}.${format}`);
+export const downloadCanvas = async (download: Download) => {
+  const blob = await canvasToBlob(download);
+  const { name, format } = download;
+  downloadBlob(blob, `${name}.${format}`);
+};
 
 /** download zip of files */
 export const downloadZip = async (files: Download[]) => {
   const zipWriter = new ZipWriter(new BlobWriter("application/zip"));
   await Promise.all(
-    files.map(({ canvas, name, format }) =>
-      zipWriter.add(
-        `${name}.${format}`,
-        new Data64URIReader(canvasToUrl(canvas, format)),
-      ),
-    ),
+    files.map(async (download) => {
+      const blob = await canvasToBlob(download);
+      const { name, format } = download;
+      return zipWriter.add(`${name}.${format}`, new BlobReader(blob));
+    }),
   );
   const blob = await zipWriter.close();
-  const url = window.URL.createObjectURL(blob);
-  downloadFile(url, "images.zip");
-  window.URL.revokeObjectURL(url);
+  downloadBlob(blob, "images.zip");
 };

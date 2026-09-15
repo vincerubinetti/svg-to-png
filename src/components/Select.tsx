@@ -28,7 +28,7 @@ export default function Select<Option extends string>({
       </_Select.Trigger>
 
       <_Select.Positioner alignItemWithTrigger={false}>
-        <_Select.Popup className="z-10 min-w-(--anchor-width) overflow-hidden rounded-md border border-gray bg-white shadow-lg">
+        <_Select.Popup className="z-10 min-w-(--anchor-width) overflow-hidden rounded-md border border-gray bg-white">
           <_Select.List>
             {options.map((option) => (
               <_Select.Item

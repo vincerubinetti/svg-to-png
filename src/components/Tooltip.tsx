@@ -30,7 +30,7 @@ export default function Tooltip({ content, children, className }: Props) {
         >
           <Popover.Popup
             className={clsx(
-              "max-h-(--available-height) w-max max-w-[min(var(--available-width),--spacing(100))] overflow-y-auto rounded-md bg-black p-4 text-white transition data-closed:opacity-0 data-ending-style:opacity-0 data-open:opacity-100 data-starting-style:opacity-0",
+              "max-h-(--available-height) w-max max-w-[min(var(--available-width),--spacing(100))] overflow-y-auto rounded-md border border-gray bg-white p-4",
               className,
             )}
           >
@@ -39,7 +39,7 @@ export default function Tooltip({ content, children, className }: Props) {
                 <div
                   {...props}
                   className={clsx(
-                    "size-3 bg-black [clip-path:polygon(0%_0%,100%_0%,100%_100%,0_0%)]",
+                    "size-3 border border-gray bg-white [clip-path:polygon(0%_0%,100%_0%,100%_100%,0_0%)]",
                     side === "top" &&
                       "top-full -translate-y-[calc(50%+1px)] rotate-135",
                     side === "bottom" &&

@@ -116,7 +116,7 @@ export default function Input() {
       )}
 
       {!!images.length && (
-        <div className="flex w-full max-w-300 grow flex-col gap-8">
+        <div className="flex w-full grow flex-col gap-8">
           {images.map((image, index) => (
             <div
               key={index}
@@ -180,6 +180,7 @@ export default function Input() {
               <div className="flex flex-3 flex-col gap-2">
                 <TextBox
                   placeholder="SVG source"
+                  className="w-full"
                   multi
                   rows={3}
                   value={image.source}
