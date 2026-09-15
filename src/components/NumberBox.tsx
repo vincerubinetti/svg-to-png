@@ -1,7 +1,7 @@
 import type { ComponentProps } from "react";
 import { NumberField } from "@base-ui/react";
 import clsx from "clsx";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, Dot } from "lucide-react";
 
 type Props = {
   min?: number;
@@ -23,7 +23,7 @@ export default function NumberBox({
   return (
     <NumberField.Root
       className={clsx(
-        "flex rounded-md border border-gray tabular-nums hover:border-theme",
+        "relative flex items-center rounded-md border border-gray tabular-nums hover:border-theme",
         className,
       )}
       min={min}
@@ -36,14 +36,21 @@ export default function NumberBox({
         if (value !== null) onChange(value);
       }}
     >
-      <NumberField.Input className="min-h-10 w-0 min-w-20 p-2" {...props} />
-      <div className="grid grid-rows-2 text-sm *:w-6 *:hover:text-theme">
+      <NumberField.Input
+        className="min-h-10 w-0 min-w-24 p-2 pr-6"
+        {...props}
+      />
+      <div className="absolute inset-y-0 right-0 grid grid-rows-3 text-xs *:w-6 *:hover:text-theme">
         <NumberField.Increment
           render={
             <button>
               <ChevronUp />
             </button>
           }
+        />
+        <NumberField.ScrubArea
+          direction="vertical"
+          render={<Dot className="cursor-ns-resize" />}
         />
         <NumberField.Decrement
           render={

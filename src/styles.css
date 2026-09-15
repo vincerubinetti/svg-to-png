@@ -36,12 +36,11 @@
   }
 
   section {
-    --width: 500;
     @apply flex flex-col items-center gap-8 bg-white p-12 *:max-w-full last:grow;
   }
 
   h2 {
-    @apply bg-theme/10 w-full p-4 text-center text-xl tracking-wider uppercase;
+    @apply bg-theme/10 w-[calc(100%+(--spacing(24)))] max-w-[unset] p-4 text-center text-xl tracking-wider uppercase;
   }
 
   b {
@@ -58,10 +57,6 @@
 
   button {
     @apply flex cursor-pointer items-center justify-center;
-  }
-
-  svg {
-    @apply overflow-visible;
   }
 
   img,

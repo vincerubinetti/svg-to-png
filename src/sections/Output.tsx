@@ -99,7 +99,7 @@ export default function Output() {
         ))}
       </div>
 
-      <div className="flex flex-wrap justify-center gap-4">
+      <div className="flex flex-wrap justify-center gap-8">
         <label>
           Quality
           <NumberBox
