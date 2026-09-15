@@ -1,5 +1,5 @@
 /** convert string of absolute css units to pixels */
-export const unitsToPixels = (string: string) => {
+const unitsToPixels = (string: string) => {
   /** unit constants https://www.w3.org/TR/css-values-3/#absolute-lengths */
   const units: Record<string, number> = {
     px: 1,
@@ -35,7 +35,7 @@ const urlToImage = (url: string): Promise<HTMLImageElement> =>
   });
 
 /** convert svg element to image object */
-export const svgToImage = async (svg: SVGSVGElement) => {
+const svgToImage = async (svg: SVGSVGElement) => {
   /** encode svg as data url */
   const url =
     "data:image/svg+xml;charset=utf8," +
@@ -64,7 +64,7 @@ export const sourceToImage = async (
 const ns = "http://www.w3.org/2000/svg";
 
 /** convert svg source code to svg dom object */
-export const sourceToSvg = async (
+const sourceToSvg = async (
   source: string,
   type: DOMParserSupportedType = "image/svg+xml",
 ) => {
