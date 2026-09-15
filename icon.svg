@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-50 -50 100 100">
+  <rect fill="#e91e63" x="-50" y="-50" width="100" height="100" />
+  <g transform="scale(0.9)">
+    <path
+      fill="none"
+      stroke="#ffffff"
+      stroke-width="7"
+      stroke-linecap="round"
+      stroke-dasharray="2.5 2.5"
+      pathLength="20"
+      d="
+        M -46 -18
+        A 20 20 0 0 1 -25 -39
+        L 25 -39
+        A 20 20 0 0 1 46 -18
+        L 46 18
+        A 20 20 0 0 1 25 39
+        L -25 39
+        A 20 20 0 0 1 -46 18
+        z
+      "
+    />
+    <g>
+      <g stroke="#ffffff" stroke-width="5">
+        <path transform="rotate(0)" d="M 0 25 L 0 0" pathLength="1" />
+        <path transform="rotate(45)" d="M 0 25 L 0 0" pathLength="1" />
+        <path transform="rotate(90)" d="M 0 25 L 0 0" pathLength="1" />
+        <path transform="rotate(135)" d="M 0 25 L 0 0" pathLength="1" />
+        <path transform="rotate(180)" d="M 0 25 L 0 0" pathLength="1" />
+        <path transform="rotate(225)" d="M 0 22 L 0 0" pathLength="1" />
+        <path transform="rotate(270)" d="M 0 25 L 0 0" pathLength="1" />
+        <path transform="rotate(315)" d="M 0 25 L 0 0" pathLength="1" />
+      </g>
+      <g fill="#ffffff">
+        <circle transform="rotate(0)" cx="0" cy="25" r="5" />
+        <circle transform="rotate(45)" cx="0" cy="25" r="5" />
+        <circle transform="rotate(90)" cx="0" cy="25" r="5" />
+        <circle transform="rotate(135)" cx="0" cy="25" r="5" />
+        <circle transform="rotate(180)" cx="0" cy="25" r="5" />
+        <circle transform="rotate(225)" cx="0" cy="25" r="5" />
+        <circle transform="rotate(270)" cx="0" cy="25" r="5" />
+        <circle transform="rotate(315)" cx="0" cy="25" r="5" />
+      </g>
+    </g>
+  </g>
+</svg>
