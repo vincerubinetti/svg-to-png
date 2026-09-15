@@ -20,7 +20,7 @@ export default function TextBox({
   return (
     <Component
       className={clsx(
-        "min-h-10 w-0 min-w-48 rounded-md border border-gray p-2 hover:border-theme",
+        "min-h-10 rounded-md border border-gray p-2 hover:border-theme",
         Component === "textarea" && "font-mono",
         className,
       )}

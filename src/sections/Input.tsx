@@ -2,7 +2,7 @@ import type { DragEventHandler } from "react";
 import { useRef, useState } from "react";
 import { useEventListener } from "@reactuses/core";
 import { useAtomValue } from "jotai";
-import { Lightbulb, Upload, X } from "lucide-react";
+import { Plus, Upload, X } from "lucide-react";
 import Button from "@/components/Button";
 import Help from "@/components/Help";
 import TextBox from "@/components/TextBox";
@@ -10,8 +10,8 @@ import {
   addImages,
   clearImages,
   imagesAtom,
+  newFile,
   removeImage,
-  sampleFile,
   setImage,
 } from "@/state";
 import { formatNumber } from "@/util/string";
@@ -73,14 +73,14 @@ export default function Input() {
     <section>
       <h2>Input</h2>
 
-      <div className="flex items-center justify-center gap-4 *:w-50 max-md:flex-col">
+      <div className="flex flex-wrap items-center justify-center gap-4 *:w-50">
         <Button onClick={onClick}>
           Upload
           <Upload />
         </Button>
-        <Button onClick={() => addImages([sampleFile])}>
-          Example
-          <Lightbulb />
+        <Button onClick={() => addImages([newFile])}>
+          Add
+          <Plus />
         </Button>
         <Button onClick={clearImages}>
           Clear

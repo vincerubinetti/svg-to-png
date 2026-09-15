@@ -148,6 +148,7 @@ export default function Options() {
 
               <div className="flex items-center gap-1">
                 <NumberBox
+                  className="w-0 min-w-24"
                   min={0}
                   max={10000}
                   step={1}
@@ -159,6 +160,7 @@ export default function Options() {
                 />
                 ×
                 <NumberBox
+                  className="w-0 min-w-24"
                   min={0}
                   max={10000}
                   step={1}
@@ -171,7 +173,7 @@ export default function Options() {
               </div>
 
               <Button
-                className="min-w-max"
+                className="w-max"
                 onClick={() =>
                   setImage(
                     editAll ? -1 : index,
@@ -221,6 +223,7 @@ export default function Options() {
 
               <div>
                 <NumberBox
+                  className="w-0 min-w-24"
                   min={-1000}
                   max={1000}
                   step={1}
@@ -245,6 +248,7 @@ export default function Options() {
 
               <div>
                 <TextBox
+                  className="w-0 min-w-48"
                   value={image.background}
                   onChange={(value) =>
                     setImage(editAll ? -1 : index, "background", value)
@@ -255,6 +259,7 @@ export default function Options() {
 
               <div>
                 <TextBox
+                  className="w-0 min-w-48"
                   value={image.color}
                   onChange={(value) =>
                     setImage(editAll ? -1 : index, "color", value)

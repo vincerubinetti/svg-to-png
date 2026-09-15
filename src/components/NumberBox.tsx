@@ -23,7 +23,7 @@ export default function NumberBox({
   return (
     <NumberField.Root
       className={clsx(
-        "relative flex items-center rounded-md border border-gray tabular-nums hover:border-theme",
+        "relative flex min-h-10 items-center rounded-md border border-gray tabular-nums hover:border-theme",
         className,
       )}
       min={min}
@@ -36,10 +36,7 @@ export default function NumberBox({
         if (value !== null) onChange(value);
       }}
     >
-      <NumberField.Input
-        className="min-h-10 w-0 min-w-24 p-2 pr-6"
-        {...props}
-      />
+      <NumberField.Input className="p-2 pr-6" {...props} />
       <div className="absolute inset-y-0 right-0 grid grid-rows-3 text-xs *:w-6 *:hover:text-theme">
         <NumberField.Increment
           render={

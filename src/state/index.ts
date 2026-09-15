@@ -151,13 +151,13 @@ const getDefaultOptions = (props?: Props) => {
   };
 };
 
-export const sampleFile = {
+export const newFile = {
   source: `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-100 -100 200 200">
   <circle fill="#e91e63" cx="0" cy="0" r="75" />
 </svg>
 `.trim(),
-  filename: "sample.svg",
+  filename: "untitled.svg",
 };
 
 /** flag to edit all images together */
