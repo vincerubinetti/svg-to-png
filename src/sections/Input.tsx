@@ -96,7 +96,7 @@ export default function Input() {
         />
       </div>
 
-      <div className="text-center text-lg text-dark-gray">
+      <div className="text-center text-lg text-balance text-dark-gray">
         {images.length
           ? `${formatNumber(images.length)} image${images.length === 1 ? "" : "s"}`
           : "Upload or drag and drop SVG files"}
