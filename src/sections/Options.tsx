@@ -1,237 +1,313 @@
-import { useAtom } from "jotai";
+import type { ReactNode } from "react";
+import { Fragment } from "react";
+import { useAtom, useAtomValue } from "jotai";
 import {
-  faArrowsUpDown,
-  faArrowsUpDownLeftRight,
-  faCompress,
-  faCropSimple,
-  faFillDrip,
-  faImage,
-  faLink,
-  faLinkSlash,
-  faPaintBrush,
-  faRefresh,
-  faUpRightAndDownLeftFromCenter,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+  Crop,
+  ImageUpscale,
+  LockKeyhole,
+  LockOpen,
+  Paintbrush,
+  PaintBucket,
+  RefreshCw,
+  Scaling,
+  SquareDimensions,
+} from "lucide-react";
 import Button from "@/components/Button";
-import Checkbox from "@/components/Checkbox";
-import Numberbox from "@/components/Numberbox";
+import CheckBox from "@/components/CheckBox";
+import Help from "@/components/Help";
+import NumberBox from "@/components/NumberBox";
 import Select from "@/components/Select";
-import Textbox from "@/components/Textbox";
-import { cleanLabel } from "@/components/tooltip";
-import { editAll, images, resetOptions, setImage } from "@/state";
-import classes from "./Options.module.css";
+import TextBox from "@/components/TextBox";
+import { editAllAtom, imagesAtom, resetOptions, setImage } from "@/state";
 
-/** tooltips/aria labels for options */
-const sizeLabel = "Width × height of output PNG image, in pixels.";
-const trimLabel = `
-  <p>
-    Whether to crop <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/viewBox" target="_blank"><code>viewBox</code></a> to contents of SVG.
-  </p>
-`;
-const marginLabel = "How many pixels of space to add on each side.";
-const fitLabel = `
-  <p>How to <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit" target="_blank">fit</a> original SVG into specified PNG size, if aspect ratio is different.</p>
-`;
-const backgroundLabel = `
-  <p>
-    Fill transparent areas with this background <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/color_value" target="_blank">CSS color</a>.
-  </p>
-`;
-const colorLabel = `
-  <p>
-    Force non-transparent areas to this <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/color_value" target="_blank">CSS color</a>.
-  </p>
-  <p>
-    Prefix with a <code>~</code> to only set <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#currentcolor_keyword" target="_blank"><code>currentColor</code></a> values.
-  </p>
-`;
+/** help content for options */
+const help: Record<string, ReactNode> = {
+  size: <p>Width × height of output PNG image, in pixels.</p>,
+  lock: <p>Lock/unlock aspect ratio.</p>,
+  trim: (
+    <p>
+      Crop{" "}
+      <a
+        href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/viewBox"
+        target="_blank"
+      >
+        <code>viewBox</code>
+      </a>{" "}
+      to contents.
+    </p>
+  ),
+  margin: <p>How many pixels of space to add on each side.</p>,
+  fit: (
+    <p>
+      How to{" "}
+      <a
+        href="https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit"
+        target="_blank"
+      >
+        fit
+      </a>{" "}
+      original image into specified size, if aspect ratio is different.
+    </p>
+  ),
+  background: (
+    <p>
+      Fill background with this{" "}
+      <a
+        href="https://developer.mozilla.org/en-US/docs/Web/CSS/color_value"
+        target="_blank"
+      >
+        CSS color
+      </a>
+      .
+    </p>
+  ),
+  color: (
+    <>
+      <p>
+        Force non-transparent areas to this{" "}
+        <a
+          href="https://developer.mozilla.org/en-US/docs/Web/CSS/color_value"
+          target="_blank"
+        >
+          CSS color
+        </a>
+        .
+      </p>
+      <p>
+        Prefix with a <code>~</code> to only set{" "}
+        <a
+          href="https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#currentcolor_keyword"
+          target="_blank"
+        >
+          <code>currentColor</code>
+        </a>
+        .
+      </p>
+    </>
+  ),
+  reset: <p>Reset options to default values.</p>,
+};
 
-const Options = () => {
-  const [getImages] = useAtom(images);
-  const [getEditAll, setEditAll] = useAtom(editAll);
+export default function Options() {
+  /** images state */
+  const images = useAtomValue(imagesAtom);
 
-  if (!getImages.length) return <></>;
+  /** edit all state */
+  const [editAll, setEditAll] = useAtom(editAllAtom);
 
   return (
     <section>
       <h2>Options</h2>
 
-      <div className={classes.wrapper}>
-        <table>
-          <thead>
-            <tr>
-              <th></th>
-              <th className={classes.name}>
-                <FontAwesomeIcon icon={faImage} />
-                <span>Image</span>
-              </th>
-              <th data-tooltip={sizeLabel}>
-                <FontAwesomeIcon icon={faArrowsUpDownLeftRight} />
-                <span>Size</span>
-              </th>
-              <th></th>
-              <th data-tooltip={trimLabel}>
-                <FontAwesomeIcon icon={faCropSimple} />
-                <span>Trim</span>
-              </th>
-              <th data-tooltip={marginLabel}>
-                <FontAwesomeIcon icon={faCompress} />
-                <span>Margin</span>
-              </th>
-              <th data-tooltip={fitLabel}>
-                <FontAwesomeIcon icon={faUpRightAndDownLeftFromCenter} />
-                <span>Fit</span>
-              </th>
-              <th data-tooltip={backgroundLabel}>
-                <FontAwesomeIcon icon={faFillDrip} />
-                <span>Bg.</span>
-              </th>
-              <th data-tooltip={colorLabel}>
-                <FontAwesomeIcon icon={faPaintBrush} />
-                <span>Color</span>
-              </th>
-            </tr>
-          </thead>
+      <div className="grid grid-cols-[1fr_1fr_auto_auto_1fr_auto_1fr_1fr_auto] gap-x-8 gap-y-4 overflow-x-auto p-1 *:flex *:items-center *:justify-center *:gap-2">
+        <b></b>
+        <b>
+          <Scaling />
+          Size
+          <Help>{help.size}</Help>
+        </b>
+        <b>
+          Lock
+          <Help>{help.lock}</Help>
+        </b>
+        <b>
+          <Crop />
+          Trim
+          <Help>{help.trim}</Help>
+        </b>
+        <b>
+          <SquareDimensions />
+          Margin
+          <Help>{help.margin}</Help>
+        </b>
+        <b>
+          <ImageUpscale />
+          Fit
+          <Help>{help.fit}</Help>
+        </b>
+        <b>
+          <PaintBucket />
+          Background
+          <Help>{help.background}</Help>
+        </b>
+        <b>
+          <Paintbrush />
+          Color
+          <Help>{help.color}</Help>
+        </b>
+        <b>
+          Reset
+          <Help>{help.reset}</Help>
+        </b>
 
-          <tbody>
-            {getImages.map((image, index) => (
-              <tr key={index} aria-label={cleanLabel(image.name)}>
-                <td>
-                  <Button
-                    onClick={() => resetOptions(getEditAll ? -1 : index)}
-                    data-tooltip="Reset all values to defaults."
-                    data-square
-                  >
-                    <FontAwesomeIcon icon={faRefresh} />
-                  </Button>
-                </td>
+        {images.map((image, index) => {
+          const ratio = getRatio(image.width / image.height);
+          return (
+            <Fragment key={index}>
+              <div className="justify-start!">{image.name}</div>
 
-                <td className={classes.name}>{image.name}</td>
+              <div className="flex items-center gap-1">
+                <NumberBox
+                  className="w-0 min-w-24"
+                  min={0}
+                  max={10000}
+                  step={1}
+                  value={image.width || 0}
+                  onChange={(value) =>
+                    setImage(editAll ? -1 : index, "width", value)
+                  }
+                  aria-label={`${image.name} width`}
+                />
+                ×
+                <NumberBox
+                  className="w-0 min-w-24"
+                  min={0}
+                  max={10000}
+                  step={1}
+                  value={image.height || 0}
+                  onChange={(value) =>
+                    setImage(editAll ? -1 : index, "height", value)
+                  }
+                  aria-label={`${image.name} height`}
+                />
+              </div>
 
-                <td>
-                  <div className={classes.cell}>
-                    <Numberbox
-                      min={0}
-                      max={10000}
-                      step={1}
-                      value={image.width || 0}
-                      onChange={(value) =>
-                        setImage(getEditAll ? -1 : index, "width", value)
-                      }
-                      aria-label="Width, in pixels"
-                    />
-                    ×
-                    <Numberbox
-                      min={0}
-                      max={10000}
-                      step={1}
-                      value={image.height || 0}
-                      onChange={(value) =>
-                        setImage(getEditAll ? -1 : index, "height", value)
-                      }
-                      aria-label="Height, in pixels"
-                    />
+              <Button
+                className="w-max"
+                onClick={() =>
+                  setImage(
+                    editAll ? -1 : index,
+                    "aspectLock",
+                    image.aspectLock ? 0 : Infinity,
+                  )
+                }
+                aria-label={[
+                  image.name,
+                  !image.aspectLock
+                    ? "lock aspect ratio"
+                    : "unlock aspect ratio",
+                ].join(" ")}
+              >
+                <div className="flex grow text-xs tabular-nums">
+                  <div className="w-4 -translate-y-2 text-right">
+                    {ratio.numerator}
                   </div>
-                </td>
-
-                <td>
-                  <Button
-                    onClick={() =>
-                      setImage(
-                        getEditAll ? -1 : index,
-                        "aspectLock",
-                        image.aspectLock ? 0 : Infinity,
-                      )
-                    }
-                    data-tooltip={
-                      (!image.aspectLock
-                        ? "Lock aspect ratio"
-                        : "Unlock aspect ratio") +
-                      ` (${(image.width / image.height).toFixed(3)})`
-                    }
-                    data-square
-                  >
-                    <FontAwesomeIcon
-                      icon={image.aspectLock ? faLink : faLinkSlash}
+                  <svg viewBox="-1 -1 2 2" className="w-2" aria-label="over">
+                    <line
+                      stroke="currentColor"
+                      x1={-1}
+                      y1={1}
+                      x2={1}
+                      y2={-1}
+                      strokeWidth={0.35}
+                      pathLength={1}
+                      strokeDasharray={ratio.approximate ? 0.2 : 0}
                     />
-                  </Button>
-                </td>
+                  </svg>
+                  <div className="w-4 translate-y-2 text-left">
+                    {ratio.denominator}
+                  </div>
+                </div>
+                {image.aspectLock ? <LockKeyhole /> : <LockOpen />}
+              </Button>
 
-                <td>
-                  <Checkbox
-                    value={image.trim}
-                    onChange={(value) =>
-                      setImage(getEditAll ? -1 : index, "trim", value)
-                    }
-                    aria-label={"Trim. " + cleanLabel(trimLabel)}
-                  />
-                </td>
+              <div>
+                <CheckBox
+                  value={image.trim}
+                  onChange={(value) =>
+                    setImage(editAll ? -1 : index, "trim", value)
+                  }
+                  aria-label={`${image.name} trim`}
+                />
+              </div>
 
-                <td>
-                  <Numberbox
-                    min={-1000}
-                    max={1000}
-                    step={1}
-                    value={image.margin || 0}
-                    onChange={(value) =>
-                      setImage(getEditAll ? -1 : index, "margin", value)
-                    }
-                    aria-label={"Margin." + cleanLabel(marginLabel)}
-                  />
-                </td>
+              <div>
+                <NumberBox
+                  className="w-0 min-w-24"
+                  min={-1000}
+                  max={1000}
+                  step={1}
+                  value={image.margin || 0}
+                  onChange={(value) =>
+                    setImage(editAll ? -1 : index, "margin", value)
+                  }
+                  aria-label={`${image.name} margin`}
+                />
+              </div>
 
-                <td>
-                  <Select
-                    options={["contain", "cover", "stretch"]}
-                    value={image.fit}
-                    onChange={(value) =>
-                      setImage(getEditAll ? -1 : index, "fit", value)
-                    }
-                    aria-label={"Fit. " + cleanLabel(fitLabel)}
-                  />
-                </td>
+              <div>
+                <Select
+                  options={["contain", "cover", "stretch"]}
+                  value={image.fit}
+                  onChange={(value) =>
+                    setImage(editAll ? -1 : index, "fit", value)
+                  }
+                  aria-label={`${image.name} fit`}
+                />
+              </div>
 
-                <td>
-                  <Textbox
-                    value={image.background}
-                    onChange={(value) =>
-                      setImage(getEditAll ? -1 : index, "background", value)
-                    }
-                    aria-label={"Background. " + cleanLabel(backgroundLabel)}
-                  />
-                </td>
+              <div>
+                <TextBox
+                  className="w-0 min-w-48"
+                  value={image.background}
+                  onChange={(value) =>
+                    setImage(editAll ? -1 : index, "background", value)
+                  }
+                  aria-label={`${image.name} background`}
+                />
+              </div>
 
-                <td>
-                  <Textbox
-                    value={image.color}
-                    onChange={(value) =>
-                      setImage(getEditAll ? -1 : index, "color", value)
-                    }
-                    aria-label={"Color. " + cleanLabel(colorLabel)}
-                  />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+              <div>
+                <TextBox
+                  className="w-0 min-w-48"
+                  value={image.color}
+                  onChange={(value) =>
+                    setImage(editAll ? -1 : index, "color", value)
+                  }
+                  aria-label={`${image.name} color`}
+                />
+              </div>
+
+              <div>
+                <Button
+                  onClick={() => resetOptions(editAll ? -1 : index)}
+                  aria-label={`${image.name} reset`}
+                >
+                  <RefreshCw />
+                </Button>
+              </div>
+            </Fragment>
+          );
+        })}
       </div>
 
-      <div>
-        <Checkbox
-          label={
-            <>
-              <FontAwesomeIcon icon={faArrowsUpDown} />
-              <span>Edit all</span>
-            </>
-          }
-          tooltip="Update all images together when changing an option value."
-          value={getEditAll}
-          onChange={setEditAll}
-        />
-      </div>
+      <label>
+        <CheckBox value={editAll} onChange={setEditAll} />
+        Edit all
+        <Help>Update all images together when changing a value.</Help>
+      </label>
     </section>
   );
-};
+}
 
-export default Options;
+/** get ratio from decimal */
+const getRatio = (decimal: number, maxDenominator = 50) => {
+  let bestNumerator = 1;
+  let bestDenominator = 1;
+  let bestError = Infinity;
+  for (let denominator = 1; denominator <= maxDenominator; denominator++) {
+    const numerator = Math.round(decimal * denominator);
+    const error = Math.abs(decimal - numerator / denominator);
+    if (error < bestError) {
+      bestError = error;
+      bestNumerator = numerator;
+      bestDenominator = denominator;
+    }
+  }
+  const approximate = bestError > 0.0000000001;
+  return {
+    approximate,
+    numerator: bestNumerator,
+    denominator: bestDenominator,
+  };
+};

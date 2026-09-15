@@ -1,7 +1,5 @@
-import { getFilterId } from "@/sections/Canvas";
-
 /** convert string of absolute css units to pixels */
-export const unitsToPixels = (string: string) => {
+const unitsToPixels = (string: string) => {
   /** unit constants https://www.w3.org/TR/css-values-3/#absolute-lengths */
   const units: Record<string, number> = {
     px: 1,
@@ -36,15 +34,8 @@ const urlToImage = (url: string): Promise<HTMLImageElement> =>
     image.src = url;
   });
 
-/** options for parsing source as svg/image */
-type SourceOptions = {
-  type?: DOMParserSupportedType;
-  trim?: boolean;
-  color?: string;
-};
-
 /** convert svg element to image object */
-export const svgToImage = async (svg: SVGSVGElement) => {
+const svgToImage = async (svg: SVGSVGElement) => {
   /** encode svg as data url */
   const url =
     "data:image/svg+xml;charset=utf8," +
@@ -55,13 +46,17 @@ export const svgToImage = async (svg: SVGSVGElement) => {
 /** convert svg source code to image object */
 export const sourceToImage = async (
   source: string,
-  options?: SourceOptions,
+  options?: ProcessingOptions,
 ) => {
-  /**
-   * use less strict html type (allows things like missing xmlns) because
-   * browser can still handle drawing it to canvas
-   */
-  const svg = await sourceToSvg(source, { ...options, type: "text/html" });
+  const svg = await sourceToSvg(
+    source,
+    /**
+     * use less strict html type (allows things like missing xmlns) because
+     * browser can still handle drawing it to canvas
+     */
+    "text/html",
+  );
+  processSvg(svg, options);
   return await svgToImage(svg);
 };
 
@@ -69,17 +64,17 @@ export const sourceToImage = async (
 const ns = "http://www.w3.org/2000/svg";
 
 /** convert svg source code to svg dom object */
-export const sourceToSvg = async (
+const sourceToSvg = async (
   source: string,
-  { type = "image/svg+xml", trim = false, color = "" }: SourceOptions = {},
+  type: DOMParserSupportedType = "image/svg+xml",
 ) => {
   /** parse source as document */
-  const doc = new DOMParser().parseFromString(source, type);
+  const document = new DOMParser().parseFromString(source, type);
   /** get svg element */
-  const svg = doc.querySelector("svg");
+  const svg = document.querySelector("svg");
 
   /** element for displaying xml parsing error */
-  let error = doc.querySelector("parsererror")?.textContent || "";
+  let error = document.querySelector("parsererror")?.textContent || "";
   /** remove unhelpful bits of error message */
   [
     "This page contains the following errors:",
@@ -89,70 +84,6 @@ export const sourceToSvg = async (
 
   if (!svg) throw Error("No root SVG element");
 
-  /** trim viewBox to contents */
-  if (trim) {
-    /** attach svg to document to get defined bbox */
-    window.document.body.append(svg);
-
-    /**
-     * get rough bbox (doesn't account for strokes/markers/etc, getBbox options
-     * not supported by most browsers)
-     */
-    let { x, y, width, height } = svg.getBBox();
-
-    /** get stroke widths of all children */
-    const strokeWidths = [...svg.querySelectorAll("*")].map((element) =>
-      parseFloat(window.getComputedStyle(element).strokeWidth || "0"),
-    );
-
-    /** get amount to expand viewBox to at least avoid cutting off strokes */
-    const margin = Math.max(...strokeWidths) / 2;
-
-    /** expand viewBox */
-    x -= margin;
-    y -= margin;
-    width += 2 * margin;
-    height += 2 * margin;
-
-    /** remove svg from document */
-    window.document.body.removeChild(svg);
-
-    /** trim svg to rough bbox */
-    svg.setAttribute("viewBox", [x, y, width, height].join(" "));
-  }
-
-  /** set currentColor */
-  if (color.startsWith("~")) svg.setAttribute("color", color.replace(/^~/, ""));
-  else if (color) {
-    /** apply color tint with inner svg filter */
-    const id = getFilterId();
-
-    /** filter element */
-    const filter = doc.createElementNS(ns, "filter");
-    filter.setAttribute("id", id);
-
-    /** flood element */
-    const flood = doc.createElementNS(ns, "feFlood");
-    flood.setAttribute("flood-color", color);
-    flood.setAttribute("result", "flood");
-
-    /** composite element */
-    const composite = doc.createElementNS(ns, "feComposite");
-    composite.setAttribute("operator", "in");
-    composite.setAttribute("in", "flood");
-    composite.setAttribute("in2", "SourceAlpha");
-
-    /** append elements */
-    filter.append(flood);
-    filter.append(composite);
-
-    /** put filter within svg */
-    svg.append(filter);
-
-    /** apply inner filter to root svg element (doesn't work in firefox) */
-    svg.setAttribute("filter", `url(#${id})`);
-  }
-
   return svg;
 };
 
@@ -160,12 +91,9 @@ export const sourceToSvg = async (
 export const svgProps = async (
   source: string,
   filename: string,
-  options?: SourceOptions,
+  options?: ProcessingOptions,
 ) => {
   let errorMessage = "";
-
-  /** svg dom object */
-  let svg = null;
 
   const handleError = (error: unknown) => {
     if (typeof error === "string") errorMessage += error;
@@ -173,17 +101,22 @@ export const svgProps = async (
     errorMessage += "\n";
   };
 
+  let svg: SVGSVGElement | undefined;
+
   /** try to convert source to svg and capture errors */
   try {
-    /** use stricter svg type to get more helpful parse errors */
-    svg = await sourceToSvg(source, { ...options, type: "image/svg+xml" });
+    svg = await sourceToSvg(
+      source,
+      /** use stricter svg type to get more helpful parse errors */
+      "image/svg+xml",
+    );
   } catch (error) {
     handleError(error);
   }
 
   /** try to convert source to image and capture errors */
   try {
-    await sourceToImage(source, { type: "image/svg+xml" });
+    await sourceToImage(source);
   } catch (error) {
     handleError(error);
   }
@@ -191,32 +124,15 @@ export const svgProps = async (
   /** collapse error whitespace */
   errorMessage = errorMessage.replaceAll(/\n+/g, "\n");
 
-  /** size exactly as specified in svg source attributes */
-  const specified = {
-    width: svg?.getAttribute("width") || "",
-    height: svg?.getAttribute("height") || "",
-  };
-
-  /** specified size converted to pixels */
-  const absolute = {
-    width: unitsToPixels(specified.width),
-    height: unitsToPixels(specified.height),
-  };
-
-  /** get viewBox attribute from svg source */
-  const [x = 0, y = 0, width = 0, height = 0] = (
-    svg?.getAttribute("viewBox") || ""
-  )
-    .split(/\s/)
-    .map(parseFloat);
-  const viewBox = { x, y, width, height };
-
   /** final inferred size of image */
   const size = {
     /** fallback size */
-    width: 512,
-    height: 512,
+    width: 100,
+    height: 100,
   };
+
+  const { specified, absolute, viewBox, contents, contentsStrokes } =
+    processSvg(svg, options);
 
   if (absolute.width && absolute.height) {
     /** use absolute if available */
@@ -259,5 +175,120 @@ export const svgProps = async (
     absolute,
     viewBox,
     size,
+    contents,
+    contentsStrokes,
   };
 };
+
+/** options for procesing svg */
+type ProcessingOptions = {
+  trim?: boolean;
+  color?: string;
+};
+
+/** modify svg (in place) and return details */
+const processSvg = (
+  svg?: SVGSVGElement,
+  { trim = false, color = "" }: ProcessingOptions = {},
+) => {
+  /** size exactly as specified in svg source attributes */
+  const specified = {
+    width: svg?.getAttribute("width") || "",
+    height: svg?.getAttribute("height") || "",
+  };
+
+  /** specified size converted to pixels */
+  const absolute = {
+    width: unitsToPixels(specified.width),
+    height: unitsToPixels(specified.height),
+  };
+
+  /** view box attribute, parsed */
+  const viewBox = (() => {
+    const [x = 0, y = 0, width = 0, height = 0] = (
+      svg?.getAttribute("viewBox") || ""
+    )
+      .split(/\s/)
+      .map(parseFloat)
+      .map((value) => (isNaN(value) ? undefined : value));
+    return { x, y, width, height };
+  })();
+
+  /** attach svg to document to get defined bbox */
+  if (svg) window.document.body.append(svg);
+
+  /** get view box of contents */
+  const contents = (() => {
+    const { x = 0, y = 0, width = 0, height = 0 } = svg?.getBBox() || {};
+    /** get as plain object, for serialization */
+    return { x, y, width, height };
+  })();
+
+  /** get view box of contents plus strokes */
+  const contentsStrokes = { ...contents };
+
+  /** get stroke widths of all children */
+  const strokeWidths = [...(svg?.querySelectorAll("*") || [])].map(
+    (element) => {
+      const style = window.getComputedStyle(element);
+      if (style.stroke === "none") return 0;
+      return parseFloat(style.strokeWidth || "0") || 0;
+    },
+  );
+
+  /** remove svg from document */
+  if (svg) window.document.body.removeChild(svg);
+
+  /** get amount to expand viewBox to at least avoid cutting off strokes */
+  const margin = Math.max(...strokeWidths) / 2;
+
+  /** expand viewBox */
+  contentsStrokes.x -= margin;
+  contentsStrokes.y -= margin;
+  contentsStrokes.width += 2 * margin;
+  contentsStrokes.height += 2 * margin;
+
+  /** trim viewBox to contents */
+  if (trim) {
+    const { x, y, width, height } = contentsStrokes;
+    svg?.setAttribute("viewBox", [x, y, width, height].join(" "));
+  }
+
+  /** set currentColor */
+  if (color.startsWith("~"))
+    svg?.setAttribute("color", color.replace(/^~/, ""));
+  else if (color) {
+    /** apply color tint with inner svg filter */
+    const id = getFilterId();
+
+    /** filter element */
+    const filter = document.createElementNS(ns, "filter");
+    filter.setAttribute("id", id);
+
+    /** flood element */
+    const flood = document.createElementNS(ns, "feFlood");
+    flood.setAttribute("flood-color", color);
+    flood.setAttribute("result", "flood");
+
+    /** composite element */
+    const composite = document.createElementNS(ns, "feComposite");
+    composite.setAttribute("operator", "in");
+    composite.setAttribute("in", "flood");
+    composite.setAttribute("in2", "SourceAlpha");
+
+    /** append elements */
+    filter.append(flood);
+    filter.append(composite);
+
+    /** put filter within svg */
+    svg?.append(filter);
+
+    /** apply inner filter to root svg element (doesn't work in firefox) */
+    svg?.setAttribute("filter", `url(#${id})`);
+  }
+
+  return { specified, absolute, viewBox, contents, contentsStrokes };
+};
+
+/** get pseudo-unique id for filter */
+export const getFilterId = () => "filter-" + String(Math.random()).slice(2);

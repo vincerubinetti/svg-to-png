@@ -1,13 +1,32 @@
-import { faGithub } from "@fortawesome/free-brands-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Code, RefreshCw } from "lucide-react";
 
-const Footer = () => (
-  <footer>
-    <a href="https://github.com/vincerubinetti/svg-to-png" target="_blank">
-      <FontAwesomeIcon icon={faGithub} />
-      <span>Source code and help</span>
-    </a>
-  </footer>
-);
+export default function Footer() {
+  return (
+    <footer className="flex items-center justify-center gap-8 bg-theme p-8 text-lg text-white *:no-underline *:hover:text-black">
+      <a
+        href="https://github.com/vincerubinetti/svg-to-png"
+        target="_blank"
+        className="flex items-center gap-2"
+      >
+        Source code
+        <Code />
+      </a>
 
-export default Footer;
+      <button
+        onClick={() => {
+          if (
+            !window.confirm(
+              "Reset all remembered images, options, etc.? No undo.",
+            )
+          )
+            return;
+          window.localStorage.clear();
+          window.location.reload();
+        }}
+      >
+        Reset All
+        <RefreshCw />
+      </button>
+    </footer>
+  );
+}

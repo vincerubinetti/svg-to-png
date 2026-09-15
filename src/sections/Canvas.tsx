@@ -1,16 +1,23 @@
-import { clamp } from "lodash";
+import type { Ref } from "react";
 import type { Image } from "@/state";
-import { sourceToImage } from "@/util/svg";
-import classes from "./Canvas.module.css";
+import clsx from "clsx";
+import { clamp } from "lodash";
+import checkersDark from "@/assets/checkers-dark.svg";
+import checkersLight from "@/assets/checkers-light.svg";
+import { isSafari } from "@/util/browser";
+import { getFilterId, sourceToImage } from "@/util/svg";
 
-export const densityScale = window.devicePixelRatio;
+/** device pixel density at page load */
+const dpr = window.devicePixelRatio;
 
 type Props = Image & {
-  tooltip: string;
+  ref?: Ref<HTMLCanvasElement>;
+  className?: string;
 };
 
 /** draw svg image to canvas */
-export const Canvas = ({
+export default function Canvas({
+  ref,
   source,
   name,
   size,
@@ -21,18 +28,16 @@ export const Canvas = ({
   fit,
   background,
   color,
-  darkCheckers,
-  tooltip,
-}: Props) => {
+  darkPreview,
+  className = "",
+}: Props) {
+  /** unique filter id */
   const filter = getFilterId();
 
   /** whether to use canvas svg method for color filter */
   const canvasFilter = color && !color.startsWith("~") && !isSafari;
 
-  /** when rendering component */
-  const drawCanvas = async (canvas: HTMLCanvasElement | null) => {
-    if (!canvas) return;
-
+  const drawCanvas = async (canvas: HTMLCanvasElement) => {
     /** get draw context */
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
@@ -44,9 +49,7 @@ export const Canvas = ({
         trim,
         color: canvasFilter ? undefined : color,
       });
-    } catch (error) {
-      //
-    }
+    } catch {}
 
     if (!image) return;
 
@@ -88,14 +91,13 @@ export const Canvas = ({
     ctx.fillStyle = background.trim() || "transparent";
     ctx.fillRect(0, 0, width, height);
 
-    /** apply color tint with canvas svg filter (doesn't work in safari) */
+    /** apply color tint with canvas svg filter */
     if (canvasFilter) ctx.filter = `url(#${filter})`;
 
     /** draw image to canvas */
     ctx.drawImage(image, target.x, target.y, target.width, target.height);
   };
 
-  /** render component */
   return (
     <>
       {canvasFilter && (
@@ -106,29 +108,26 @@ export const Canvas = ({
           </filter>
         </svg>
       )}
-      <div
-        className={classes.container}
-        data-dark={darkCheckers}
-        data-tooltip={tooltip}
-        role="img"
-      >
-        <canvas
-          ref={drawCanvas}
-          width={width}
-          height={height}
-          style={{
-            width: width / densityScale + "px",
-            height: height / densityScale + "px",
-          }}
-          title={name}
-        />
-      </div>
+      <canvas
+        ref={(canvas) => {
+          if (!canvas) return;
+          drawCanvas(canvas);
+          if (ref) {
+            if (typeof ref === "function") ref(canvas);
+            else ref.current = canvas;
+          }
+        }}
+        className={clsx("bg-fixed bg-repeat", className)}
+        width={width}
+        height={height}
+        style={{
+          width: width / dpr + "px",
+          height: height / dpr + "px",
+          backgroundImage: `url("${darkPreview ? checkersDark : checkersLight}")`,
+          backgroundSize: "16px 16px",
+        }}
+        title={name}
+      />
     </>
   );
-};
-
-/** get pseudo-unique id for filter */
-export const getFilterId = () => "filter-" + String(Math.random()).slice(2);
-
-/** is safari browser */
-const isSafari = !!navigator.userAgent.match(/safari/i);
+}

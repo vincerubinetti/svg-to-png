@@ -1,5 +1,5 @@
 <a href="https://vincerubinetti.github.io/svg-to-png/">
-  <img height="150" src="https://raw.githubusercontent.com/vincerubinetti/svg-to-png/main/public/logo.png?raw=true">
+  <img height="150" src="https://raw.githubusercontent.com/vincerubinetti/svg-to-png/main/public/icon.svg?raw=true">
 </a>
 
 # SVG to PNG
@@ -7,12 +7,6 @@
 Convert SVG to PNG right in your browser, reliably and correctly
 
 [**OPEN THE APP**](https://vincerubinetti.github.io/svg-to-png/)
-
-## Screenshot
-
-<a href="https://vincerubinetti.github.io/svg-to-png/">
-  <img width="200" src="https://github.com/user-attachments/assets/1806fc56-a7d7-4eee-92be-739400c74239" />
-</a>
 
 ## Motivation
 
@@ -54,6 +48,8 @@ This works fine for many cases.
 But it becomes a pain if you need a very high resolution image, where you would have to take multiple screenshots and stitch them together.
 Taking a screenshot also doesn't allow transparent backgrounds.
 This tool alleviates both of these problems with the use of HTML5 [`<canvas>`](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API).
+
+Plus, this tool has nice UI features such as trimming, colorizing, and batch editing.
 
 ## Note about fonts
 

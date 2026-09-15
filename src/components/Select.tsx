@@ -1,48 +1,50 @@
 import type { ComponentProps } from "react";
-import clsx from "clsx";
-import { startCase } from "lodash";
-import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import classes from "./Select.module.css";
+import { Select as _Select } from "@base-ui/react";
+import { Check, ChevronDown } from "lucide-react";
+import Button from "@/components/Button";
 
 type Props<Option> = {
-  label?: string;
-  tooltip?: string;
   options: Option[];
   value: Option;
   onChange: (value: Option) => void;
-} & Omit<ComponentProps<"select">, "value" | "onChange">;
+} & Omit<ComponentProps<"button">, "value" | "onChange">;
 
-const Select = <Option extends string>({
-  label,
-  tooltip,
+export default function Select<Option extends string>({
   options,
   value,
   onChange,
-  "aria-label": ariaLabel,
-  className,
   ...props
-}: Props<Option>) => (
-  <label
-    className={clsx("control", classes.label, className)}
-    data-tooltip={tooltip}
-    aria-label={ariaLabel}
-  >
-    {label && <span>{label}</span>}
-    <select
-      className={classes.select}
-      {...props}
+}: Props<Option>) {
+  return (
+    <_Select.Root
       value={value}
-      onChange={(event) => onChange(options[event.target.selectedIndex])}
+      onValueChange={(value) => value && onChange(value)}
     >
-      {options.map((option, index) => (
-        <option key={index} value={option}>
-          {startCase(option)}
-        </option>
-      ))}
-    </select>
-    <FontAwesomeIcon icon={faCaretDown} className={classes.caret} />
-  </label>
-);
+      <_Select.Trigger render={(props) => <Button {...props} />} {...props}>
+        <_Select.Value />
+        <_Select.Icon>
+          <ChevronDown />
+        </_Select.Icon>
+      </_Select.Trigger>
 
-export default Select;
+      <_Select.Positioner alignItemWithTrigger={false}>
+        <_Select.Popup className="z-10 min-w-(--anchor-width) overflow-hidden rounded-md border border-gray bg-white">
+          <_Select.List>
+            {options.map((option) => (
+              <_Select.Item
+                key={option}
+                className="flex cursor-pointer items-center justify-between gap-4 p-2 data-highlighted:bg-theme data-highlighted:text-white"
+                value={option}
+              >
+                {option}
+                <_Select.ItemIndicator>
+                  <Check />
+                </_Select.ItemIndicator>
+              </_Select.Item>
+            ))}
+          </_Select.List>
+        </_Select.Popup>
+      </_Select.Positioner>
+    </_Select.Root>
+  );
+}

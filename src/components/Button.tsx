@@ -1,9 +1,17 @@
 import type { ComponentProps } from "react";
 import { clsx } from "clsx";
-import classes from "./Button.module.css";
 
-const Button = ({ className, ...props }: ComponentProps<"button">) => (
-  <button {...props} className={clsx(classes.button, className)} />
-);
-
-export default Button;
+export default function Button({
+  className,
+  ...props
+}: ComponentProps<"button">) {
+  return (
+    <button
+      className={clsx(
+        "min-h-10 min-w-10 rounded-md bg-light-gray p-2 hover:bg-theme hover:text-white",
+        className,
+      )}
+      {...props}
+    />
+  );
+}

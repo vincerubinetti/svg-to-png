@@ -1,0 +1,111 @@
+@import "tailwindcss";
+
+@theme {
+  --color-*: initial;
+
+  --color-theme: oklch(60% 0.225 10);
+
+  --color-white: oklch(100% 0 10);
+  --color-light-gray: oklch(95% 0 10);
+  --color-gray: oklch(80% 0 10);
+  --color-dark-gray: oklch(50% 0 10);
+  --color-black: oklch(0% 0 10);
+
+  --font-weight-regular: 400;
+  --font-weight-bold: 600;
+
+  --font-sans: "Figtree Variable", sans-serif;
+  --font-mono: "Spline Sans Mono Variable", monospace;
+}
+
+@layer base {
+  html {
+    @apply font-regular font-sans leading-normal;
+  }
+
+  body {
+    @apply flex min-h-dvh flex-col;
+  }
+
+  #root {
+    @apply contents;
+  }
+
+  main {
+    @apply flex grow flex-col;
+  }
+
+  section {
+    @apply flex flex-col items-center gap-8 bg-white p-12 *:max-w-full last:grow;
+  }
+
+  h2 {
+    @apply bg-theme/10 w-[calc(100%+(--spacing(24)))] max-w-[unset] p-4 text-center text-xl tracking-wider uppercase;
+  }
+
+  b {
+    @apply font-bold;
+  }
+
+  p {
+    @apply leading-relaxed;
+  }
+
+  a {
+    @apply hover:text-theme rounded-md underline;
+  }
+
+  button {
+    @apply hover:text-theme flex cursor-pointer items-center justify-center gap-2 rounded-md;
+  }
+
+  img,
+  svg {
+    @apply shrink-0;
+  }
+
+  label {
+    @apply flex cursor-pointer items-center gap-2;
+  }
+
+  input,
+  textarea {
+    @apply min-w-0;
+  }
+
+  code {
+    @apply bg-light-gray rounded-md px-1 py-0.5;
+  }
+
+  dl {
+    @apply grid grid-cols-[repeat(var(--cols),auto)] gap-x-4 gap-y-2 [--cols:2];
+  }
+
+  dt {
+    @apply font-bold;
+  }
+
+  dd {
+    @apply wrap-anywhere;
+  }
+
+  dd:empty {
+    @apply before:text-dark-gray before:content-['-'];
+  }
+
+  .lucide {
+    @apply h-[1.1em] w-[unset];
+  }
+
+  [aria-disabled="true"] {
+    @apply cursor-not-allowed opacity-50 grayscale;
+  }
+
+  :not(html) ::-webkit-scrollbar {
+    @apply bg-light-gray size-2 rounded-full;
+  }
+
+  :not(html) ::-webkit-scrollbar-thumb {
+    @apply bg-gray rounded-full;
+  }
+}

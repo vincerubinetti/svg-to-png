@@ -3,8 +3,9 @@ import Header from "@/sections/Header";
 import Input from "@/sections/Input";
 import Options from "@/sections/Options";
 import Output from "@/sections/Output";
-import "@/components/tooltip";
-import "./App.css";
+import "@fontsource-variable/figtree/wght.css";
+import "@fontsource-variable/spline-sans-mono/wght.css";
+import "./styles.css";
 
 const App = () => (
   <>

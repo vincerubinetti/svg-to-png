@@ -1,19 +1,30 @@
 import type { DragEventHandler } from "react";
-import { useEffect, useRef, useState } from "react";
-import { useAtom } from "jotai";
-import { faTimes, faUpload } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useRef, useState } from "react";
+import { useEventListener } from "@reactuses/core";
+import { useAtomValue } from "jotai";
+import { Plus, Upload, X } from "lucide-react";
 import Button from "@/components/Button";
-import Textarea from "@/components/Textarea";
-import Textbox from "@/components/Textbox";
-import { addImages, clearImages, images, removeImage, setImage } from "@/state";
-import classes from "./Input.module.css";
+import Help from "@/components/Help";
+import TextBox from "@/components/TextBox";
+import {
+  addImages,
+  clearImages,
+  imagesAtom,
+  newFile,
+  removeImage,
+  setImage,
+} from "@/state";
+import { formatNumber } from "@/util/string";
 
-const Input = () => {
-  const [dragging, setDragging] = useState(false);
+export default function Input() {
+  /** file input element */
   const input = useRef<HTMLInputElement>(null);
 
-  const [getImages] = useAtom(images);
+  /** drag state */
+  const [dragging, setDragging] = useState(false);
+
+  /** images state */
+  const images = useAtomValue(imagesAtom);
 
   /** click actual file input on button click */
   const onClick = () => input.current?.click();
@@ -24,7 +35,7 @@ const Input = () => {
 
     /** parse file uploads as text */
     const data = await Promise.all(
-      Array.from(files).map(async (file) => ({
+      [...files].map(async (file) => ({
         source: await file.text(),
         filename: file.name,
       })),
@@ -33,21 +44,15 @@ const Input = () => {
     /** add files to list */
     addImages(data);
 
-    /** reset file input so the same file could be re-selected */
+    /** reset file input so same file can be re-selected */
     if (input.current) input.current.value = "";
   };
 
   /** on button drag file over, set drag flag on */
   const onDragEnter = () => setDragging(true);
 
-  /**
-   * add drag enter listener to window, because overlay not interact-able until
-   * dragging started
-   */
-  useEffect(() => {
-    window.addEventListener("dragenter", onDragEnter);
-    return () => window.removeEventListener("dragenter", onDragEnter);
-  });
+  /** on window drag start (overlay not visible until drag start) */
+  useEventListener("dragenter", onDragEnter);
 
   /** on button drag file off, set drag flag off */
   const onDragLeave = () => setDragging(false);
@@ -68,77 +73,132 @@ const Input = () => {
     <section>
       <h2>Input</h2>
 
-      <div className={classes.buttons}>
+      <div className="flex flex-wrap items-center justify-center gap-4 *:w-50">
+        <Button onClick={onClick}>
+          Upload
+          <Upload />
+        </Button>
+        <Button onClick={() => addImages([newFile])}>
+          Add
+          <Plus />
+        </Button>
+        <Button onClick={clearImages}>
+          Clear
+          <X />
+        </Button>
         <input
           ref={input}
           onChange={(event) => onLoad(event.target.files)}
           type="file"
           accept="image/svg+xml"
           multiple
-          style={{ display: "none" }}
+          className="hidden"
         />
-        <Button
-          onClick={onClick}
-          data-tooltip="Load SVG files. Or drag and drop files onto window."
-        >
-          Load
-          <FontAwesomeIcon icon={faUpload} />
-        </Button>
-        <Button
-          className={classes.upload}
-          onClick={clearImages}
-          data-tooltip="Clear all files"
-        >
-          Clear
-          <FontAwesomeIcon icon={faTimes} />
-        </Button>
-      </div>
-      <div
-        className={classes.overlay}
-        onDragLeave={onDragLeave}
-        onDragOver={onDragOver}
-        onDrop={onDrop}
-        data-dragging={dragging}
-      >
-        Drop SVG files
       </div>
 
-      <div className={classes.grid}>
-        {getImages.map((image, index) => (
-          <div
-            key={index}
-            className={classes.cell}
-            role="group"
-            aria-label={image.filename}
-          >
-            <Textbox
-              className={classes.filename}
-              value={image.filename}
-              onChange={(value) => setImage(index, "filename", value)}
-              tooltip="Filename"
-            />
-            <Button
-              className={classes.actions}
-              onClick={() => removeImage(index)}
-              data-tooltip="Remove image"
-              data-square
-            >
-              <FontAwesomeIcon icon={faTimes} />
-            </Button>
-            <Textarea
-              className={classes.source}
-              value={image.source}
-              onChange={(value) => setImage(index, "source", value)}
-              data-tooltip="SVG source code"
-            />
-            {image.errorMessage && (
-              <div className={classes.error}>{image.errorMessage}</div>
-            )}
-          </div>
-        ))}
+      <div className="text-center text-lg text-dark-gray">
+        {!!images.length
+          ? `${formatNumber(images.length)} image(s)`
+          : "Upload or drag and drop SVG files"}
       </div>
+
+      {dragging && (
+        <div
+          className="fixed inset-0 z-100 grid bg-black/75 p-8 text-xl text-white"
+          onDragLeave={onDragLeave}
+          onDragOver={onDragOver}
+          onDrop={onDrop}
+        >
+          <div className="grid place-items-center rounded-md border-2 border-dashed border-white p-8">
+            Drop SVG files
+          </div>
+        </div>
+      )}
+
+      {!!images.length && (
+        <div className="flex w-full grow flex-col gap-8">
+          {images.map((image, index) => (
+            <div
+              key={index}
+              className="flex items-start gap-8 max-md:flex-col max-md:items-stretch"
+              role="group"
+              aria-label={`${image.name}.svg`}
+            >
+              <div className="flex flex-1 items-center gap-4">
+                <Button
+                  onClick={() => removeImage(index)}
+                  aria-label="Remove SVG"
+                >
+                  <X />
+                </Button>
+                <TextBox
+                  className="grow"
+                  placeholder="SVG file name"
+                  value={image.name}
+                  onChange={(value) => setImage(index, "name", value)}
+                />
+                <Help>
+                  <dl>
+                    <dt>Specified size</dt>
+                    <dd>
+                      {image.specified.width || "-"} ×{" "}
+                      {image.specified.height || "-"}
+                    </dd>
+                    <dt>Specified size (px)</dt>
+                    <dd>
+                      {formatNumber(image.absolute.width) || "-"} ×{" "}
+                      {formatNumber(image.absolute.height) || "-"}
+                    </dd>
+                    <dt>View Box</dt>
+                    <dd>
+                      {formatNumber(image.viewBox.x) || "-"}{" "}
+                      {formatNumber(image.viewBox.y) || "-"}{" "}
+                      {formatNumber(image.viewBox.width) || "-"}{" "}
+                      {formatNumber(image.viewBox.height) || "-"}
+                    </dd>
+                    <dt>Decided default size</dt>
+                    <dd>
+                      {formatNumber(image.width)} × {formatNumber(image.height)}
+                    </dd>
+                    <dt>Contents</dt>
+                    <dd>
+                      {formatNumber(image.contents?.x) || "-"}{" "}
+                      {formatNumber(image.contents?.y) || "-"}{" "}
+                      {formatNumber(image.contents?.width) || "-"}{" "}
+                      {formatNumber(image.contents?.height) || "-"}
+                    </dd>
+                    <dt>Contents + strokes</dt>
+                    <dd>
+                      {formatNumber(image.contentsStrokes?.x) || "-"}{" "}
+                      {formatNumber(image.contentsStrokes?.y) || "-"}{" "}
+                      {formatNumber(image.contentsStrokes?.width) || "-"}{" "}
+                      {formatNumber(image.contentsStrokes?.height) || "-"}
+                    </dd>
+                  </dl>
+                </Help>
+              </div>
+              <div className="flex flex-3 flex-col gap-2">
+                <TextBox
+                  placeholder="SVG source"
+                  className="w-full"
+                  multi
+                  rows={3}
+                  value={image.source}
+                  onChange={(value) => setImage(index, "source", value)}
+                />
+                {image.errorMessage && (
+                  <div
+                    className="rounded-md bg-theme/10 p-2"
+                    aria-label="SVG parsing error"
+                  >
+                    {image.errorMessage}
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </section>
   );
-};
-
-export default Input;
+}
