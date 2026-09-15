@@ -1,6 +1,6 @@
-import Tooltip from "@/components/Tooltip";
-import { Info } from "lucide-react";
 import type { ReactNode } from "react";
+import { Info } from "lucide-react";
+import Tooltip from "@/components/Tooltip";
 
 type Props = {
   children: ReactNode;

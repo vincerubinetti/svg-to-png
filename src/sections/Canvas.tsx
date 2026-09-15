@@ -1,12 +1,11 @@
-import { clamp } from "lodash";
-import type { Image } from "@/state";
 import type { Ref } from "react";
+import type { Image } from "@/state";
 import clsx from "clsx";
-import { getFilterId } from "@/util/svg";
-import { isSafari } from "@/util/browser";
-import { sourceToImage } from "@/util/svg";
+import { clamp } from "lodash";
 import checkersDark from "@/assets/checkers-dark.svg";
 import checkersLight from "@/assets/checkers-light.svg";
+import { isSafari } from "@/util/browser";
+import { getFilterId, sourceToImage } from "@/util/svg";
 
 export const densityScale = window.devicePixelRatio;
 

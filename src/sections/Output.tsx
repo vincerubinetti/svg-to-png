@@ -1,12 +1,12 @@
-import { useAtomValue } from "jotai";
-import { Download, FileStack, FileArchive, Moon, Sun } from "lucide-react";
-import Canvas from "@/sections/Canvas";
-import { imagesAtom, setImage } from "@/state";
-import { downloadCanvas, downloadZip } from "@/util/download";
+import { useRef } from "react";
+import { useAtom, useAtomValue } from "jotai";
+import { Download, FileArchive, FileStack, Moon, Sun } from "lucide-react";
 import Button from "@/components/Button";
 import Help from "@/components/Help";
 import Select from "@/components/Select";
-import { useRef, useState } from "react";
+import Canvas from "@/sections/Canvas";
+import { formatAtom, imagesAtom, setImage } from "@/state";
+import { downloadCanvas, downloadZip } from "@/util/download";
 
 export default function Output() {
   const canvases = useRef<HTMLCanvasElement[]>([]);
@@ -22,7 +22,7 @@ export default function Output() {
 
   const allDark = images.every((image) => image.darkPreview);
 
-  const [format, setFormat] = useState<"png" | "jpeg">("png");
+  const [format, setFormat] = useAtom(formatAtom);
 
   return (
     <section>

@@ -1,7 +1,7 @@
 import { atomWithStorage } from "jotai/utils";
 import { cloneDeep, isEqual, range } from "lodash";
-import { svgProps } from "@/util/svg";
 import { getAtom, setAtom } from "@/util/atoms";
+import { svgProps } from "@/util/svg";
 
 /** input file */
 type File = { source: string; filename: string };
@@ -157,3 +157,6 @@ export const sampleFile = {
 
 /** flag to edit all images together */
 export const editAllAtom = atomWithStorage("edit-all", false);
+
+/** save format */
+export const formatAtom = atomWithStorage<"png" | "jpeg">("format", "png");

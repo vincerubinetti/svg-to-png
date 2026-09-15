@@ -1,23 +1,24 @@
+import type { ReactNode } from "react";
+import { Fragment } from "react";
 import { useAtom, useAtomValue } from "jotai";
-import { Fragment, type ReactNode } from "react";
 import {
   Crop,
   ImageUpscale,
   Link,
-  Scaling,
-  PaintBucket,
   Paintbrush,
+  PaintBucket,
   RefreshCw,
+  Scaling,
   SquareDimensions,
   Unlink,
 } from "lucide-react";
+import Button from "@/components/Button";
 import CheckBox from "@/components/CheckBox";
+import Help from "@/components/Help";
 import NumberBox from "@/components/NumberBox";
 import Select from "@/components/Select";
 import TextBox from "@/components/TextBox";
 import { editAllAtom, imagesAtom, resetOptions, setImage } from "@/state";
-import Button from "@/components/Button";
-import Help from "@/components/Help";
 
 /** tooltips for options */
 const tooltips: Record<string, ReactNode> = {

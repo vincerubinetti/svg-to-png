@@ -1,7 +1,7 @@
 import type { ComponentProps } from "react";
-import clsx from "clsx";
 import { NumberField } from "@base-ui/react";
-import { ChevronUp, ChevronDown } from "lucide-react";
+import clsx from "clsx";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 type Props = {
   min?: number;

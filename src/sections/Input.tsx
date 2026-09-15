@@ -1,9 +1,10 @@
 import type { DragEventHandler } from "react";
 import { useRef, useState } from "react";
+import { useEventListener } from "@reactuses/core";
 import { useAtomValue } from "jotai";
 import { Lightbulb, Upload, X } from "lucide-react";
 import Button from "@/components/Button";
-import { useEventListener } from "@reactuses/core";
+import Help from "@/components/Help";
 import TextBox from "@/components/TextBox";
 import {
   addImages,
@@ -14,7 +15,6 @@ import {
   setImage,
 } from "@/state";
 import { formatNumber } from "@/util/string";
-import Help from "@/components/Help";
 
 export default function Input() {
   const [dragging, setDragging] = useState(false);
