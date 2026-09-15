@@ -9,7 +9,7 @@ export default function Footer() {
         className="flex items-center gap-2 hover:text-black hover:no-underline"
       >
         <Code />
-        <span>Source code and help</span>
+        <span>Source code</span>
       </a>
     </footer>
   );
