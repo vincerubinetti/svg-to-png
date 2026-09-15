@@ -1,17 +1,16 @@
 import type { ReactNode } from "react";
 import { Fragment } from "react";
-import clsx from "clsx";
 import { useAtom, useAtomValue } from "jotai";
 import {
   Crop,
   ImageUpscale,
-  Link,
+  LockKeyhole,
+  LockOpen,
   Paintbrush,
   PaintBucket,
   RefreshCw,
   Scaling,
   SquareDimensions,
-  Unlink,
 } from "lucide-react";
 import Button from "@/components/Button";
 import CheckBox from "@/components/CheckBox";
@@ -172,6 +171,7 @@ export default function Options() {
               </div>
 
               <Button
+                className="min-w-max"
                 onClick={() =>
                   setImage(
                     editAll ? -1 : index,
@@ -186,15 +186,27 @@ export default function Options() {
                     : "unlock aspect ratio",
                 ].join(" ")}
               >
-                <div className="flex grow justify-start gap-1 text-xs tabular-nums">
-                  <div className={clsx(!ratio.approximate && "opacity-0")}>
-                    ~
+                <div className="flex grow text-xs tabular-nums">
+                  <div className="w-4 -translate-y-2 text-right">
+                    {ratio.numerator}
                   </div>
-                  <div>{ratio.numerator}</div>
-                  <div>/</div>
-                  <div>{ratio.denominator}</div>
+                  <svg viewBox="-1 -1 2 2" className="w-2" aria-label="over">
+                    <line
+                      stroke="currentColor"
+                      x1={-1}
+                      y1={1}
+                      x2={1}
+                      y2={-1}
+                      strokeWidth={0.35}
+                      pathLength={1}
+                      strokeDasharray={ratio.approximate ? 0.2 : 0}
+                    />
+                  </svg>
+                  <div className="w-4 translate-y-2 text-left">
+                    {ratio.denominator}
+                  </div>
                 </div>
-                {image.aspectLock ? <Link /> : <Unlink />}
+                {image.aspectLock ? <LockKeyhole /> : <LockOpen />}
               </Button>
 
               <div>
@@ -274,7 +286,7 @@ export default function Options() {
 }
 
 /** get ratio from decimal */
-const getRatio = (decimal: number, maxDenominator = 100) => {
+const getRatio = (decimal: number, maxDenominator = 50) => {
   let bestNumerator = 1;
   let bestDenominator = 1;
   let bestError = Infinity;
