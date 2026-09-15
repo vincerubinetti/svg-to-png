@@ -167,4 +167,4 @@ export const editAllAtom = atomWithStorage("edit-all", false);
 export const formatAtom = atomWithStorage<Format>("format", "png");
 
 /** output quality */
-export const qualityAtom = atomWithStorage("quality", 0.8);
+export const qualityAtom = atomWithStorage("quality", 1);

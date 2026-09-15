@@ -58,7 +58,7 @@ export default function Output() {
             role="group"
             aria-label={image.name}
           >
-            <div className="flex items-center justify-between gap-8">
+            <div className="flex flex-wrap items-center justify-between gap-8">
               <div>{image.name}</div>
               <div className="flex items-center gap-4">
                 <Button
@@ -103,6 +103,7 @@ export default function Output() {
         <label>
           Quality
           <NumberBox
+            className="w-0 min-w-24"
             min={0}
             max={1}
             step={0.01}
@@ -123,7 +124,7 @@ export default function Output() {
 
       <div className="flex flex-wrap justify-center gap-4">
         <Button onClick={() => getCanvases().forEach(downloadCanvas)}>
-          Download All
+          Download Each
           <FileStack />
         </Button>
         <Button onClick={() => downloadZip(getCanvases())}>

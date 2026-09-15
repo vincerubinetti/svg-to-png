@@ -56,7 +56,7 @@
   }
 
   button {
-    @apply flex cursor-pointer items-center justify-center;
+    @apply hover:text-theme flex cursor-pointer items-center justify-center gap-2 rounded-md;
   }
 
   img,
