@@ -9,8 +9,19 @@ import { formatAtom, imagesAtom, setImage } from "@/state";
 import { downloadCanvas, downloadZip } from "@/util/download";
 
 export default function Output() {
+  /** canvas elements */
   const canvases = useRef<HTMLCanvasElement[]>([]);
 
+  /** images state */
+  const images = useAtomValue(imagesAtom);
+
+  /** selected format state */
+  const [format, setFormat] = useAtom(formatAtom);
+
+  /** whether all images use dark transparency preview pattern */
+  const allDark = images.every((image) => image.darkPreview);
+
+  /** get canvas details */
   const getCanvases = () =>
     canvases.current.map((canvas, index) => ({
       canvas,
@@ -18,17 +29,11 @@ export default function Output() {
       format,
     }));
 
-  const images = useAtomValue(imagesAtom);
-
-  const allDark = images.every((image) => image.darkPreview);
-
-  const [format, setFormat] = useAtom(formatAtom);
-
   return (
     <section>
       <h2>Output</h2>
 
-      <div className="flex items-center gap-2 ">
+      <div className="flex items-center gap-2">
         <Button onClick={() => setImage(-1, "darkPreview", !allDark)}>
           Transparency
           {allDark ? <Moon /> : <Sun />}
@@ -73,7 +78,7 @@ export default function Output() {
             </div>
 
             <div
-              className="flex max-w-full overflow-auto max-md:col-span-full"
+              className="flex max-h-screen max-w-full overflow-auto max-md:col-span-full"
               role="img"
             >
               <Canvas
@@ -99,10 +104,7 @@ export default function Output() {
           Download All
           <FileStack />
         </Button>
-        <Button
-          onClick={() => downloadZip(getCanvases())}
-          data-tooltip="Zip PNGs together into single download."
-        >
+        <Button onClick={() => downloadZip(getCanvases())}>
           Download ZIP
           <FileArchive />
         </Button>

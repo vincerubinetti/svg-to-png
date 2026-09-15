@@ -33,8 +33,8 @@ export default function Select<Option extends string>({
             {options.map((option) => (
               <_Select.Item
                 key={option}
-                value={option}
                 className="flex cursor-pointer items-center justify-between gap-4 p-2 data-highlighted:bg-theme data-highlighted:text-white"
+                value={option}
               >
                 {option}
                 <_Select.ItemIndicator>

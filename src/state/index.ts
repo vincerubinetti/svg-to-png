@@ -133,7 +133,7 @@ export const removeImage = (index: number) => {
 export const clearImages = () => setAtom(imagesAtom, []);
 
 /** get default options for an image */
-export const getDefaultOptions = (props?: Props) => {
+const getDefaultOptions = (props?: Props) => {
   const width = props?.size.width ?? 512;
   const height = props?.size.height ?? 512;
 

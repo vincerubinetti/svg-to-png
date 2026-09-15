@@ -3,15 +3,11 @@ import { Popover } from "@base-ui/react";
 import clsx from "clsx";
 
 type Props = {
-  /** tooltip content */
   content?: ReactNode;
-  /** class on popup box */
   className?: string;
-  /** tooltip trigger */
   children: ReactElement;
 };
 
-/** popup of content on hover or click */
 export default function Tooltip({ content, children, className }: Props) {
   if (!content) return children;
 

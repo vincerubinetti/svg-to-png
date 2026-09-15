@@ -20,8 +20,8 @@ import Select from "@/components/Select";
 import TextBox from "@/components/TextBox";
 import { editAllAtom, imagesAtom, resetOptions, setImage } from "@/state";
 
-/** tooltips for options */
-const tooltips: Record<string, ReactNode> = {
+/** help content for options */
+const help: Record<string, ReactNode> = {
   size: <p>Width × height of output PNG image, in pixels.</p>,
   lock: <p>Lock/unlock aspect ratio.</p>,
   trim: (
@@ -89,7 +89,10 @@ const tooltips: Record<string, ReactNode> = {
 };
 
 export default function Options() {
+  /** images state */
   const images = useAtomValue(imagesAtom);
+
+  /** edit all state */
   const [editAll, setEditAll] = useAtom(editAllAtom);
 
   return (
@@ -101,40 +104,40 @@ export default function Options() {
         <b>
           <Scaling />
           Size
-          <Help>{tooltips.size}</Help>
+          <Help>{help.size}</Help>
         </b>
         <b>
           Lock
-          <Help>{tooltips.lock}</Help>
+          <Help>{help.lock}</Help>
         </b>
         <b>
           <Crop />
           Trim
-          <Help>{tooltips.trim}</Help>
+          <Help>{help.trim}</Help>
         </b>
         <b>
           <SquareDimensions />
           Margin
-          <Help>{tooltips.margin}</Help>
+          <Help>{help.margin}</Help>
         </b>
         <b>
           <ImageUpscale />
           Fit
-          <Help>{tooltips.fit}</Help>
+          <Help>{help.fit}</Help>
         </b>
         <b>
           <PaintBucket />
           Background
-          <Help>{tooltips.background}</Help>
+          <Help>{help.background}</Help>
         </b>
         <b>
           <Paintbrush />
           Color
-          <Help>{tooltips.color}</Help>
+          <Help>{help.color}</Help>
         </b>
         <b>
           Reset
-          <Help>{tooltips.reset}</Help>
+          <Help>{help.reset}</Help>
         </b>
 
         {images.map((image, index) => (

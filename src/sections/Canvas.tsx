@@ -7,7 +7,7 @@ import checkersLight from "@/assets/checkers-light.svg";
 import { isSafari } from "@/util/browser";
 import { getFilterId, sourceToImage } from "@/util/svg";
 
-export const densityScale = window.devicePixelRatio;
+const densityScale = window.devicePixelRatio;
 
 type Props = Image & {
   ref?: Ref<HTMLCanvasElement>;
@@ -30,6 +30,7 @@ export default function Canvas({
   darkPreview,
   className = "",
 }: Props) {
+  /** unique filter id */
   const filter = getFilterId();
 
   /** whether to use canvas svg method for color filter */
@@ -97,7 +98,6 @@ export default function Canvas({
     ctx.drawImage(image, target.x, target.y, target.width, target.height);
   };
 
-  /** render component */
   return (
     <>
       {canvasFilter && (
@@ -117,12 +117,12 @@ export default function Canvas({
             else ref.current = canvas;
           }
         }}
+        className={clsx("bg-fixed bg-repeat", className)}
         width={width}
         height={height}
-        className={clsx("bg-fixed bg-repeat", className)}
         style={{
-          minWidth: width,
-          minHeight: height,
+          width: width / densityScale + "px",
+          height: height / densityScale + "px",
           backgroundImage: `url("${darkPreview ? checkersDark : checkersLight}")`,
           backgroundSize: "16px 16px",
         }}

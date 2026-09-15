@@ -17,9 +17,13 @@ import {
 import { formatNumber } from "@/util/string";
 
 export default function Input() {
-  const [dragging, setDragging] = useState(false);
+  /** file input element */
   const input = useRef<HTMLInputElement>(null);
 
+  /** drag state */
+  const [dragging, setDragging] = useState(false);
+
+  /** images state */
   const images = useAtomValue(imagesAtom);
 
   /** click actual file input on button click */

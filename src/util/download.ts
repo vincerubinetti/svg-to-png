@@ -12,21 +12,21 @@ const downloadFile = (url: string, name: string) => {
   link.click();
 };
 
-type Image = {
+type Download = {
   canvas: HTMLCanvasElement;
   name: string;
   format: "png" | "jpeg";
 };
 
 /** download single image from canvas */
-export const downloadCanvas = ({ canvas, name, format }: Image) =>
+export const downloadCanvas = ({ canvas, name, format }: Download) =>
   downloadFile(canvasToUrl(canvas, format), `${name}.${format}`);
 
 /** download zip of files */
-export const downloadZip = async (pngs: Image[]) => {
+export const downloadZip = async (files: Download[]) => {
   const zipWriter = new ZipWriter(new BlobWriter("application/zip"));
   await Promise.all(
-    pngs.map(({ canvas, name, format }) =>
+    files.map(({ canvas, name, format }) =>
       zipWriter.add(
         `${name}.${format}`,
         new Data64URIReader(canvasToUrl(canvas, format)),
@@ -35,6 +35,6 @@ export const downloadZip = async (pngs: Image[]) => {
   );
   const blob = await zipWriter.close();
   const url = window.URL.createObjectURL(blob);
-  downloadFile(url, "svg-to-png.zip");
+  downloadFile(url, "images.zip");
   window.URL.revokeObjectURL(url);
 };
