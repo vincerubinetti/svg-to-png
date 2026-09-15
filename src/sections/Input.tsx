@@ -156,7 +156,7 @@ export default function Input() {
                       {formatNumber(image.viewBox.width) || "-"}{" "}
                       {formatNumber(image.viewBox.height) || "-"}
                     </dd>
-                    <dt>Decided size</dt>
+                    <dt>Decided default size</dt>
                     <dd>
                       {formatNumber(image.width)} × {formatNumber(image.height)}
                     </dd>
@@ -167,7 +167,7 @@ export default function Input() {
                       {formatNumber(image.contents?.width) || "-"}{" "}
                       {formatNumber(image.contents?.height) || "-"}
                     </dd>
-                    <dt>Contents w/ strokes</dt>
+                    <dt>Contents + strokes</dt>
                     <dd>
                       {formatNumber(image.contentsStrokes?.x) || "-"}{" "}
                       {formatNumber(image.contentsStrokes?.y) || "-"}{" "}
