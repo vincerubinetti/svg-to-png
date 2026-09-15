@@ -19,7 +19,6 @@ type Props = Image & {
 export default function Canvas({
   ref,
   source,
-  name,
   size,
   width,
   height,
