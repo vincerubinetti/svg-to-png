@@ -146,15 +146,15 @@ export default function Input() {
                     </dd>
                     <dt>Specified size (px)</dt>
                     <dd>
-                      {formatNumber(image.absolute.width) || "-"} ×{" "}
-                      {formatNumber(image.absolute.height) || "-"}
+                      {formatNumber(image.absolute.width || undefined)} ×{" "}
+                      {formatNumber(image.absolute.height || undefined)}
                     </dd>
                     <dt>View Box</dt>
                     <dd>
-                      {formatNumber(image.viewBox.x) || "-"}{" "}
-                      {formatNumber(image.viewBox.y) || "-"}{" "}
-                      {formatNumber(image.viewBox.width) || "-"}{" "}
-                      {formatNumber(image.viewBox.height) || "-"}
+                      {formatNumber(image.viewBox.x)}{" "}
+                      {formatNumber(image.viewBox.y)}{" "}
+                      {formatNumber(image.viewBox.width)}{" "}
+                      {formatNumber(image.viewBox.height)}
                     </dd>
                     <dt>Decided default size</dt>
                     <dd>
@@ -162,17 +162,17 @@ export default function Input() {
                     </dd>
                     <dt>Contents</dt>
                     <dd>
-                      {formatNumber(image.contents?.x) || "-"}{" "}
-                      {formatNumber(image.contents?.y) || "-"}{" "}
-                      {formatNumber(image.contents?.width) || "-"}{" "}
-                      {formatNumber(image.contents?.height) || "-"}
+                      {formatNumber(image.contents?.x)}{" "}
+                      {formatNumber(image.contents?.y)}{" "}
+                      {formatNumber(image.contents?.width)}{" "}
+                      {formatNumber(image.contents?.height)}
                     </dd>
                     <dt>Contents + strokes</dt>
                     <dd>
-                      {formatNumber(image.contentsStrokes?.x) || "-"}{" "}
-                      {formatNumber(image.contentsStrokes?.y) || "-"}{" "}
-                      {formatNumber(image.contentsStrokes?.width) || "-"}{" "}
-                      {formatNumber(image.contentsStrokes?.height) || "-"}
+                      {formatNumber(image.contentsStrokes?.x)}{" "}
+                      {formatNumber(image.contentsStrokes?.y)}{" "}
+                      {formatNumber(image.contentsStrokes?.width)}{" "}
+                      {formatNumber(image.contentsStrokes?.height)}
                     </dd>
                   </dl>
                 </Help>

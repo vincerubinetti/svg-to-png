@@ -52,6 +52,8 @@ export const setImage = async <Key extends keyof Image>(
 
   /** set as much as possible synchronously first to preserve text box cursors */
   /** https://stackoverflow.com/questions/46000544/react-controlled-input-cursor-jumps#comment126597443_48608293 */
+
+  /** get sync changes */
   for (const index of indices) {
     const newImage = newImages[index];
     if (!newImage) continue;
@@ -76,21 +78,25 @@ export const setImage = async <Key extends keyof Image>(
   /** re-clone so second store set works */
   newImages = cloneDeep(newImages);
 
+  /** get async changes */
   if (["source", "filename", "trim"].includes(key)) {
     for (const index of indices) {
       const newImage = newImages[index];
       if (!newImage) continue;
 
-      const oldSize = newImage.size;
-
       /** update computed props */
       const props = await svgProps(newImage.source, newImage.filename, {
         trim: newImage.trim,
       });
+
+      /** did anything that affects size change */
+      const sizeChanged = !isEqual(newImage.size, props.size);
+
+      /** update props */
       Object.assign(newImage, props);
 
       /** reset size */
-      if (!isEqual(newImage.size, oldSize)) {
+      if (sizeChanged) {
         const { width, height, aspectLock } = getDefaultOptions(props);
         Object.assign(newImage, { width, height, aspectLock });
       }
@@ -132,8 +138,8 @@ export const clearImages = () => setAtom(imagesAtom, []);
 
 /** get default options for an image */
 const getDefaultOptions = (props?: Props) => {
-  const width = props?.size.width ?? 512;
-  const height = props?.size.height ?? 512;
+  const width = props?.size.width ?? 100;
+  const height = props?.size.height ?? 100;
 
   return {
     width,
