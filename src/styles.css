@@ -3,20 +3,19 @@
 @theme {
   --color-*: initial;
 
-  --color-theme: oklch(60% 0.25 10);
+  --color-theme: oklch(60% 0.225 10);
 
-  --color-white: oklch(100% 0.025 10);
-  --color-light-gray: oklch(95% 0.025 200);
-  --color-gray: oklch(80% 0.025 200);
-  --color-dark-gray: oklch(40% 0.025 200);
-  --color-black: oklch(0% 0.025 200);
+  --color-white: oklch(100% 0 10);
+  --color-light-gray: oklch(95% 0 10);
+  --color-gray: oklch(80% 0 10);
+  --color-dark-gray: oklch(50% 0 10);
+  --color-black: oklch(0% 0 10);
 
-  --font-weight-regular: 300;
-  --font-weight-medium: 400;
+  --font-weight-regular: 400;
   --font-weight-bold: 600;
 
-  --font-sans: "Outfit Variable", sans-serif;
-  --font-mono: "JetBrains Mono Variable", monospace;
+  --font-sans: "Figtree Variable", sans-serif;
+  --font-mono: "Spline Sans Mono Variable", monospace;
 }
 
 @layer base {
@@ -36,45 +35,29 @@
     @apply flex grow flex-col;
   }
 
-  header,
-  footer {
-    @apply bg-theme flex items-center gap-8 p-8 text-white;
-
-    a {
-      @apply text-white;
-    }
-  }
-
   section {
-    @apply flex flex-col gap-8 bg-white p-8 last:grow;
-  }
-
-  h1,
-  h2,
-  h3,
-  h4 {
-    @apply font-regular flex scroll-mt-8 items-center gap-[0.75em] leading-normal tracking-wide;
-  }
-
-  h1 {
-    @apply justify-center text-center text-2xl;
+    --width: 500;
+    @apply flex flex-col items-center gap-8 bg-white p-12 *:max-w-full last:grow;
   }
 
   h2 {
-    @apply justify-center text-center text-xl;
+    @apply bg-theme/5 w-full p-4 text-center text-xl tracking-wider uppercase;
   }
 
-  hr {
-    @apply bg-light-gray my-12 block h-px shrink-0 border-none;
-  }
-
-  strong,
   b {
     @apply font-bold;
   }
 
   p {
-    @apply leading-loose;
+    @apply leading-relaxed;
+  }
+
+  a {
+    @apply hover:bg-theme rounded-md underline transition;
+  }
+
+  button {
+    @apply flex cursor-pointer items-center justify-center transition;
   }
 
   svg {
@@ -86,43 +69,21 @@
     @apply shrink-0;
   }
 
-  a {
-    @apply text-theme underline transition-all hover:text-current;
-  }
-
-  button {
-    @apply cursor-pointer leading-none transition-all;
-  }
-
-  label {
-    @apply flex items-center gap-2;
-  }
-
-  input {
-    @apply min-w-0 font-mono;
-  }
-
+  input,
   textarea {
-    @apply min-w-0 font-mono;
+    @apply min-w-0;
   }
 
-  label:has(input[type="checkbox"]) {
-    @apply cursor-pointer;
+  code {
+    @apply bg-gray/50 rounded-md;
   }
 
-  input[type="checkbox"] {
-    @apply accent-theme cursor-pointer;
-  }
-
-  select {
-    @apply cursor-pointer;
-  }
   dl {
-    @apply grid grid-cols-[repeat(var(--cols),auto)] gap-x-8 gap-y-4 [--cols:2];
+    @apply grid grid-cols-[repeat(var(--cols),auto)] gap-x-4 gap-y-2 [--cols:2];
   }
 
   dt {
-    @apply font-medium;
+    @apply font-bold;
   }
 
   dd {
@@ -130,7 +91,7 @@
   }
 
   dd:empty {
-    @apply before:text-gray before:content-['-'];
+    @apply before:text-dark-gray before:content-['-'];
   }
 
   .lucide {
