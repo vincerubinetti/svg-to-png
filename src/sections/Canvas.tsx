@@ -126,7 +126,6 @@ export default function Canvas({
           backgroundImage: `url("${darkPreview ? checkersDark : checkersLight}")`,
           backgroundSize: "16px 16px",
         }}
-        title={name}
       />
     </>
   );

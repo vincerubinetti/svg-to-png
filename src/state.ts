@@ -16,9 +16,6 @@ type Options = ReturnType<typeof getDefaultOptions>;
 /** full image object */
 export type Image = File & Props & Options;
 
-/** list of images */
-export const imagesAtom = atomWithStorage<Image[]>("images", []);
-
 /** add images to list */
 export const addImages = async (newFiles: File[]) => {
   const newImages = cloneDeep(getAtom(imagesAtom));
@@ -159,6 +156,9 @@ export const newFile = {
 `.trim(),
   filename: "untitled.svg",
 };
+
+/** list of images */
+export const imagesAtom = atomWithStorage<Image[]>("images", []);
 
 /** flag to edit all images together */
 export const editAllAtom = atomWithStorage("edit-all", false);

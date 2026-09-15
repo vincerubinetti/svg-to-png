@@ -39,17 +39,6 @@ export default function Output() {
     <section>
       <h2>Output</h2>
 
-      <div className="flex items-center gap-2">
-        <Button onClick={() => setImage(-1, "darkPreview", !allDark)}>
-          Transparency
-          {allDark ? <Moon /> : <Sun />}
-        </Button>
-        <Help>
-          Whether to use dark or light transparency preview pattern. Doesn't
-          affect downloaded image.
-        </Help>
-      </div>
-
       <div className="grid grid-cols-[repeat(2,auto)] items-center justify-center gap-8 *:min-h-0 *:min-w-0 max-md:grid-cols-1 max-md:justify-items-center-safe">
         {images.map((image, index) => (
           <div
@@ -100,6 +89,16 @@ export default function Output() {
       </div>
 
       <div className="flex flex-wrap justify-center gap-8">
+        <div className="flex items-center gap-2">
+          <Button onClick={() => setImage(-1, "darkPreview", !allDark)}>
+            Preview
+            {allDark ? <Moon /> : <Sun />}
+          </Button>
+          <Help>
+            For previewing how images will look on dark/light backgrounds.
+            Doesn't affect downloaded images.
+          </Help>
+        </div>
         <label>
           Quality
           <NumberBox
@@ -120,9 +119,6 @@ export default function Output() {
             aria-label="Format"
           />
         </label>
-      </div>
-
-      <div className="flex flex-wrap justify-center gap-4">
         <Button onClick={() => getCanvases().forEach(downloadCanvas)}>
           Download Each
           <FileStack />

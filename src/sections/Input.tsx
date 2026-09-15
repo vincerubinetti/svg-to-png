@@ -2,7 +2,7 @@ import type { DragEventHandler } from "react";
 import { useRef, useState } from "react";
 import { useEventListener } from "@reactuses/core";
 import { useAtomValue } from "jotai";
-import { Plus, Upload, X } from "lucide-react";
+import { Lightbulb, Plus, Upload, X } from "lucide-react";
 import Button from "@/components/Button";
 import Help from "@/components/Help";
 import TextBox from "@/components/TextBox";
@@ -79,8 +79,8 @@ export default function Input() {
           <Upload />
         </Button>
         <Button onClick={() => addImages([newFile])}>
-          Add
-          <Plus />
+          {images.length ? "Add" : "Example"}
+          {images.length ? <Plus /> : <Lightbulb />}
         </Button>
         <Button onClick={clearImages}>
           Clear
@@ -97,8 +97,8 @@ export default function Input() {
       </div>
 
       <div className="text-center text-lg text-dark-gray">
-        {!!images.length
-          ? `${formatNumber(images.length)} image(s)`
+        {images.length
+          ? `${formatNumber(images.length)} image${images.length === 1 ? "" : "s"}`
           : "Upload or drag and drop SVG files"}
       </div>
 
