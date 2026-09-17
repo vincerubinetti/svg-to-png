@@ -149,7 +149,7 @@ export default function Input() {
                       {formatNumber(image.absolute.width || undefined)} ×{" "}
                       {formatNumber(image.absolute.height || undefined)}
                     </dd>
-                    <dt>View Box</dt>
+                    <dt>View box</dt>
                     <dd>
                       {formatNumber(image.viewBox.x)}{" "}
                       {formatNumber(image.viewBox.y)}{" "}

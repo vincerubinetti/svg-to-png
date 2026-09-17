@@ -291,7 +291,7 @@ export default function Options() {
 }
 
 /** get ratio from decimal */
-const getRatio = (decimal: number, maxDenominator = 50) => {
+const getRatio = (decimal: number, maxDenominator = 16) => {
   let bestNumerator = 1;
   let bestDenominator = 1;
   let bestError = Infinity;
